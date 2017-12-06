@@ -64,7 +64,7 @@
                 <!-- IMPORTANT: plugin version 3 uses :MapboxView, lower versions use :Mapbox -->
                 <map:MapboxView
                     accessToken="sk.eyJ1IjoiZmluZ2VyNTYzIiwiYSI6ImNqYXZmZDhsNzBib2czN28xdTUxazhzaWEifQ.J4IKSM4hWFx7zZSEDC1ycA"
-                    mapStyle="Outdoors"
+                    mapStyle="mapbox://styles/mapbox/outdoors-v10"
                     zoomLevel="3"
                     showUserLocation="true"
                     mapReady="onMapReady">
