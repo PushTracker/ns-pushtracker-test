@@ -30,9 +30,22 @@ function SettingsViewModel() {
         peripherals: new observableArray.ObservableArray(),
 
         onPeripheralTap: function(args) {
+            var that = this;
             var index = args.index;
-            var peri = SettingsViewModel.prototype.peripherals.getItem(index);
+            var peri = that.peripherals.getItem(index);
             console.log("selected: "+peri.UUID);
+
+            var navigationEntry = {
+                moduleName: "bluetooth/services-page",
+                context: {
+                    info: "something you want to pass to your page",
+                    foo: "bar",
+                    peripheral: peri
+                },
+                animated: true
+            };
+            var topmost = frameModule.topmost();
+            topmost.navigate(navigationEntry);
         },
 
         doScanForSmartDrive: function() {
