@@ -9,3 +9,7 @@ function MapViewModel() {
 }
 
 module.exports = MapViewModel;
+module.exports.fabTap = function(args) {
+    console.log(args);
+    console.log("tapped");
+};

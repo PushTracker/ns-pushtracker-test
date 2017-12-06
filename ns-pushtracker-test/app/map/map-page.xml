@@ -4,6 +4,7 @@
     xmlns:nsDrawer="nativescript-pro-ui/sidedrawer"
     xmlns:myDrawer="shared/my-drawer"
     xmlns="http://www.nativescript.org/tns.xsd"
+    xmlns:FAB="nativescript-floatingactionbutton"
     xmlns:map="nativescript-mapbox"
     navigatingTo="navigatingTo">
 
@@ -59,18 +60,22 @@
         Always wrap content in a layout component.
         -->
         <nsDrawer:RadSideDrawer.mainContent>
-            <StackLayout>
-                <ContentView>
-                <!-- IMPORTANT: plugin version 3 uses :MapboxView, lower versions use :Mapbox -->
-                <map:MapboxView
-                    accessToken="sk.eyJ1IjoiZmluZ2VyNTYzIiwiYSI6ImNqYXZmZDhsNzBib2czN28xdTUxazhzaWEifQ.J4IKSM4hWFx7zZSEDC1ycA"
-                    mapStyle="mapbox://styles/mapbox/outdoors-v10"
-                    zoomLevel="3"
-                    showUserLocation="true"
-                    mapReady="onMapReady">
-                </map:MapboxView>
+            <GridLayout rows="auto, *">
+                <FAB:fab tap="fabTap"
+                     row="1"
+                     rippleColor="#f1f1f1"
+                     class="fab-button" />
+                <ContentView row="1">
+                    <!-- IMPORTANT: plugin version 3 uses :MapboxView, lower versions use :Mapbox -->
+                    <map:MapboxView
+                        accessToken="sk.eyJ1IjoiZmluZ2VyNTYzIiwiYSI6ImNqYXZmZDhsNzBib2czN28xdTUxazhzaWEifQ.J4IKSM4hWFx7zZSEDC1ycA"
+                        mapStyle="mapbox://styles/mapbox/outdoors-v10"
+                        zoomLevel="3"
+                        showUserLocation="true"
+                        mapReady="onMapReady">
+                    </map:MapboxView>
                 </ContentView>
-            </StackLayout>
+            </GridLayout>
         </nsDrawer:RadSideDrawer.mainContent>
     </nsDrawer:RadSideDrawer>
 </Page>
