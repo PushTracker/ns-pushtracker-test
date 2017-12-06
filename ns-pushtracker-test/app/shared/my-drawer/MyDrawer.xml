@@ -32,7 +32,7 @@ Feel free to customize layouts and components to change how your app drawer look
 
             <GridLayout columns="auto, *" class="{{ 'sidedrawer-list-item' + (selectedPage === 'Map My Journey' ? ' selected': '') }}"
                 route="map/map-page" tap="onNavigationItemTap">
-                <Label row="0" col="0" text="&#xf002;" class="fa" />
+                <Label row="0" col="0" text="&#xf041;" class="fa" />
                 <Label row="0" col="1" text="Map My Journey" class="p-r-10" />
             </GridLayout>
 
