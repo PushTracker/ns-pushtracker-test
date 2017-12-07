@@ -3,7 +3,7 @@ const observableModule = require("data/observable");
 function MapViewModel() {
     const viewModel = observableModule.fromObject({
 
-        fabTap: function(args) {
+        mapTapped: function(args) {
             console.log("TAPPED");
         }
 

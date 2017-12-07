@@ -61,9 +61,9 @@
         -->
         <nsDrawer:RadSideDrawer.mainContent>
             <GridLayout rows="auto, *">
-                <FAB:fab tap="fabTap"
-                     icon="res://menu"
+                <FAB:fab tap="onFabTap"
                      row="1"
+                     icon="res://menu"
                      rippleColor="#f1f1f1"
                      class="fab-button" />
                 <ContentView row="1">
