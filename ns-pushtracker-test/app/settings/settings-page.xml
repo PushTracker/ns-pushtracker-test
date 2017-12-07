@@ -64,7 +64,13 @@
             <StackLayout orientation="vertical">
                 <GridLayout horizontalAlignment="left" rows="auto" columns="*, auto">
                 <Label text="Control Mode" class="sidedrawer-list-item" row="0" col="0"/>
-                <Switch checked="{{ controlMode }}" row="0" col="1"/>
+                <SegmentedBar row="0" col="1">
+                    <SegmentedBar.items>
+                        <SegmentedBarItem title="MX1"/>
+                        <SegmentedBarItem title="MX2"/>
+                        <SegmentedBarItem title="MX2+"/>
+                    </SegmentedBar.items>
+                </SegmentedBar>
                 </GridLayout>
 
                 <GridLayout horizontalAlignment="left" rows="auto" columns="*, auto">
@@ -74,7 +80,12 @@
 
                 <GridLayout horizontalAlignment="left" rows="auto" columns="*, auto">
                 <Label text="Units" class="sidedrawer-list-item" row="0" col="0"/>
-                <Switch checked="{{ units }}" row="0" col="1"/>
+                <SegmentedBar row="0" col="1">
+                    <SegmentedBar.items>
+                        <SegmentedBarItem title="English"/>
+                        <SegmentedBarItem title="Metric"/>
+                    </SegmentedBar.items>
+                </SegmentedBar>
                 </GridLayout>
 
                 <Label text="Acceleration" class="sidedrawer-list-item" />

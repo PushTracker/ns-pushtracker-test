@@ -9,6 +9,18 @@ function SettingsViewModel() {
     const viewModel = observableModule.fromObject({
         // SETTINGS
 
+        controlModes: [
+            {
+                name: "MX1"
+            },
+            {
+                name: "MX2"
+            },
+            {
+                name: "MX2+"
+            }
+        ],
+
         acceleration: 30,
         maxSpeed: 70,
         tapSensitivity: 100,
