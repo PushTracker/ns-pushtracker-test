@@ -3,11 +3,13 @@ const frameModule = require("ui/frame");
 const MapViewModel = require("./map-view-model");
 
 const mapbox = require("nativescript-mapbox");
+const geolocation = require("nativescript-geolocation");
 
 let markerId = 0;
 
+let map = null;
+
 function placeMarker(point) {
-    const map = this;
     const myId = new Date().getTime();
     map.addMarkers([
         {
@@ -15,6 +17,7 @@ function placeMarker(point) {
             lat: point.lat,
             lng: point.lng,
             title: "New Marker " + ++markerId,
+            subtitle: "Tap to remove",
             onTap: function() { console.log("Marker was tapped");},
             onCalloutTap: function() {console.log("Callout was tapped"); map.removeMarkers([myId]);}
         }
@@ -25,16 +28,32 @@ function onMapReady(args) {
     var nativeMapView = args.ios ? args.ios : args.android;
     console.log("Mapbox onMapReady for " + (args.ios ? "iOS" : "Android") + ", native object received: " + nativeMapView);
 
-    args.map.setCenter({
-        lat: 52.36,
-        lng: 4.8891
-    });
+    map = args.map;
 
-    args.map.setOnMapClickListener(placeMarker.bind(args.map));
+    args.map.setOnMapClickListener(placeMarker);
+
+    geolocation.getCurrentLocation({desiredAccuracy: 3, updateDistance: 10, maximumAge: 20000, timeout: 20000})
+    .then(function(userLocation) {
+        console.log("Got user location:");
+        console.log(JSON.stringify(userLocation));
+        args.map.setCenter({
+            lat: userLocation.latitude,
+            lng: userLocation.longitude
+        })
+        .then(function() {
+            args.map.setZoomLevel({
+            level: 10
+            });
+        });
+    })
+    .catch(function(err) {
+        console.log("Error: "+e.message);
+    });
 }
 
 function onFabTap(args) {
-    console.log("FAB Tapped");
+    console.log("FAB Tapped, removing all markers");
+    map.removeMarkers();
 }
 
 /* ***********************************************************
