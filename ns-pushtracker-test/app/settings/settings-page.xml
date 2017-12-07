@@ -56,7 +56,40 @@
         Always wrap content in a layout component.
         -->
         <nsDrawer:RadSideDrawer.mainContent>
-            <StackLayout>
+            <StackLayout orientation="vertical">
+                <GridLayout horizontalAlignment="left" rows="auto" columns="*, *, *, *">
+                <Label text="Control Mode" class="sidedrawer-list-item" row="0" col="0"/>
+                <Switch checked="{{ controlMode }}" row="0" col="3"/>
+                </GridLayout>
+
+                <GridLayout horizontalAlignment="left" rows="auto" columns="*, *, *, *">
+                <Label text="EZ-ON" class="sidedrawer-list-item" row="0" col="0"/>
+                <Switch checked="{{ ezOn }}" row="0" col="3"/>
+                </GridLayout>
+
+                <GridLayout horizontalAlignment="left" rows="auto" columns="*, *, *, *">
+                <Label text="Units" class="sidedrawer-list-item" row="0" col="0"/>
+                <Switch checked="{{ units }}" row="0" col="3"/>
+                </GridLayout>
+
+                <Label text="Acceleration" class="sidedrawer-list-item" />
+                <GridLayout horizontalAlignment="right" rows="auto" columns="*, *, *, *">
+                <Label text="{{ acceleration }} %" row="0" col="3"/>
+                <Slider value="{{ acceleration }}" row="0" col="0" colSpan="3"/>
+                </GridLayout>
+
+                <Label text="Max Speed" class="sidedrawer-list-item" />
+                <GridLayout horizontalAlignment="right" rows="auto" columns="*, *, *, *">
+                <Label text="{{ maxSpeed }} %" row="0" col="3"/>
+                <Slider value="{{ maxSpeed }}" row="0" col="0" colSpan="3"/>
+                </GridLayout>
+
+                <Label text="Tap Sensitivity" class="sidedrawer-list-item" />
+                <GridLayout horizontalAlignment="right" rows="auto" columns="*, *, *, *">
+                <Label text="{{ tapSensitivity }} %" row="0" col="3"/>
+                <Slider value="{{ tapSensitivity }}" row="0" col="0" colSpan="3"/>
+                </GridLayout>
+
                 <GridLayout columns="*, *" rows="auto, auto, auto, auto" horizontalAlignment="center" class="tab-content">
                 <iOS>
                     <Button row="0" colSpan="2" text="is bluetooth enabled?" tap="{{ doIsBluetoothEnabled }}" class="button button-positive" />
