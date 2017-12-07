@@ -7,6 +7,25 @@ const bluetooth = require("nativescript-bluetooth");
 
 function SettingsViewModel() {
     const viewModel = observableModule.fromObject({
+        // SETTINGS
+
+        acceleration: 30,
+        maxSpeed: 70,
+        tapSensitivity: 100,
+
+        getAccelerationLabel: function() {
+            return this.acceleration + "%";
+        },
+
+        getMaxSpeedLabel: function() {
+            return this.maxSpeed + "%";
+        },
+
+        getTapSensitivityLabel: function() {
+            return this.tapSensitivity + "%";
+        },
+
+
         doIsBluetoothEnabled: function() {
             bluetooth.isBluetoothEnabled().then(function(enabled) {
                 dialogs.alert({

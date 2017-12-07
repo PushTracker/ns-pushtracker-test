@@ -17,6 +17,11 @@
             tap="onDrawerButtonTap"
             ios.position="left">
         </ActionItem>
+
+        <ActionItem text="Save"
+            tap="onSaveSettingsTap"
+            ios.position="right">
+        </ActionItem>
         <Label class="action-bar-title" text="Settings"></Label>
     </ActionBar>
 
@@ -57,37 +62,37 @@
         -->
         <nsDrawer:RadSideDrawer.mainContent>
             <StackLayout orientation="vertical">
-                <GridLayout horizontalAlignment="left" rows="auto" columns="*, *, *, *">
+                <GridLayout horizontalAlignment="left" rows="auto" columns="*, auto">
                 <Label text="Control Mode" class="sidedrawer-list-item" row="0" col="0"/>
-                <Switch checked="{{ controlMode }}" row="0" col="3"/>
+                <Switch checked="{{ controlMode }}" row="0" col="1"/>
                 </GridLayout>
 
-                <GridLayout horizontalAlignment="left" rows="auto" columns="*, *, *, *">
+                <GridLayout horizontalAlignment="left" rows="auto" columns="*, auto">
                 <Label text="EZ-ON" class="sidedrawer-list-item" row="0" col="0"/>
-                <Switch checked="{{ ezOn }}" row="0" col="3"/>
+                <Switch checked="{{ ezOn }}" row="0" col="1"/>
                 </GridLayout>
 
-                <GridLayout horizontalAlignment="left" rows="auto" columns="*, *, *, *">
+                <GridLayout horizontalAlignment="left" rows="auto" columns="*, auto">
                 <Label text="Units" class="sidedrawer-list-item" row="0" col="0"/>
-                <Switch checked="{{ units }}" row="0" col="3"/>
+                <Switch checked="{{ units }}" row="0" col="1"/>
                 </GridLayout>
 
                 <Label text="Acceleration" class="sidedrawer-list-item" />
-                <GridLayout horizontalAlignment="right" rows="auto" columns="*, *, *, *">
-                <Label text="{{ acceleration }} %" row="0" col="3"/>
-                <Slider value="{{ acceleration }}" row="0" col="0" colSpan="3"/>
+                <GridLayout rows="auto" columns="*, auto">
+                <Slider value="{{ acceleration }}" row="0" col="0"/>
+                <Label text="{{ getAccelerationLabel() }}" row="0" col="1"/>
                 </GridLayout>
 
                 <Label text="Max Speed" class="sidedrawer-list-item" />
-                <GridLayout horizontalAlignment="right" rows="auto" columns="*, *, *, *">
-                <Label text="{{ maxSpeed }} %" row="0" col="3"/>
-                <Slider value="{{ maxSpeed }}" row="0" col="0" colSpan="3"/>
+                <GridLayout rows="auto" columns="*, auto">
+                <Slider value="{{ maxSpeed }}" row="0" col="0"/>
+                <Label text="{{ getMaxSpeedLabel() }}" row="0" col="1"/>
                 </GridLayout>
 
                 <Label text="Tap Sensitivity" class="sidedrawer-list-item" />
-                <GridLayout horizontalAlignment="right" rows="auto" columns="*, *, *, *">
-                <Label text="{{ tapSensitivity }} %" row="0" col="3"/>
-                <Slider value="{{ tapSensitivity }}" row="0" col="0" colSpan="3"/>
+                <GridLayout rows="auto" columns="*, auto">
+                <Slider value="{{ tapSensitivity }}" row="0" col="0"/>
+                <Label text="{{ getTapSensitivityLabel() }}" row="0" col="1"/>
                 </GridLayout>
 
                 <GridLayout columns="*, *" rows="auto, auto, auto, auto" horizontalAlignment="center" class="tab-content">

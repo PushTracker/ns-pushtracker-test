@@ -1,3 +1,5 @@
+const dialogsModule = require("ui/dialogs");
+
 const frameModule = require("ui/frame");
 
 const SettingsViewModel = require("./settings-view-model");
@@ -29,5 +31,15 @@ function onDrawerButtonTap(args) {
     sideDrawer.showDrawer();
 }
 
+function onSaveSettingsTap(args) {
+    dialogsModule.confirm({
+        title: "Save Settings?",
+        message: "Send these settings to the PushTracker?",
+        okButtonText: "Yes",
+        cancelButtonText: "No"
+    });
+}
+
 exports.onNavigatingTo = onNavigatingTo;
 exports.onDrawerButtonTap = onDrawerButtonTap;
+exports.onSaveSettingsTap = onSaveSettingsTap;
