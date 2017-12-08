@@ -109,7 +109,7 @@ function onPeripheralTap(args) {
             info: "something you want to pass to your page",
             foo: "bar",
             peripheral: peri,
-            isSmartDrive: scannedForSmartDrives
+            settings: settings
         },
         animated: true
     };

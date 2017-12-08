@@ -13,6 +13,7 @@
     "lint": "eslint \"app/**/*.js\""
   },
   "dependencies": {
+    "buffer": "^5.0.8",
     "nativescript-appversion": "^1.4.1",
     "nativescript-bluetooth": "^1.3.0",
     "nativescript-fingerprint-auth": "^5.0.0",

@@ -1,4 +1,5 @@
 var Binding = require('./packet_bindings');
+var Buffer = require('buffer').Buffer;
 
 function bindingTypeToString( bindingType, bindingValue ) {
     var valueName = null;
