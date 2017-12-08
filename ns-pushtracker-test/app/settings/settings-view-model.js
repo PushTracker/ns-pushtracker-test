@@ -20,6 +20,29 @@ function SettingsViewModel() {
                 name: "MX2+"
             }
         ],
+        controlModeSelection: 2,
+        onControlModeSelected: function(propertyChangeData) {
+            this.controlModeSelection = propertyChangeData.newIndex;
+        },
+        getControlMode: function() {
+            return this.controlModes[ this.controlModeSelection ];
+        },
+
+        units: [
+            {
+                name: "English"
+            },
+            {
+                name: "Metric"
+            }
+        ],
+        unitsSelection: 0,
+        onUnitsSelected: function(propertyChangeData) {
+            this.unitsSelection = propertyChangeData.newIndex;
+        },
+        getUnits: function() {
+            return this.units[ this.unitsSelection ];
+        },
 
         acceleration: 30,
         maxSpeed: 70,

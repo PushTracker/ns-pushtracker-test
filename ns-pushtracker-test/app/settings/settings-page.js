@@ -2,7 +2,11 @@ const dialogsModule = require("ui/dialogs");
 
 const frameModule = require("ui/frame");
 
+const segmentedBarModule = require("ui/segmented-bar");
+
 const SettingsViewModel = require("./settings-view-model");
+
+let settings = new SettingsViewModel();
 
 /* ***********************************************************
 * Use the "onNavigatingTo" handler to initialize the page binding context.
@@ -18,7 +22,26 @@ function onNavigatingTo(args) {
     }
 
     const page = args.object;
-    page.bindingContext = new SettingsViewModel();
+    page.bindingContext = settings;
+
+    function makeItem(o) {
+        const i = new segmentedBarModule.SegmentedBarItem();
+        i.title = o.name;
+
+        return i;
+    }
+
+    // set up control mode
+    const controlModeView = page.getViewById("control_modes");
+    const controlModeItems = settings.controlModes.map(makeItem);
+    controlModeView.items = controlModeItems;
+    controlModeView.selectedIndex = settings.controlModeSelection;
+
+    // set up units
+    const unitsView = page.getViewById("units");
+    const unitsItems = settings.units.map(makeItem);
+    unitsView.items = unitsItems;
+    unitsView.selectedIndex = settings.unitsSelection;
 }
 
 /* ***********************************************************

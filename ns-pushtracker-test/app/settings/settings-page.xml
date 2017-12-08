@@ -61,16 +61,11 @@
         Always wrap content in a layout component.
         -->
         <nsDrawer:RadSideDrawer.mainContent>
+            <ScrollView orientation="vertical">
             <StackLayout orientation="vertical">
                 <GridLayout horizontalAlignment="left" rows="auto" columns="*, auto">
                 <Label text="Control Mode" class="sidedrawer-list-item" row="0" col="0"/>
-                <SegmentedBar row="0" col="1">
-                    <SegmentedBar.items>
-                        <SegmentedBarItem title="MX1"/>
-                        <SegmentedBarItem title="MX2"/>
-                        <SegmentedBarItem title="MX2+"/>
-                    </SegmentedBar.items>
-                </SegmentedBar>
+                <SegmentedBar id="control_modes" row="0" col="1" selectedIndexChanged="{{ onControlModeSelected }}"/>
                 </GridLayout>
 
                 <GridLayout horizontalAlignment="left" rows="auto" columns="*, auto">
@@ -80,12 +75,7 @@
 
                 <GridLayout horizontalAlignment="left" rows="auto" columns="*, auto">
                 <Label text="Units" class="sidedrawer-list-item" row="0" col="0"/>
-                <SegmentedBar row="0" col="1">
-                    <SegmentedBar.items>
-                        <SegmentedBarItem title="English"/>
-                        <SegmentedBarItem title="Metric"/>
-                    </SegmentedBar.items>
-                </SegmentedBar>
+                <SegmentedBar id="units" row="0" col="1" selectedIndexChanged="{{ onUnitsSelected }}"/>
                 </GridLayout>
 
                 <Label text="Acceleration" class="sidedrawer-list-item" />
@@ -120,23 +110,22 @@
                 <Button row="3" colSpan="2" text="stop scan" tap="{{ doStopScanning }}" class="button button-danger" />
                 </GridLayout>
                 <ActivityIndicator busy="{{ isLoading }}" />
-                <GridLayout rows="*">
-                    <ListView items="{{ peripherals }}" itemTap="{{ onPeripheralTap }}" separatorColor="#90c3d4">
-                        <ListView.itemTemplate>
-                            <StackLayout orientation="horizontal" class="padded-label">
-                                <StackLayout class="padded-label-stack">
-                                <Image horizontalAlignment="right" width="30" src="~/res/signal-strength.png" />
-                                <Label horizontalAlignment="right" width="30" text="{{ RSSI }}" class="rssi-label" />
-                                </StackLayout>
-                                <StackLayout class="padded-label-stack">
-                                <Label text="{{ name }}" class="title-label" textWrap="true" />
-                                <Label text="{{ UUID }}" class="uuid-label" textWrap="true" />
-                                </StackLayout>
+                <ListView height="300" items="{{ peripherals }}" itemTap="{{ onPeripheralTap }}" separatorColor="#90c3d4">
+                    <ListView.itemTemplate>
+                        <StackLayout orientation="horizontal" class="padded-label">
+                            <StackLayout class="padded-label-stack">
+                            <Image horizontalAlignment="right" width="30" src="~/res/signal-strength.png" />
+                            <Label horizontalAlignment="right" width="30" text="{{ RSSI }}" class="rssi-label" />
                             </StackLayout>
-                        </ListView.itemTemplate>
-                    </ListView>
-                </GridLayout>
+                            <StackLayout class="padded-label-stack">
+                            <Label text="{{ name }}" class="title-label" textWrap="true" />
+                            <Label text="{{ UUID }}" class="uuid-label" textWrap="true" />
+                            </StackLayout>
+                        </StackLayout>
+                    </ListView.itemTemplate>
+                </ListView>
             </StackLayout>
+            </ScrollView>
         </nsDrawer:RadSideDrawer.mainContent>
     </nsDrawer:RadSideDrawer>
 </Page>
