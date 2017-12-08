@@ -43,6 +43,8 @@ function onCharacteristicTap(args) {
         serviceUUID: service.UUID,
         characteristicUUID: characteristic.UUID
       }).then(function (result) {
+        console.log("TEST");
+        console.log(JSON.stringify(result));
         // result.value is an ArrayBuffer. Every service has a different encoding.
         // fi. a heartrate monitor value can be retrieved by:
         //   var data = new Uint8Array(result.value);
@@ -51,6 +53,7 @@ function onCharacteristicTap(args) {
         service.set("feedbackRaw", result.valueRaw);
         service.set("feedbackTimestamp", getTimestamp());
       }, function(error) {
+        console.log("ERROR");
         service.set("feedback", error);
         service.set("feedbackTimestamp", getTimestamp());
       });

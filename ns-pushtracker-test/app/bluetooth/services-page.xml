@@ -1,4 +1,8 @@
 <Page xmlns="http://www.nativescript.org/tns.xsd" loaded="pageLoaded">
+    <ActionBar class="action-bar">
+        <Label class="action-bar-title" text="Services"></Label>
+    </ActionBar>
+
   <StackLayout col="0" orientation="vertical">
     <StackLayout col="0" orientation="vertical" class="tab-content">
       <StackLayout orientation="horizontal">

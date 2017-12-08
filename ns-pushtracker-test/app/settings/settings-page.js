@@ -13,6 +13,7 @@ const bluetooth = require("../bluetooth/bluetooth");
 const settings = new SettingsViewModel();
 
 let page = null;
+let scannedForSmartDrives = false;
 
 /* ***********************************************************
 * Use the "onNavigatingTo" handler to initialize the page binding context.
@@ -107,7 +108,8 @@ function onPeripheralTap(args) {
         context: {
             info: "something you want to pass to your page",
             foo: "bar",
-            peripheral: peri
+            peripheral: peri,
+            isSmartDrive: scannedForSmartDrives
         },
         animated: true
     };
@@ -130,6 +132,7 @@ function peripheralDiscoveredCallback(p) {
 }
 
 function doScanForSmartDrive() {
+    scannedForSmartDrives = true;
     settings.set("isLoading", true);
     bluetooth.scanForSmartDrive(peripheralDiscoveredCallback)
     .then(function() {
@@ -147,6 +150,7 @@ function doScanForSmartDrive() {
 }
 
 function doStartScanning() {
+    scannedForSmartDrives = false;
     settings.set("isLoading", true);
     bluetooth.scanForAny(peripheralDiscoveredCallback)
     .then(function() {
