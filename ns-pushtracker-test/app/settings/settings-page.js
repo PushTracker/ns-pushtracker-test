@@ -1,3 +1,5 @@
+const ObservableArray = require("data/observable-array");
+
 const dialogsModule = require("ui/dialogs");
 
 const frameModule = require("ui/frame");
@@ -6,7 +8,11 @@ const segmentedBarModule = require("ui/segmented-bar");
 
 const SettingsViewModel = require("./settings-view-model");
 
-let settings = new SettingsViewModel();
+const bluetooth = require("../bluetooth/bluetooth");
+
+const settings = new SettingsViewModel();
+
+let page = null;
 
 /* ***********************************************************
 * Use the "onNavigatingTo" handler to initialize the page binding context.
@@ -21,7 +27,7 @@ function onNavigatingTo(args) {
         return;
     }
 
-    const page = args.object;
+    page = args.object;
     page.bindingContext = settings;
 
     function makeItem(o) {
@@ -30,6 +36,9 @@ function onNavigatingTo(args) {
 
         return i;
     }
+
+    // add peripherals to settings
+    settings.set("peripherals", bluetooth.peripherals);
 
     // set up control mode
     const controlModeView = page.getViewById("control_modes");
@@ -63,6 +72,131 @@ function onSaveSettingsTap(args) {
     });
 }
 
+// bluetooth interaction
+function onBluetoothEnabledTap() {
+    console.log("tapped!");
+    bluetooth.isBluetoothEnabled().then(function(enabled) {
+        dialogsModule.alert({
+            title: "Enabled?",
+            message: enabled ? "Yes" : "No",
+            okButtonText: "OK, Thanks"
+        });
+    })
+    .catch(function(err) {
+        console.log(err);
+    });
+}
+
+function onEnableBluetoothTap() {
+    bluetooth.enable().then(function(enabled) {
+        dialogsModule.alert({
+            title: "Did the user allow enabling Bluetooth by our app?",
+            message: enabled ? "Yes" : "No",
+            okButtonText: "OK, nice!"
+        });
+    });
+}
+
+function onPeripheralTap(args) {
+    var index = args.index;
+    var peri = bluetooth.peripherals.getItem(index);
+    console.log("selected: "+peri.UUID);
+
+    var navigationEntry = {
+        moduleName: "bluetooth/services-page",
+        context: {
+            info: "something you want to pass to your page",
+            foo: "bar",
+            peripheral: peri
+        },
+        animated: true
+    };
+    var topmost = frameModule.topmost();
+    topmost.navigate(navigationEntry);
+}
+
+function updatePeripheralListHeight(h) {
+    if (page === null) {
+        return;
+    }
+    // update height of the list view accordingly
+    const peripheralList = page.getViewById("peripherals");
+    if (peripheralList !== null) {
+        peripheralList.height = h;
+    }
+}
+
+function peripheralDiscoveredCallback(p) {
+}
+
+function doScanForSmartDrive() {
+    settings.set("isLoading", true);
+    bluetooth.scanForSmartDrive(peripheralDiscoveredCallback)
+    .then(function() {
+        settings.set("isLoading", false);    
+    })
+    .catch(function(err) {
+        settings.set("isLoading", false);
+        var errMsg = `${err}`;
+        dialogsModule.alert({
+            title: "Whoops",
+            message: errMsg,
+            okButtonText: "OK, got it."
+        });
+    });
+}
+
+function doStartScanning() {
+    settings.set("isLoading", true);
+    bluetooth.scanForAny(peripheralDiscoveredCallback)
+    .then(function() {
+        settings.set("isLoading", false);    
+    })
+    .catch(function(err) {
+        settings.set("isLoading", false);
+        var errMsg = `${err}`;
+        dialogsModule.alert({
+            title: "Whoops",
+            message: errMsg,
+            okButtonText: "OK, got it."
+        });
+    });
+}
+
+function doStopScanning() {
+    bluetooth.stopScanning()
+    .then(function() {
+        settings.set("isLoading", false);
+    })
+    .catch(function(err) {
+        settings.set("isLoading", false);
+        dialogsModule.alert({
+            title: "Whoops",
+            message: err,
+            okButtonText: "OK, that's fine"
+        });
+    });
+}
+
+function doClearPeripherals() {
+    bluetooth.clearPeripherals();
+}
+
+function onPeripheralsChangedEvent(args) {
+    const newHeight = 40 * (bluetooth.peripherals.length);
+    updatePeripheralListHeight(newHeight);
+}
+
+bluetooth.peripherals.on("change", onPeripheralsChangedEvent);
+
 exports.onNavigatingTo = onNavigatingTo;
 exports.onDrawerButtonTap = onDrawerButtonTap;
 exports.onSaveSettingsTap = onSaveSettingsTap;
+
+exports.doStopScanning = doStopScanning;
+exports.doStartScanning = doStartScanning;
+exports.doScanForSmartDrive = doScanForSmartDrive;
+exports.onPeripheralTap = onPeripheralTap;
+exports.onEnableBluetoothTap = onEnableBluetoothTap;
+exports.onBluetoothEnabledTap = onBluetoothEnabledTap;
+exports.doClearPeripherals = doClearPeripherals;

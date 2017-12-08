@@ -98,19 +98,20 @@
 
                 <GridLayout columns="*, *" rows="auto, auto, auto, auto" horizontalAlignment="center" class="tab-content">
                 <iOS>
-                    <Button row="0" colSpan="2" text="is bluetooth enabled?" tap="{{ doIsBluetoothEnabled }}" class="button button-positive" />
+                    <Button row="0" colSpan="2" text="is bluetooth enabled?" tap="onBluetoothEnabledTap" class="button button-positive" />
                 </iOS>
                 <Android>
-                    <Button row="0" col="0" text="bluetooth enabled?" tap="{{ doIsBluetoothEnabled }}" class="button button-positive" />
-                    <Button row="0" col="1" text="enable bluetooth" tap="{{ doEnableBluetooth }}" class="button button-positive" />
+                    <Button row="0" col="0" text="bluetooth enabled?" tap="onBluetoothEnabledTap" class="button button-positive" />
+                    <Button row="0" col="1" text="enable bluetooth" tap="onEnableBluetoothTap" class="button button-positive" />
                 </Android>
                 <Label row="1" colSpan="2" text="scan 4 seconds for:" class="hint" textWrap="true" />
-                <Button row="2" col="0" text="any peripheral" tap="{{ doStartScanning }}" class="button button-neutral" />
-                <Button row="2" col="1" text="a SmartDrive" tap="{{ doScanForSmartDrive }}" class="button button-neutral" />
-                <Button row="3" colSpan="2" text="stop scan" tap="{{ doStopScanning }}" class="button button-danger" />
+                <Button row="2" col="0" text="any peripheral" tap="doStartScanning" class="button button-neutral" />
+                <Button row="2" col="1" text="a SmartDrive" tap="doScanForSmartDrive" class="button button-neutral" />
+                <Button row="3" col="0" text="stop scan" tap="doStopScanning" class="button button-danger" />
+                <Button row="3" col="1" text="clear" tap="doClearPeripherals" class="button button-danger" />
                 </GridLayout>
                 <ActivityIndicator busy="{{ isLoading }}" />
-                <ListView height="300" items="{{ peripherals }}" itemTap="{{ onPeripheralTap }}" separatorColor="#90c3d4">
+                <ListView id="peripherals" items="{{ peripherals }}" itemTap="onPeripheralTap" separatorColor="#90c3d4" itemHeight="40">
                     <ListView.itemTemplate>
                         <StackLayout orientation="horizontal" class="padded-label">
                             <StackLayout class="padded-label-stack">
