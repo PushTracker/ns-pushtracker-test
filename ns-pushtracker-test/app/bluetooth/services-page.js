@@ -8,6 +8,12 @@ const Packet = require("../packet/packet");
 const SmartDrive = require("../smartdrive/smartdrive.js");
 
 let _peripheral = null;
+let receivedData = null;
+
+function onNotify(result) {
+  const data = new Uint8Array(result.value);
+  receivedData.push(observable.fromObject({ value: Packet.toString(data) }));
+}
 
 function pageLoaded(args) {
   const page = args.object;
@@ -19,6 +25,7 @@ function pageLoaded(args) {
 
   _peripheral = page.navigationContext.peripheral;
   const discoveredServices = new observableArray.ObservableArray();
+  receivedData = new observableArray.ObservableArray();
   page.bindingContext = _peripheral;
   _peripheral.set("isLoading", true);
 
@@ -36,6 +43,7 @@ function pageLoaded(args) {
         _peripheral.set("isLoading", false);
         _peripheral.set("services", discoveredServices);
         _peripheral.set("peripheral", peripheral);
+        _peripheral.set("receivedData", receivedData);
         
         _peripheral.set("isSmartDrive", false);
 
@@ -43,7 +51,7 @@ function pageLoaded(args) {
         if (SmartDrive.peripheralIsSmartDrive(peripheral)) {
           _peripheral.set("isSmartDrive", true);
           // connect 
-          SmartDrive.connect(peripheral).then(() => {
+          SmartDrive.connect(peripheral, onNotify).then(() => {
             // send double tap
             setTimeout(() => {
               SmartDrive.sendTap(peripheral);

@@ -42,10 +42,10 @@ function clearPeripherals() {
 
 // original 
 exports._bluetooth = bluetooth;
+exports.isPeripheralModeSupported = bluetooth.isPeripheralModeSupported;
 exports.isBluetoothEnabled = bluetooth.isBluetoothEnabled;
 exports.enable = bluetooth.enable;
 // what we add / wrap
-exports.isSmartDrive = 
 exports.peripherals = peripherals;
 exports.clearPeripherals = clearPeripherals;
 exports.stopScanning = stopScanning;

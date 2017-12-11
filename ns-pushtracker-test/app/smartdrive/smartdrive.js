@@ -45,7 +45,7 @@ function sendTap(peri) {
 
 const notificationInterval = 1000; // ms
 
-function connect(peri) {
+function connect(peri, onNotify) {
     const deferred = Q.defer();
     const peripheral = peri;
     if (peripheral === null || peripheral === undefined || peripheral.state !== "connected") {
@@ -63,10 +63,7 @@ function connect(peri) {
                     peripheralUUID: peripheral.UUID,
                     serviceUUID: smartDriveUUID,
                     characteristicUUID: c,
-                    onNotify: function(result) {
-                        const data = new Uint8Array(result.value);
-                        console.log(Packet.toString(data));
-                    }
+                    onNotify: onNotify
                 });
                 d.resolve();
             }, i * notificationInterval);

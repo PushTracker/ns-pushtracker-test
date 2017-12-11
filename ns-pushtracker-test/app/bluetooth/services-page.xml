@@ -18,12 +18,19 @@
 
     <Label text="{{ isSmartDrive ? 'Connected to a SmartDrive!' : '' }}" class="details-label-title" />
 
-    <GridLayout rows="*">
+    <GridLayout rows="auto, *">
       <ListView items="{{ services }}" itemTap="onServiceTap" separatorColor="#90c3d4">
         <ListView.itemTemplate>
           <StackLayout col="0" class="tab-content">
             <Label text="{{ name }}" />
             <Label text="{{ UUID }}" visibility="{{ name != UUID ? 'visible' : 'collapse' }}" />
+          </StackLayout>
+        </ListView.itemTemplate>
+      </ListView>
+      <ListView row="1" items="{{ receivedData }}" separatorColor="#90c3d4">
+        <ListView.itemTemplate>
+          <StackLayout col="0" class="tab-content">
+            <Label text="{{ value }}" />
           </StackLayout>
         </ListView.itemTemplate>
       </ListView>

@@ -67,8 +67,24 @@ function onSaveSettingsTap(args) {
 }
 
 // bluetooth interaction
+function onPeripheralModeSupportedTap() {
+    const bluetoothAdapter = bluetooth._bluetooth.getAdapter();
+    console.log(bluetoothAdapter.isMultipleAdvertisementSupported());
+    console.log(bluetoothAdapter.isOffloadedFilteringSupported());
+    console.log(bluetoothAdapter.isOffloadedScanBatchingSupported());
+    bluetooth.isPeripheralModeSupported().then((supported) => {
+        dialogsModule.alert({
+            title: "Peripheral Mode Supported?",
+            message: supported ? "Yes" : "No",
+            okButtonText: "OK, Thanks"
+        });
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+}
+
 function onBluetoothEnabledTap() {
-    console.log("tapped!");
     bluetooth.isBluetoothEnabled().then((enabled) => {
         dialogsModule.alert({
             title: "Enabled?",
@@ -191,5 +207,6 @@ exports.doStartScanning = doStartScanning;
 exports.doScanForSmartDrive = doScanForSmartDrive;
 exports.onPeripheralTap = onPeripheralTap;
 exports.onEnableBluetoothTap = onEnableBluetoothTap;
+exports.onPeripheralModeSupportedTap = onPeripheralModeSupportedTap;
 exports.onBluetoothEnabledTap = onBluetoothEnabledTap;
 exports.doClearPeripherals = doClearPeripherals;
