@@ -1,27 +1,59 @@
-var Binding = require('./packet_bindings');
-var Buffer = require('buffer').Buffer;
+const Binding = require("./packet_bindings");
+const Buffer = require("buffer").Buffer;
 
-function bindingTypeToString( bindingType, bindingValue ) {
-    var valueName = null;
-    var names = Object.keys(Binding[ bindingType ]).filter(function(key) {
-        if ( Binding[ bindingType ][ key ] == bindingValue ) {
+function bindingTypeToString(bindingType, bindingValue) {
+    let valueName = null;
+    const names = Object.keys(Binding[bindingType]).filter((key) => {
+        if (Binding[bindingType][key] === bindingValue) {
             return true;
         }
     });
-    if (names.length == 1)
+    if (names.length === 1) {
         valueName = names[0];
+    }
+
     return valueName;
-};
+}
 
 function decimalToHex(d) {
-    var hex = Number(d).toString(16);
-    hex = "00".substr(0, 2 - hex.length) + hex; 
-    return hex.toUpperCase();
+    const hex = Number(d).toString(16);
+    const hexStr = "00".substring(0, 2 - hex.length) + hex;
+
+    return hexStr.toUpperCase();
+}
+
+function toString(data) {
+    const p = new Packet(data);
+    let dataStr = "";
+    data.map((d) => {
+        dataStr += ` ${decimalToHex(d)}`;
+    });
+    const str = `${p.Type()}::${p.SubType()}::${dataStr.trim()}`;
+    p.destroy();
+
+    return str;
+}
+
+function makePacketData(type, subtype, key, data) {
+  const p = new Packet();
+  p.makePacket(type, subtype, key, data);
+  const dataBuffer = p.writableBuffer();
+  p.destroy();
+
+  return bufferToHex(dataBuffer);
+}
+
+function bufferToHex(dataArray) {
+  const str = dataArray.map((d) => {
+    return `0x${d.toString(16).toUpperCase()}`;
+  });
+
+  return str;
 }
 
 function Packet(bytes) {
-    this.initialize( bytes );
-};
+    this.initialize(bytes);
+}
 
 // LIFECYCLE
 
@@ -33,23 +65,24 @@ Packet.prototype.initialize = function(bytes) {
     this._bytes = bytes;
 
     if (bytes) {
-        this.instance.processPacket( bytes );
+        this.instance.processPacket(bytes);
     }
 };
 
 Packet.prototype.destroy = function() {
-    if (this.instance)
+    if (this.instance) {
         this.instance.delete();
+    }
 };
 
 // BINDING WRAPPING
 
 Packet.prototype.makePacket = function(type, subType, key, data) {
-    if (this.instance == undefined) {
+    if (this.instance === undefined || this.instance === null) {
         this.initialize();
     }
     this.instance.Type = Binding.PacketType[type];
-    this.instance[type] = Binding['Packet'+type+'Type'][subType];
+    this.instance[type] = Binding[`Packet${type}Type`][subType];
     if (key && data) {
         this.instance[key] = data;
     }
@@ -60,9 +93,10 @@ Packet.prototype.send = function(characteristic, type, subType, key, data, lengt
         if (type && subType) {
             this.makePacket(type, subType, key, data);
         }
-        if (length)
+        if (length) {
             this.instance.length = length;
-        var output = this.writableBuffer();
+        }
+        const output = this.writableBuffer();
         if (output) {
             //console.log(output);
             characteristic.write(output, false); // withoutResponse = false
@@ -72,22 +106,19 @@ Packet.prototype.send = function(characteristic, type, subType, key, data, lengt
 };
 
 Packet.prototype.writableBuffer = function() {
-    var output = null;
+    let output = null;
 
     if (this.instance) {
-        var vectorOut = new Binding.VectorInt();
+        let vectorOut = new Binding.VectorInt();
         vectorOut = this.instance.format();
-        var len = vectorOut.size();
+        const len = vectorOut.size();
         output = Buffer.alloc(len);
-        var str = ""
-        for (var i=0; i<vectorOut.size(); i++) {
+        for (let i = 0; i < vectorOut.size(); i++) {
             output[i] = vectorOut.get(i);
-            str += "0x"+decimalToHex(vectorOut.get(i))+" ";
         }
-        str += "\n";
-        //console.log(str);
         vectorOut.delete();
     }
+
     return output;
 };
 
@@ -96,10 +127,10 @@ Packet.prototype.writableBuffer = function() {
 Packet.prototype.Type = function(newType) {
     if (this.instance) {
         if (newType) {
-            this.instance.Type = Binding.PacketType[ newType ];
+            this.instance.Type = Binding.PacketType[newType];
         }
         else {
-            return bindingTypeToString( "PacketType", this.instance.Type );
+            return bindingTypeToString("PacketType", this.instance.Type);
         }
     }
     else {
@@ -109,13 +140,13 @@ Packet.prototype.Type = function(newType) {
 
 Packet.prototype.SubType = function(newSubType) {
     if (this.instance) {
-        var type = this.Type();
-        var bindingKey = "Packet"+type+"Type";
+        const type = this.Type();
+        const bindingKey = `Packet${type}Type`;
         if (newSubType) {
-            this.instance[ this.instance.Type ] = Binding[ bindingKey ][ newSubType ];
+            this.instance[this.instance.Type] = Binding[bindingKey][newSubType];
         }
         else {
-            return bindingTypeToString( bindingKey, this.instance[ type ] );
+            return bindingTypeToString(bindingKey, this.instance[type]);
         }
     }
     else {
@@ -127,6 +158,7 @@ Packet.prototype.data = function(key) {
     if (this.instance) {
         return this.instance[key];
     }
+
     return null;
 };
 
@@ -148,6 +180,12 @@ Packet.prototype.parseError = function(error) {
 Packet.prototype.parseOTA = function(ota) {
 };
 
-module.exports = function(bytes) {
+// export packet
+module.exports.Packet = function(bytes) {
     return new Packet(bytes);
-}
+};
+// export functions
+module.exports.decimalToHex = decimalToHex;
+module.exports.bufferToHex = bufferToHex;
+module.exports.makePacketData = makePacketData;
+module.exports.toString = toString;
