@@ -1,19 +1,12 @@
-const ObservableArray = require("data/observable-array");
-
 const dialogsModule = require("ui/dialogs");
-
 const frameModule = require("ui/frame");
-
 const segmentedBarModule = require("ui/segmented-bar");
 
 const SettingsViewModel = require("./settings-view-model");
-
 const bluetooth = require("../bluetooth/bluetooth");
 
 const settings = new SettingsViewModel();
-
 let page = null;
-let scannedForSmartDrives = false;
 
 /* ***********************************************************
 * Use the "onNavigatingTo" handler to initialize the page binding context.
@@ -76,20 +69,20 @@ function onSaveSettingsTap(args) {
 // bluetooth interaction
 function onBluetoothEnabledTap() {
     console.log("tapped!");
-    bluetooth.isBluetoothEnabled().then(function(enabled) {
+    bluetooth.isBluetoothEnabled().then((enabled) => {
         dialogsModule.alert({
             title: "Enabled?",
             message: enabled ? "Yes" : "No",
             okButtonText: "OK, Thanks"
         });
     })
-    .catch(function(err) {
+    .catch((err) => {
         console.log(err);
     });
 }
 
 function onEnableBluetoothTap() {
-    bluetooth.enable().then(function(enabled) {
+    bluetooth.enable().then((enabled) => {
         dialogsModule.alert({
             title: "Did the user allow enabling Bluetooth by our app?",
             message: enabled ? "Yes" : "No",
@@ -99,11 +92,11 @@ function onEnableBluetoothTap() {
 }
 
 function onPeripheralTap(args) {
-    var index = args.index;
-    var peri = bluetooth.peripherals.getItem(index);
-    console.log("selected: "+peri.UUID);
+    const index = args.index;
+    const peri = bluetooth.peripherals.getItem(index);
+    console.log(`selected: ${peri.UUID}`);
 
-    var navigationEntry = {
+    const navigationEntry = {
         moduleName: "bluetooth/services-page",
         context: {
             info: "something you want to pass to your page",
@@ -113,7 +106,7 @@ function onPeripheralTap(args) {
         },
         animated: true
     };
-    var topmost = frameModule.topmost();
+    const topmost = frameModule.topmost();
     topmost.navigate(navigationEntry);
 }
 
@@ -132,36 +125,32 @@ function peripheralDiscoveredCallback(p) {
 }
 
 function doScanForSmartDrive() {
-    scannedForSmartDrives = true;
     settings.set("isLoading", true);
     bluetooth.scanForSmartDrive(peripheralDiscoveredCallback)
-    .then(function() {
-        settings.set("isLoading", false);    
-    })
-    .catch(function(err) {
+    .then(() => {
         settings.set("isLoading", false);
-        var errMsg = `${err}`;
+    })
+    .catch((err) => {
+        settings.set("isLoading", false);
         dialogsModule.alert({
             title: "Whoops",
-            message: errMsg,
+            message: `${err}`,
             okButtonText: "OK, got it."
         });
     });
 }
 
 function doStartScanning() {
-    scannedForSmartDrives = false;
     settings.set("isLoading", true);
     bluetooth.scanForAny(peripheralDiscoveredCallback)
-    .then(function() {
-        settings.set("isLoading", false);    
-    })
-    .catch(function(err) {
+    .then(() => {
         settings.set("isLoading", false);
-        var errMsg = `${err}`;
+    })
+    .catch((err) => {
+        settings.set("isLoading", false);
         dialogsModule.alert({
             title: "Whoops",
-            message: errMsg,
+            message: `${err}`,
             okButtonText: "OK, got it."
         });
     });
@@ -169,14 +158,14 @@ function doStartScanning() {
 
 function doStopScanning() {
     bluetooth.stopScanning()
-    .then(function() {
+    .then(() => {
         settings.set("isLoading", false);
     })
-    .catch(function(err) {
+    .catch((err) => {
         settings.set("isLoading", false);
         dialogsModule.alert({
             title: "Whoops",
-            message: err,
+            message: `${err}`,
             okButtonText: "OK, that's fine"
         });
     });
