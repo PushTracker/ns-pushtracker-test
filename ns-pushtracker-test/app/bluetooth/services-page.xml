@@ -16,6 +16,8 @@
 
     <ActivityIndicator busy="{{ isLoading }}"/>
 
+    <Label text="{{ isSmartDrive ? 'Connected to a SmartDrive!' : '' }}" class="details-label-title" />
+
     <GridLayout rows="*">
       <ListView items="{{ services }}" itemTap="onServiceTap" separatorColor="#90c3d4">
         <ListView.itemTemplate>

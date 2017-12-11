@@ -22,8 +22,6 @@ function pageLoaded(args) {
   page.bindingContext = _peripheral;
   _peripheral.set("isLoading", true);
 
-  let _isSmartDrive = false;
-
   bluetooth.connect(
     {
       UUID: _peripheral.UUID,
@@ -35,49 +33,28 @@ function pageLoaded(args) {
           discoveredServices.push(observable.fromObject(value));
         });
 
-        const sdServices = peripheral.services.filter((v) => {
-          return (v.UUID === SmartDrive.UUID);
-        });
-        _isSmartDrive = sdServices.length > 0;
-
-        // if this is a smartDrive, subscribe to characteristics
-        if (_isSmartDrive) {
-          let i = 0;
-          SmartDrive.Characteristics.map((c) => {
-            setTimeout(() => {
-              console.log(`subscribing to: ${c}`);
-              bluetooth.startNotifying({
-                peripheralUUID: peripheral.UUID,
-                serviceUUID: SmartDrive.UUID,
-                characteristicUUID: c,
-                onNotify: function(result) {
-                  const data = new Uint8Array(result.value);
-                  console.log(Packet.toString(data));
-                }
-              });
-            }, i * 1000);
-            i++;
-          });
-          // send double tap
-          setTimeout(SmartDrive.sendTap.bind(_peripheral), 10000);
-          setTimeout(SmartDrive.sendTap.bind(_peripheral), 10500);
-        }
-
         _peripheral.set("isLoading", false);
         _peripheral.set("services", discoveredServices);
-      },
-      onDisconnected: function (peripheral) {
-        // if we're a smartDrive, unsubscribe from all characteristics
-        if (_isSmartDrive) {
-          SmartDrive.Characteristics.map((c) => {
-            console.log(`unsubscribing from: ${c}`);
-            bluetooth.stopNotifying({
-              peripheralUUID: peripheral.UUID,
-              serviceUUID: SmartDrive.UUID,
-              characteristicUUID: c
-            });
+        _peripheral.set("peripheral", peripheral);
+        
+        _peripheral.set("isSmartDrive", false);
+
+        // if this is a smartDrive, subscribe to characteristics
+        if (SmartDrive.peripheralIsSmartDrive(peripheral)) {
+          _peripheral.set("isSmartDrive", true);
+          // connect 
+          SmartDrive.connect(peripheral).then(() => {
+            // send double tap
+            setTimeout(() => {
+              SmartDrive.sendTap(peripheral);
+            }, 1000);
+            setTimeout(() => {
+              SmartDrive.sendTap(peripheral);
+            }, 1500);
           });
         }
+      },
+      onDisconnected: function (peripheral) {
         // let the user know we were disconnected
         dialogs.alert({
           title: "Disconnected",
@@ -107,33 +84,36 @@ function onServiceTap(args) {
 }
 
 function onDisconnectTap(args) {
-  console.log(`Disconnecting peripheral ${_peripheral.UUID}`);
-  bluetooth.disconnect(
-    {
-      UUID: _peripheral.UUID
-    }
-  ).then(() => {
-      // going back to previous page
-      frameModule.topmost().navigate({
-        moduleName: "settings/settings-page",
-        animated: true,
-        transition: {
-          name: "slideRight"
-        }
-      });
-    },
-    (err) => {
-      console.log(err);
-      // still going back to previous page
-      frameModule.topmost().navigate({
-        moduleName: "settings/settings-page",
-        animated: true,
-        transition: {
-          name: "slideRight"
-        }
-      });
-    }
-  );
+  // if we're a smartDrive, unsubscribe from all characteristics
+  SmartDrive.disconnect(_peripheral.get("peripheral")).then(() => {
+    console.log(`Disconnecting peripheral ${_peripheral.UUID}`);
+    bluetooth.disconnect(
+      {
+        UUID: _peripheral.UUID
+      }
+    ).then(() => {
+        // going back to previous page
+        frameModule.topmost().navigate({
+          moduleName: "settings/settings-page",
+          animated: true,
+          transition: {
+            name: "slideRight"
+          }
+        });
+      },
+      (err) => {
+        console.log(err);
+        // still going back to previous page
+        frameModule.topmost().navigate({
+          moduleName: "settings/settings-page",
+          animated: true,
+          transition: {
+            name: "slideRight"
+          }
+        });
+      }
+    );
+  });
 }
 
 exports.pageLoaded = pageLoaded;
