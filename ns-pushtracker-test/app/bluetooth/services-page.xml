@@ -16,6 +16,7 @@
       <Label text="{{ UUID }}" class="details-services-uuid" />
       <!--<Label text="{{ state }}" />-->
       <Button id="connection" tap="onConnectionTap" class="button button-positive" />
+      <Button text="Send Tap" tap="onTapTap" class="button button-positive" />
     </StackLayout>
 
     <GridLayout rows="auto, auto, auto, *">

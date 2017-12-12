@@ -10,6 +10,7 @@ const SmartDrive = require("../smartdrive/smartdrive.js");
 let page = null;
 let _peripheral = null;
 let receivedData = null;
+let smartDrivePeripheral = null;
 
 function onNotify(result) {
   const data = new Uint8Array(result.value);
@@ -61,6 +62,19 @@ function onConnectionTap(args) {
   }
   else {
     connect();
+  }
+}
+
+function onTapTap() {
+  if (smartDrivePeripheral === null) {
+    dialogs.alert({
+      title: "Tap failed",
+      message: "Not connected to a SmartDrive",
+      okButtonText: "OK"
+    });
+  }
+  else {
+    SmartDrive.sendTap(smartDrivePeripheral);
   }
 }
 
@@ -120,15 +134,10 @@ function connect() {
         // if this is a smartDrive, subscribe to characteristics
         if (SmartDrive.peripheralIsSmartDrive(peripheral)) {
           _peripheral.set("isSmartDrive", true);
+          smartDrivePeripheral = peripheral;
           // connect 
           SmartDrive.connect(peripheral, onNotify).then(() => {
-            // send double tap
-            setTimeout(() => {
-              SmartDrive.sendTap(peripheral);
-            }, 1000);
-            setTimeout(() => {
-              SmartDrive.sendTap(peripheral);
-            }, 1500);
+            // what do we want to do here? send settings?
           });
         }
       },
@@ -178,3 +187,4 @@ exports.pageLoaded = pageLoaded;
 exports.onServiceTap = onServiceTap;
 exports.onConnectionTap = onConnectionTap;
 exports.onBackTap = onBackTap;
+exports.onTapTap = onTapTap;

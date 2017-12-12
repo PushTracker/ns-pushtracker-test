@@ -68,10 +68,14 @@ function onSaveSettingsTap(args) {
 
 // bluetooth interaction
 function onPeripheralModeSupportedTap() {
+    /*
     const bluetoothAdapter = bluetooth._bluetooth.getAdapter();
     console.log(bluetoothAdapter.isMultipleAdvertisementSupported());
     console.log(bluetoothAdapter.isOffloadedFilteringSupported());
     console.log(bluetoothAdapter.isOffloadedScanBatchingSupported());
+    console.log(bluetoothAdapter.isLeExtendedAdvertisingSupported());
+    console.log(bluetoothAdapter.isLePeriodicAdvertisingSupported());
+    */
     bluetooth.isPeripheralModeSupported().then((supported) => {
         dialogsModule.alert({
             title: "Peripheral Mode Supported?",
@@ -196,11 +200,22 @@ function onPeripheralsChangedEvent(args) {
     updatePeripheralListHeight(newHeight);
 }
 
+function doSetDiscoverable() {
+    bluetooth.setDiscoverable();
+}
+
+function doDisable() {
+    bluetooth.disable();
+}
+
 bluetooth.peripherals.on("change", onPeripheralsChangedEvent);
 
 exports.onNavigatingTo = onNavigatingTo;
 exports.onDrawerButtonTap = onDrawerButtonTap;
 exports.onSaveSettingsTap = onSaveSettingsTap;
+
+exports.doSetDiscoverable = doSetDiscoverable;
+exports.doDisable = doDisable;
 
 exports.doStopScanning = doStopScanning;
 exports.doStartScanning = doStartScanning;
