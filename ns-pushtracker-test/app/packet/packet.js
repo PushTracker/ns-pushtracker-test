@@ -23,13 +23,11 @@ function decimalToHex(d) {
 }
 
 function toString(data) {
-    const p = new Packet(data);
     let dataStr = "";
     data.map((d) => {
         dataStr += ` ${decimalToHex(d)}`;
     });
-    const str = `${p.Type()}::${p.SubType()}::${dataStr.trim()}`;
-    p.destroy();
+    const str = `${dataStr.trim()}`;
 
     return str;
 }
@@ -73,6 +71,10 @@ Packet.prototype.destroy = function() {
     if (this.instance) {
         this.instance.delete();
     }
+};
+
+Packet.prototype.toString = function() {
+
 };
 
 // BINDING WRAPPING
