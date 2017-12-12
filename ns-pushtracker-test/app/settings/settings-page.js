@@ -200,9 +200,14 @@ function onPeripheralsChangedEvent(args) {
     updatePeripheralListHeight(newHeight);
 }
 
+// for peripheral mode:
+
+// see https://code.tutsplus.com/tutorials/how-to-advertise-android-as-a-bluetooth-le-peripheral--cms-25426
 function doSetDiscoverable() {
     bluetooth.setDiscoverable();
 }
+
+// end for peripheral mode
 
 function doDisable() {
     bluetooth.disable();
