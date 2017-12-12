@@ -203,6 +203,8 @@ function onPeripheralsChangedEvent(args) {
 // for peripheral mode:
 
 // see https://code.tutsplus.com/tutorials/how-to-advertise-android-as-a-bluetooth-le-peripheral--cms-25426
+// see https://docs.nativescript.org/core-concepts/accessing-native-apis-with-javascript for how to get intellisense on native apis
+
 function doSetDiscoverable() {
     bluetooth.setDiscoverable();
 }
