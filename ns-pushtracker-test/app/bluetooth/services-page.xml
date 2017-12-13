@@ -7,38 +7,40 @@
         <Label class="action-bar-title" text="Services"></Label>
     </ActionBar>
 
-  <StackLayout orientation="vertical">
-    <StackLayout orientation="vertical" class="tab-content">
-      <StackLayout orientation="horizontal">
-        <Label text="{{ name }}" class="details-label-title" />
-        <Label text=" services" class="details-label-title details-label-title-postfix" />
+  <ScrollView orientation="vertical">
+    <StackLayout orientation="vertical">
+      <StackLayout orientation="vertical" class="tab-content">
+        <StackLayout orientation="horizontal">
+          <Label text="{{ name }}" class="details-label-title" />
+          <Label text=" services" class="details-label-title details-label-title-postfix" />
+        </StackLayout>
+        <Label text="{{ UUID }}" class="details-services-uuid" />
+        <!--<Label text="{{ state }}" />-->
+        <Button id="connection" tap="onConnectionTap" class="button button-positive" />
+        <Button text="Send Tap" tap="onTapTap" class="button button-positive" />
       </StackLayout>
-      <Label text="{{ UUID }}" class="details-services-uuid" />
-      <!--<Label text="{{ state }}" />-->
-      <Button id="connection" tap="onConnectionTap" class="button button-positive" />
-      <Button text="Send Tap" tap="onTapTap" class="button button-positive" />
-    </StackLayout>
 
-    <GridLayout rows="auto, auto, auto, *">
-      <Label row="0" text="Services" class="title" />
-      <ActivityIndicator busy="{{ isLoading }}"/>
-      <ListView id="services" row="1" col="0" items="{{ services }}" itemTap="onServiceTap" separatorColor="#90c3d4" let-odd="odd" let-even="even">
-        <ListView.itemTemplate>
-          <StackLayout class="tab-content">
-            <Label text="{{ name }}" />
-            <Label text="{{ UUID }}" visibility="{{ name != UUID ? 'visible' : 'collapse' }}" />
-          </StackLayout>
-        </ListView.itemTemplate>
-      </ListView>
-      <Label row="2" text="Received Data" class="title" />
-      <ListView row="3" col="0" items="{{ receivedData }}" separatorColor="#90c3d4" let-odd="odd" let-even="even">
-        <ListView.itemTemplate>
-          <StackLayout>
-            <Label text="{{ type + '::' + subtype}}" />
-            <Label text="{{ data }}" />
-          </StackLayout>
-        </ListView.itemTemplate>
-      </ListView>
-    </GridLayout>
-  </StackLayout>
+      <GridLayout rows="auto, auto, auto, auto">
+        <Label row="0" text="Services" class="title" />
+        <ActivityIndicator busy="{{ isLoading }}"/>
+        <ListView id="services" row="1" col="0" items="{{ services }}" itemTap="onServiceTap" separatorColor="#90c3d4" let-odd="odd" let-even="even">
+          <ListView.itemTemplate>
+            <StackLayout class="tab-content">
+              <Label text="{{ name }}" />
+              <Label text="{{ UUID }}" visibility="{{ name != UUID ? 'visible' : 'collapse' }}" />
+            </StackLayout>
+          </ListView.itemTemplate>
+        </ListView>
+        <Label row="2" text="Received Data" class="title" />
+        <ListView id="data" row="3" col="0" items="{{ receivedData }}" separatorColor="#90c3d4" let-odd="odd" let-even="even">
+          <ListView.itemTemplate>
+            <StackLayout>
+              <Label text="{{ type + '::' + subtype}}" />
+              <Label text="{{ data }}" />
+            </StackLayout>
+          </ListView.itemTemplate>
+        </ListView>
+      </GridLayout>
+    </StackLayout>
+  </ScrollView>
 </Page>

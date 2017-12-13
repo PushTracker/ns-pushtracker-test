@@ -37,7 +37,11 @@ function stopAccel() {
 
 function handleAccelData(accelData) {
     //console.log(`(${accelData.x}, ${accelData.y}, ${accelData.z})`);
-    if (accelData && accelData.z < -1.1) {
+    let threshold = -1.1;
+    if (_settings !== null && _settings.tapSensitivity) {
+      threshold = -2.1 - (_settings.tapSensitivity / 100.0);
+    }
+    if (accelData && accelData.z < threshold) {
         //Toast.makeText("You tapped!").show();
         if (smartDrivePeripheral === null) {
           // don't do anything
@@ -48,6 +52,7 @@ function handleAccelData(accelData) {
     }
 }
 
+const maxReceivedData = 20;
 function onNotify(result) {
   const data = new Uint8Array(result.value);
   const p = new Packet.Packet(data);
@@ -56,6 +61,10 @@ function onNotify(result) {
     subtype: p.SubType(),
     data: Packet.toString(data)
   }));
+  if (receivedData.length > maxReceivedData) {
+    receivedData.splice(0, receivedData.length - maxReceivedData);
+  }
+  updateDataListHeight(40 * receivedData.length);
   p.destroy();
 }
 
@@ -67,6 +76,17 @@ function updateServicesListHeight(h) {
     const servicesList = page.getViewById("services");
     if (servicesList !== null) {
         servicesList.height = h;
+    }
+}
+
+function updateDataListHeight(h) {
+    if (page === null) {
+        return;
+    }
+    // update height of the list view accordingly
+    const dataList = page.getViewById("data");
+    if (dataList !== null) {
+        dataList.height = h;
     }
 }
 
