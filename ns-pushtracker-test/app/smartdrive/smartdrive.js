@@ -1,4 +1,5 @@
 const Packet = require("../packet/packet");
+const Binding = require("../packet/packet_bindings");
 const bluetooth = require("nativescript-bluetooth");
 const Q = require("q");
 
@@ -24,6 +25,66 @@ function peripheralIsSmartDrive(peri) {
     });
 
     return sdServices.length > 0;
+}
+
+function sendSettings(peri, settings) {
+    const peripheral = peri;
+    if (peripheral === null || peripheral === undefined || peripheral.state !== "connected") {
+        console.log("SmartDrive no longer connected, not sending settings");
+
+        return;
+    }
+    try {
+        const cm = settings.getControlMode().name;
+        const u = settings.getUnits().name;
+
+        const p = new Packet.Packet();
+        const settingsData = p.data("settings");
+
+        let controlMode = "Off";
+        let units = "English";
+
+        if (cm === "MX1") {
+            controlMode = "Beginner";
+        }
+        else if (cm === "MX2") {
+            controlMode = "Intermediate";
+        }
+        else if (cm === "MX2+") {
+            controlMode = "Advanced";
+        }
+        if (u === "Metric") {
+            units = "Metric";
+        }
+
+        settingsData.ControlMode = Binding.SmartDriveControlMode[controlMode];
+        settingsData.Units = Binding.Units[units];
+        settingsData.Flags = settings.ezOn ? 1 : 0;
+        settingsData.Padding = 0;
+        settingsData.TapSensitivity = settings.tapSensitivity / 100.0;
+        settingsData.Acceleration = settings.acceleration / 100.0;
+        settingsData.MaxSpeed = settings.maxSpeed / 100.0;
+        p.Type("Command");
+        p.SubType("SetSettings");
+        p.data("settings", settingsData);
+
+        const data = p.toBuffer();
+        console.log(`Sending Settings =>  ${Packet.toString(data)}`);
+        bluetooth.write({
+            peripheralUUID: peripheral.UUID,
+            serviceUUID: smartDriveUUID,
+            characteristicUUID: controlCharacteristic,
+            value: data
+        });
+        // free up memory
+        p.destroy();
+    }
+    catch (ex) {
+        console.log("error sending settings");
+        console.log(ex);
+        console.log(ex.fileName);
+        console.log(ex.lineNumber);
+    }
 }
 
 function sendTap(peri) {
@@ -132,4 +193,5 @@ exports.controlChar = controlCharacteristic;
 exports.connect = connect;
 exports.disconnect = disconnect;
 exports.sendTap = sendTap;
+exports.sendSettings = sendSettings;
 exports.peripheralIsSmartDrive = peripheralIsSmartDrive;

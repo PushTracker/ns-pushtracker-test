@@ -9,6 +9,7 @@ const SmartDrive = require("../smartdrive/smartdrive.js");
 
 let page = null;
 let _peripheral = null;
+let _settings = null;
 let receivedData = null;
 let smartDrivePeripheral = null;
 
@@ -88,6 +89,7 @@ function pageLoaded(args) {
   }
 
   _peripheral = page.navigationContext.peripheral;
+  _settings = page.navigationContext.settings;
   connect();
   initAccel();
 }
@@ -178,6 +180,7 @@ function connect() {
           // connect 
           SmartDrive.connect(peripheral, onNotify).then(() => {
             // what do we want to do here? send settings?
+            SmartDrive.sendSettings(peripheral, _settings);
           });
         }
       },

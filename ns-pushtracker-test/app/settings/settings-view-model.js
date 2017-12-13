@@ -23,6 +23,8 @@ function SettingsViewModel() {
             return this.controlModes[this.controlModeSelection];
         },
 
+        ezOn: false,
+
         units: [
             {
                 name: "English"

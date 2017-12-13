@@ -73,8 +73,17 @@ Packet.prototype.destroy = function() {
     }
 };
 
-Packet.prototype.toString = function() {
+Packet.prototype.toBuffer = function() {
+    let output = null;
+    if (this.instance) {
+        output = bufferToHex(this.writableBuffer());
+    }
 
+    return output;
+};
+
+Packet.prototype.toString = function() {
+    return toString(this.toBuffer());
 };
 
 // BINDING WRAPPING
@@ -145,7 +154,7 @@ Packet.prototype.SubType = function(newSubType) {
         const type = this.Type();
         const bindingKey = `Packet${type}Type`;
         if (newSubType) {
-            this.instance[this.instance.Type] = Binding[bindingKey][newSubType];
+            this.instance[type] = Binding[bindingKey][newSubType];
         }
         else {
             return bindingTypeToString(bindingKey, this.instance[type]);
@@ -156,9 +165,14 @@ Packet.prototype.SubType = function(newSubType) {
     }
 };
 
-Packet.prototype.data = function(key) {
+Packet.prototype.data = function(key, value) {
     if (this.instance) {
-        return this.instance[key];
+        if (value) {
+            this.instance[key] = value;
+        }
+        else {
+            return this.instance[key];
+        }
     }
 
     return null;

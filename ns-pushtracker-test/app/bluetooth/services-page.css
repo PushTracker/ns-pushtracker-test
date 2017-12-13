@@ -1,12 +1,1 @@
-.title {
-    font-size: 20;
-    margin-top: 5;
-    margin-bottom: 5;
-    border-bottom-color: black;
-    border-bottom-width: 1;
-}
-
-ListView {
-    border-color: black;
-    background-color: grey;
-}
+.title{font-size:20;margin-top:5;margin-bottom:5;border-bottom-color:black;border-bottom-width:1}ListView{border-color:black;background-color:#dbdbdb}
