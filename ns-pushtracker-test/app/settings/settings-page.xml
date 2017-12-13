@@ -82,20 +82,20 @@
 
                 <Label text="Acceleration" class="sidedrawer-list-item" />
                 <GridLayout rows="auto" columns="*, auto">
-                <Slider value="{{ acceleration }}" row="0" col="0"/>
-                <Label style="min-width: 50" text="{{ getAccelerationLabel() }}" row="0" col="1"/>
+                <Slider verticalAlignment="center" value="{{ acceleration }}" row="0" col="0"/>
+                <Label verticalAlignment="center" style="min-width: 50" text="{{ getAccelerationLabel() }}" row="0" col="1"/>
                 </GridLayout>
 
                 <Label text="Max Speed" class="sidedrawer-list-item" />
                 <GridLayout rows="auto" columns="*, auto">
-                <Slider value="{{ maxSpeed }}" row="0" col="0"/>
-                <Label style="min-width: 50" text="{{ getMaxSpeedLabel() }}" row="0" col="1"/>
+                <Slider verticalAlignment="center" value="{{ maxSpeed }}" row="0" col="0"/>
+                <Label verticalAlignment="center" style="min-width: 50" text="{{ getMaxSpeedLabel() }}" row="0" col="1"/>
                 </GridLayout>
 
                 <Label text="Tap Sensitivity" class="sidedrawer-list-item" />
                 <GridLayout rows="auto" columns="*, auto">
-                <Slider value="{{ tapSensitivity }}" row="0" col="0"/>
-                <Label style="min-width: 50" text="{{ getTapSensitivityLabel() }}" row="0" col="1"/>
+                <Slider verticalAlignment="center" value="{{ tapSensitivity }}" row="0" col="0"/>
+                <Label verticalAlignment="center" style="min-width: 50" text="{{ getTapSensitivityLabel() }}" row="0" col="1"/>
                 </GridLayout>
 
                 <GridLayout columns="*, *" rows="auto, auto, auto, auto, auto" horizontalAlignment="center" class="tab-content">
