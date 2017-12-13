@@ -39,7 +39,7 @@ function handleAccelData(accelData) {
     //console.log(`(${accelData.x}, ${accelData.y}, ${accelData.z})`);
     let threshold = -1.1;
     if (_settings !== null && _settings.tapSensitivity) {
-      threshold = -2.1 - (_settings.tapSensitivity / 100.0);
+      threshold = -2.1 + (_settings.tapSensitivity / 100.0);
     }
     if (accelData && accelData.z < threshold) {
         //Toast.makeText("You tapped!").show();
@@ -52,7 +52,7 @@ function handleAccelData(accelData) {
     }
 }
 
-const maxReceivedData = 20;
+const maxReceivedData = 10;
 function onNotify(result) {
   const data = new Uint8Array(result.value);
   const p = new Packet.Packet(data);

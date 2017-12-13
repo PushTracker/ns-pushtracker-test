@@ -66,7 +66,7 @@
             <ScrollView orientation="vertical">
             <StackLayout orientation="vertical">
                 <GridLayout horizontalAlignment="left" rows="auto" columns="*, auto">
-                <Label text="Control Mode" class="sidedrawer-list-item" row="0" col="0"/>
+                <Label text="Control Mode" class="sidedrawer-list-item" style="padding: 0; margin: 0;" row="0" col="0"/>
                 <SegmentedBar id="control_modes" row="0" col="1" selectedIndexChanged="{{ onControlModeSelected }}"/>
                 </GridLayout>
 
@@ -75,7 +75,7 @@
                 <Switch checked="{{ ezOn }}" row="0" col="1"/>
                 </GridLayout>
 
-                <GridLayout horizontalAlignment="left" rows="auto" columns="*, auto">
+                <GridLayout horizontalAlignment="center" rows="auto" columns="*, auto">
                 <Label text="Units" class="sidedrawer-list-item" row="0" col="0"/>
                 <SegmentedBar id="units" row="0" col="1" selectedIndexChanged="{{ onUnitsSelected }}"/>
                 </GridLayout>
@@ -83,19 +83,19 @@
                 <Label text="Acceleration" class="sidedrawer-list-item" />
                 <GridLayout rows="auto" columns="*, auto">
                 <Slider value="{{ acceleration }}" row="0" col="0"/>
-                <Label text="{{ getAccelerationLabel() }}" row="0" col="1"/>
+                <Label style="min-width: 50" text="{{ getAccelerationLabel() }}" row="0" col="1"/>
                 </GridLayout>
 
                 <Label text="Max Speed" class="sidedrawer-list-item" />
                 <GridLayout rows="auto" columns="*, auto">
                 <Slider value="{{ maxSpeed }}" row="0" col="0"/>
-                <Label text="{{ getMaxSpeedLabel() }}" row="0" col="1"/>
+                <Label style="min-width: 50" text="{{ getMaxSpeedLabel() }}" row="0" col="1"/>
                 </GridLayout>
 
                 <Label text="Tap Sensitivity" class="sidedrawer-list-item" />
                 <GridLayout rows="auto" columns="*, auto">
                 <Slider value="{{ tapSensitivity }}" row="0" col="0"/>
-                <Label text="{{ getTapSensitivityLabel() }}" row="0" col="1"/>
+                <Label style="min-width: 50" text="{{ getTapSensitivityLabel() }}" row="0" col="1"/>
                 </GridLayout>
 
                 <GridLayout columns="*, *" rows="auto, auto, auto, auto, auto" horizontalAlignment="center" class="tab-content">

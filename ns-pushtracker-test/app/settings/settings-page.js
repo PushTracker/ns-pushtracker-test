@@ -40,12 +40,14 @@ function onNavigatingTo(args) {
     const controlModeItems = settings.controlModes.map(makeItem);
     controlModeView.items = controlModeItems;
     controlModeView.selectedIndex = settings.controlModeSelection;
+    controlModeView.width = settings.controlModes.length * 75;
 
     // set up units
     const unitsView = page.getViewById("units");
     const unitsItems = settings.units.map(makeItem);
     unitsView.items = unitsItems;
     unitsView.selectedIndex = settings.unitsSelection;
+    unitsView.width = settings.units.length * 100;
 }
 
 function onNavigatingFrom() {
