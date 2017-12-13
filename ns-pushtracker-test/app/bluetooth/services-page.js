@@ -181,6 +181,7 @@ function connect() {
           SmartDrive.connect(peripheral, onNotify).then(() => {
             // what do we want to do here? send settings?
             SmartDrive.sendSettings(peripheral, _settings);
+            Toast.makeText("Sent Settings").show();
           });
         }
       },

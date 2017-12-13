@@ -43,6 +43,9 @@ function sendSettings(peri, settings) {
 
         let controlMode = "Off";
         let units = "English";
+        let tapSens = 1.0;
+        let accel = 0.3;
+        let speed = 0.7;
 
         if (cm === "MX1") {
             controlMode = "Beginner";
@@ -56,14 +59,27 @@ function sendSettings(peri, settings) {
         if (u === "Metric") {
             units = "Metric";
         }
+        tapSens = settings.tapSensitivity / 100.0;
+        accel = settings.acceleration / 100.0;
+        speed = settings.maxSpeed / 100.0;
+        /*
+        console.log(cm);
+        console.log(u);
+
+        console.log(controlMode);
+        console.log(ezOn);
+        console.log(accel);
+        console.log(speed);
+        console.log(tapSens);
+        */
 
         settingsData.ControlMode = Binding.SmartDriveControlMode[controlMode];
         settingsData.Units = Binding.Units[units];
         settingsData.Flags = settings.ezOn ? 1 : 0;
         settingsData.Padding = 0;
-        settingsData.TapSensitivity = settings.tapSensitivity / 100.0;
-        settingsData.Acceleration = settings.acceleration / 100.0;
-        settingsData.MaxSpeed = settings.maxSpeed / 100.0;
+        settingsData.TapSensitivity = tapSens;
+        settingsData.Acceleration = accel;
+        settingsData.MaxSpeed = speed;
         p.Type("Command");
         p.SubType("SetSettings");
         p.data("settings", settingsData);
