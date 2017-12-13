@@ -34,6 +34,7 @@ function updateSpeedDisplay(speed) {
     }
 
     const gauge = frameModule.topmost().getViewById("gaugeView");
+    gauge.title = `Current Speed:\n${speed.toFixed(2)} mph`;
     const scale = gauge.scales.getItem(0);
     const speedNeedle = scale.indicators.getItem(scale.indicators.length - 1);
 
