@@ -3,6 +3,10 @@ const Buffer = require("buffer").Buffer;
 
 function bindingTypeToString(bindingType, bindingValue) {
     let valueName = null;
+    if (bindingType === null || bindingType === undefined ||
+        bindingValue === null || bindingValue === undefined) {
+        return valueName;
+    }
     const names = Object.keys(Binding[bindingType]).filter((key) => {
         if (Binding[bindingType][key] === bindingValue) {
             return true;
@@ -136,7 +140,7 @@ Packet.prototype.writableBuffer = function() {
 // ACCESSING FUNCTIONS
 
 Packet.prototype.Type = function(newType) {
-    if (this.instance) {
+    if (this.instance !== null && this.instance !== undefined) {
         if (newType) {
             this.instance.Type = Binding.PacketType[newType];
         }
@@ -150,13 +154,13 @@ Packet.prototype.Type = function(newType) {
 };
 
 Packet.prototype.SubType = function(newSubType) {
-    if (this.instance) {
+    if (this.instance !== null && this.instance !== undefined) {
         const type = this.Type();
         const bindingKey = `Packet${type}Type`;
-        if (newSubType) {
+        if (type && bindingKey && newSubType) {
             this.instance[type] = Binding[bindingKey][newSubType];
         }
-        else {
+        else if (bindingKey && type) {
             return bindingTypeToString(bindingKey, this.instance[type]);
         }
     }
