@@ -47,6 +47,12 @@ function onNavigatingTo(args) {
     unitsView.selectedIndex = settings.unitsSelection;
 }
 
+function onNavigatingFrom() {
+}
+
+function onUnloaded() {
+}
+
 /* ***********************************************************
 * According to guidelines, if you have a drawer on your page, you should always
 * have a button that opens it. Get a reference to the RadSideDrawer view and
@@ -218,6 +224,8 @@ function doDisable() {
 bluetooth.peripherals.on("change", onPeripheralsChangedEvent);
 
 exports.onNavigatingTo = onNavigatingTo;
+exports.onNavigatingFrom = onNavigatingFrom;
+exports.onUnloaded = onUnloaded;
 exports.onDrawerButtonTap = onDrawerButtonTap;
 exports.onSaveSettingsTap = onSaveSettingsTap;
 

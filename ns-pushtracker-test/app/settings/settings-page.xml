@@ -1,5 +1,7 @@
 <Page
-    navigatingTo="onNavigatingTo"  
+    navigatingTo="onNavigatingTo"
+    navigatingFrom="onNavigatingFrom"
+    unloaded="onUnloaded"
     xmlns:nsDrawer="nativescript-pro-ui/sidedrawer"
     xmlns:myDrawer="shared/my-drawer"
     xmlns="http://www.nativescript.org/tns.xsd">

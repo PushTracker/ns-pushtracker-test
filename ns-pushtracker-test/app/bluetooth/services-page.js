@@ -12,6 +12,41 @@ let _peripheral = null;
 let receivedData = null;
 let smartDrivePeripheral = null;
 
+
+const accelerometer = require("nativescript-accelerometer");
+const Toast = require("nativescript-toast");
+
+function initAccel() {
+    stopAccel();
+    const accelOptions = {
+        sensorDelay: "ui"
+    };
+    accelerometer.startAccelerometerUpdates(handleAccelData, accelOptions);
+}
+
+function stopAccel() {
+    try {
+        accelerometer.stopAccelerometerUpdates();
+        console.log("stopped accelerometer updates!");
+    }
+    catch (e) {
+        //
+    }
+}
+
+function handleAccelData(accelData) {
+    //console.log(`(${accelData.x}, ${accelData.y}, ${accelData.z})`);
+    if (accelData && accelData.z < -1.5) {
+        Toast.makeText("You tapped!").show();
+        if (smartDrivePeripheral === null) {
+          // don't do anything
+        }
+        else {
+          SmartDrive.sendTap(smartDrivePeripheral);
+        }
+    }
+}
+
 function onNotify(result) {
   const data = new Uint8Array(result.value);
   const p = new Packet.Packet(data);
@@ -54,6 +89,11 @@ function pageLoaded(args) {
 
   _peripheral = page.navigationContext.peripheral;
   connect();
+  initAccel();
+}
+
+function onNavigatingFrom() {
+  stopAccel();
 }
 
 function onConnectionTap(args) {
@@ -184,6 +224,7 @@ function onBackTap(args) {
 }
 
 exports.pageLoaded = pageLoaded;
+exports.onNavigatingFrom = onNavigatingFrom;
 exports.onServiceTap = onServiceTap;
 exports.onConnectionTap = onConnectionTap;
 exports.onBackTap = onBackTap;
