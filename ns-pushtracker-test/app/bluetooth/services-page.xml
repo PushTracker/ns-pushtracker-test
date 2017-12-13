@@ -1,4 +1,7 @@
-<Page xmlns="http://www.nativescript.org/tns.xsd" loaded="pageLoaded" navigatingFrom="onNavigatingFrom">
+<Page xmlns="http://www.nativescript.org/tns.xsd"
+      xmlns:gauge="nativescript-pro-ui/gauges"
+      loaded="pageLoaded" 
+      navigatingFrom="onNavigatingFrom">
     <ActionBar class="action-bar">
         <ActionItem text="Back"
             tap="onBackTap"
@@ -6,8 +9,7 @@
         </ActionItem>
         <Label class="action-bar-title" text="Services"></Label>
     </ActionBar>
-
-  <ScrollView orientation="vertical">
+  <ScrollView orientation="vertical" class="page-content">
     <StackLayout orientation="vertical">
       <StackLayout orientation="vertical" class="tab-content">
         <StackLayout orientation="horizontal">
@@ -20,17 +22,7 @@
         <Button text="Send Tap" tap="onTapTap" class="button button-positive" />
       </StackLayout>
 
-      <GridLayout rows="auto, auto, auto, auto">
-        <Label row="0" text="Services" class="title" />
-        <ActivityIndicator busy="{{ isLoading }}"/>
-        <ListView id="services" row="1" col="0" items="{{ services }}" itemTap="onServiceTap" separatorColor="#90c3d4" let-odd="odd" let-even="even">
-          <ListView.itemTemplate>
-            <StackLayout class="tab-content">
-              <Label text="{{ name }}" />
-              <Label text="{{ UUID }}" visibility="{{ name != UUID ? 'visible' : 'collapse' }}" />
-            </StackLayout>
-          </ListView.itemTemplate>
-        </ListView>
+      <GridLayout rows="*, *, auto, auto">
         <Label row="2" text="Received Data" class="title" />
         <ListView id="data" row="3" col="0" items="{{ receivedData }}" separatorColor="#90c3d4" let-odd="odd" let-even="even">
           <ListView.itemTemplate>
@@ -43,4 +35,43 @@
       </GridLayout>
     </StackLayout>
   </ScrollView>
+
+                <gauge:RadRadialGauge id="gaugeView" row="0" rowSpan="2" title="Current Speed" tap="onTapTap">
+                    <gauge:RadRadialGauge.titleStyle>
+                        <gauge:TitleStyle textColor="black" ios:verticalOffset="20" android:verticalOffset="75"/>
+                    </gauge:RadRadialGauge.titleStyle>
+                    <!-- >> gauges-scales-add-scales -->
+                    <gauge:RadRadialGauge.scales>
+                        <gauge:RadialScale minimum="0.0" maximum="6.0" radius="0.7">
+                            <gauge:RadialScale.scaleStyle>
+                                <gauge:ScaleStyle majorTicksCount="7" minorTicksCount="20" lineThickness="2" labelsOffset="0.1" lineColor="gray" labelsCount="7" ticksOffset="0"
+                                labelsLayoutMode="Outer" ticksLayoutMode="Outer" />
+                            </gauge:RadialScale.scaleStyle>
+                            <!-- >> gauges-scales-add-indicators -->
+                            <gauge:RadialScale.indicators>
+                                <gauge:RadialBarIndicator minimum="0" maximum="3.5" location="0.69">
+                                    <gauge:RadialBarIndicator.indicatorStyle>
+                                        <gauge:BarIndicatorStyle fillColor="green" barWidth="0.08"/>
+                                    </gauge:RadialBarIndicator.indicatorStyle>
+                                </gauge:RadialBarIndicator>
+                                <gauge:RadialBarIndicator minimum="3.5" maximum="4.5" location="0.69">
+                                    <gauge:RadialBarIndicator.indicatorStyle>
+                                        <gauge:BarIndicatorStyle fillColor="yellow" barWidth="0.08"/>
+                                    </gauge:RadialBarIndicator.indicatorStyle>
+                                </gauge:RadialBarIndicator>
+                                <gauge:RadialBarIndicator minimum="4.5" maximum="6.0" location="0.69">
+                                    <gauge:RadialBarIndicator.indicatorStyle>
+                                        <gauge:BarIndicatorStyle fillColor="red" barWidth="0.08"/>
+                                    </gauge:RadialBarIndicator.indicatorStyle>
+                                </gauge:RadialBarIndicator>
+                                <gauge:RadialNeedle id="speedNeedle" value="{{ currentSpeed }}">
+                                    <gauge:RadialNeedle.needleStyle>
+                                        <gauge:NeedleStyle length="0.5" android:topWidth="8" ios:topWidth="3" android:bottomWidth="8" ios:bottomWidth="3"/>
+                                    </gauge:RadialNeedle.needleStyle>
+                                </gauge:RadialNeedle>
+                            </gauge:RadialScale.indicators>
+                            <!-- << gauges-scales-add-indicators -->
+                        </gauge:RadialScale>
+                    </gauge:RadRadialGauge.scales>
+                </gauge:RadRadialGauge>
 </Page>

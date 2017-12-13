@@ -62,16 +62,15 @@ function sendSettings(peri, settings) {
         tapSens = settings.tapSensitivity / 100.0;
         accel = settings.acceleration / 100.0;
         speed = settings.maxSpeed / 100.0;
-        /*
+
         console.log(cm);
         console.log(u);
 
         console.log(controlMode);
-        console.log(ezOn);
+        console.log(settings.ezOn);
         console.log(accel);
         console.log(speed);
         console.log(tapSens);
-        */
 
         settingsData.ControlMode = Binding.SmartDriveControlMode[controlMode];
         settingsData.Units = Binding.Units[units];

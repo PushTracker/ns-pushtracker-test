@@ -4,6 +4,8 @@ const frameModule = require("tns-core-modules/ui/frame");
 const dialogs = require("tns-core-modules/ui/dialogs");
 const bluetooth = require("nativescript-bluetooth");
 
+const GaugesModule = require("nativescript-pro-ui/gauges");
+
 const Packet = require("../packet/packet");
 const SmartDrive = require("../smartdrive/smartdrive.js");
 
@@ -13,6 +15,7 @@ let _settings = null;
 let receivedData = null;
 let smartDrivePeripheral = null;
 
+let currentSpeed = 0;
 
 const accelerometer = require("nativescript-accelerometer");
 const Toast = require("nativescript-toast");
@@ -23,6 +26,22 @@ function initAccel() {
         sensorDelay: "game"
     };
     accelerometer.startAccelerometerUpdates(handleAccelData, accelOptions);
+}
+
+function updateSpeedDisplay(speed) {
+    if (page === null) {
+        return;
+    }
+
+    const gauge = frameModule.topmost().getViewById("gaugeView");
+    const scale = gauge.scales.getItem(0);
+    const speedNeedle = scale.indicators.getItem(scale.indicators.length - 1);
+
+    // update height of the list view accordingly
+    //const speedNeedle = page.getViewById("speedNeedle");
+    if (speedNeedle !== null && speedNeedle !== undefined) {
+        speedNeedle.value = speed;
+    }
 }
 
 function stopAccel() {
@@ -56,6 +75,13 @@ const maxReceivedData = 10;
 function onNotify(result) {
   const data = new Uint8Array(result.value);
   const p = new Packet.Packet(data);
+
+  if (p.Type() === "Data" && p.SubType() === "MotorInfo") {
+    currentSpeed = p.data("motorInfo").speed;
+    //console.log(`Current speed = ${currentSpeed} mph`);
+    updateSpeedDisplay(currentSpeed);
+  }
+
   receivedData.push(observable.fromObject({
     type: p.Type(),
     subtype: p.SubType(),
@@ -74,7 +100,7 @@ function updateServicesListHeight(h) {
     }
     // update height of the list view accordingly
     const servicesList = page.getViewById("services");
-    if (servicesList !== null) {
+    if (servicesList !== null && servicesList !== undefined) {
         servicesList.height = h;
     }
 }
@@ -85,7 +111,7 @@ function updateDataListHeight(h) {
     }
     // update height of the list view accordingly
     const dataList = page.getViewById("data");
-    if (dataList !== null) {
+    if (dataList !== null && dataList !== undefined) {
         dataList.height = h;
     }
 }
@@ -95,7 +121,7 @@ function updateConnectionButtonText() {
     return;
   }
   const button = page.getViewById("connection");
-  if (button !== null) {
+  if (button !== null && button !== undefined) {
     button.text = _peripheral.get("connected") ? "Disconnect" : "Connect";
   }
 }
@@ -116,6 +142,7 @@ function pageLoaded(args) {
 
 function onNavigatingFrom() {
   stopAccel();
+  disconnect();
 }
 
 function onConnectionTap(args) {
@@ -184,7 +211,7 @@ function connect() {
           discoveredServices.push(observable.fromObject(value));
         });
 
-        updateServicesListHeight(40 * peripheral.services.length);
+        //updateServicesListHeight(40 * peripheral.services.length);
 
         _peripheral.set("isLoading", false);
         _peripheral.set("services", discoveredServices);
@@ -201,7 +228,7 @@ function connect() {
           SmartDrive.connect(peripheral, onNotify).then(() => {
             // what do we want to do here? send settings?
             SmartDrive.sendSettings(peripheral, _settings);
-            Toast.makeText("Sent Settings").show();
+            Toast.makeText(`Sent Settings (${_settings.getControlMode().name}, ${_settings.acceleration}, ${_settings.maxSpeed})`).show();
           });
         }
       },
@@ -247,6 +274,7 @@ function onBackTap(args) {
   });
 }
 
+exports.currentSpeed = currentSpeed;
 exports.pageLoaded = pageLoaded;
 exports.onNavigatingFrom = onNavigatingFrom;
 exports.onServiceTap = onServiceTap;
