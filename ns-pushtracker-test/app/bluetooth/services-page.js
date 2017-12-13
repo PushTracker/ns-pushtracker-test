@@ -19,7 +19,7 @@ const Toast = require("nativescript-toast");
 function initAccel() {
     stopAccel();
     const accelOptions = {
-        sensorDelay: "ui"
+        sensorDelay: "game"
     };
     accelerometer.startAccelerometerUpdates(handleAccelData, accelOptions);
 }
@@ -36,8 +36,8 @@ function stopAccel() {
 
 function handleAccelData(accelData) {
     //console.log(`(${accelData.x}, ${accelData.y}, ${accelData.z})`);
-    if (accelData && accelData.z < -1.5) {
-        Toast.makeText("You tapped!").show();
+    if (accelData && accelData.z < -1.1) {
+        //Toast.makeText("You tapped!").show();
         if (smartDrivePeripheral === null) {
           // don't do anything
         }
