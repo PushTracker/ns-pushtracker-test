@@ -4,7 +4,7 @@ const frameModule = require("tns-core-modules/ui/frame");
 const dialogs = require("tns-core-modules/ui/dialogs");
 const bluetooth = require("nativescript-bluetooth");
 
-const GaugesModule = require("nativescript-pro-ui/gauges");
+//const GaugesModule = require("nativescript-pro-ui/gauges");
 
 const Packet = require("../packet/packet");
 const SmartDrive = require("../smartdrive/smartdrive.js");
@@ -12,7 +12,6 @@ const SmartDrive = require("../smartdrive/smartdrive.js");
 let page = null;
 let _peripheral = null;
 let _settings = null;
-let receivedData = null;
 let smartDrivePeripheral = null;
 
 let currentSpeed = 0;
@@ -72,49 +71,21 @@ function handleAccelData(accelData) {
     }
 }
 
-const maxReceivedData = 10;
 function onNotify(result) {
   const data = new Uint8Array(result.value);
   const p = new Packet.Packet(data);
 
-  if (p.Type() === "Data" && p.SubType() === "MotorInfo") {
-    currentSpeed = p.data("motorInfo").speed;
-    //console.log(`Current speed = ${currentSpeed} mph`);
-    updateSpeedDisplay(currentSpeed);
+  if (p.Type() === "Data") {
+    if (p.SubType() === "MotorInfo") {
+      currentSpeed = p.data("motorInfo").speed;
+      //console.log(`Current speed = ${currentSpeed} mph`);
+      updateSpeedDisplay(currentSpeed);
+    }
   }
-
-  receivedData.push(observable.fromObject({
-    type: p.Type(),
-    subtype: p.SubType(),
-    data: Packet.toString(data)
-  }));
-  if (receivedData.length > maxReceivedData) {
-    receivedData.splice(0, receivedData.length - maxReceivedData);
+  else {
+    Toast.makeText(`${p.Type()}::${p.SubType()}`).show();
   }
-  updateDataListHeight(40 * receivedData.length);
   p.destroy();
-}
-
-function updateServicesListHeight(h) {
-    if (page === null) {
-        return;
-    }
-    // update height of the list view accordingly
-    const servicesList = page.getViewById("services");
-    if (servicesList !== null && servicesList !== undefined) {
-        servicesList.height = h;
-    }
-}
-
-function updateDataListHeight(h) {
-    if (page === null) {
-        return;
-    }
-    // update height of the list view accordingly
-    const dataList = page.getViewById("data");
-    if (dataList !== null && dataList !== undefined) {
-        dataList.height = h;
-    }
 }
 
 function updateConnectionButtonText() {
@@ -156,7 +127,7 @@ function onConnectionTap(args) {
 }
 
 function onTapTap() {
-  if (smartDrivePeripheral === null) {
+  if (smartDrivePeripheral === null || smartDrivePeripheral.state !== "connected") {
     dialogs.alert({
       title: "Tap failed",
       message: "Not connected to a SmartDrive",
@@ -168,15 +139,31 @@ function onTapTap() {
   }
 }
 
+function onSettingsTap() {
+  if (smartDrivePeripheral === null || smartDrivePeripheral.state !== "connected") {
+    dialogs.alert({
+      title: "Send Settings Failed",
+      message: "Not connected to a SmartDrive",
+      okButtonText: "OK"
+    });
+  }
+  else {
+    SmartDrive.sendSettings(smartDrivePeripheral, _settings);
+    Toast.makeText(`Sent Settings (${_settings.getControlMode().name}, ${_settings.acceleration}, ${_settings.maxSpeed})`).show();
+  }
+}
+
 function disconnect() {
   // if we're a smartDrive, unsubscribe from all characteristics
-  SmartDrive.disconnect(_peripheral.get("peripheral")).then(() => {
-    console.log(`Disconnecting peripheral ${_peripheral.UUID}`);
+  SmartDrive.disconnect(smartDrivePeripheral).then(() => {
+    console.log(`Disconnecting peripheral ${smartDrivePeripheral.UUID}`);
     bluetooth.disconnect(
       {
-        UUID: _peripheral.UUID
+        UUID: smartDrivePeripheral.UUID
       }
     ).then(() => {
+        smartDrivePeripheral.state = "disconnected";
+        console.log(smartDrivePeripheral.state);
       },
       (err) => {
         console.log(err);
@@ -196,9 +183,7 @@ function disconnect() {
 function connect() {
   _peripheral.set("connected", false);
   const discoveredServices = new observableArray.ObservableArray();
-  receivedData = new observableArray.ObservableArray();
   page.bindingContext = _peripheral;
-  _peripheral.set("isLoading", true);
     bluetooth.connect(
     {
       UUID: _peripheral.UUID,
@@ -214,10 +199,7 @@ function connect() {
 
         //updateServicesListHeight(40 * peripheral.services.length);
 
-        _peripheral.set("isLoading", false);
-        _peripheral.set("services", discoveredServices);
         _peripheral.set("peripheral", peripheral);
-        _peripheral.set("receivedData", receivedData);
         
         _peripheral.set("isSmartDrive", true);
 
@@ -228,10 +210,12 @@ function connect() {
           // connect 
           SmartDrive.connect(peripheral, onNotify).then(() => {
             // what do we want to do here? send settings?
+            /*
             setTimeout(() => {
               SmartDrive.sendSettings(peripheral, _settings);
               Toast.makeText(`Sent Settings (${_settings.getControlMode().name}, ${_settings.acceleration}, ${_settings.maxSpeed})`).show();
             }, 1000);
+            */
           });
         }
       },
@@ -249,23 +233,6 @@ function connect() {
   );
 }
 
-function onServiceTap(args) {
-  const index = args.index;
-  const service = _peripheral.get("services").getItem(index);
-  console.log(`--- service selected: ${service.UUID}`);
-
-  const navigationEntry = {
-    moduleName: "bluetooth/characteristics-page",
-    context: {
-      peripheral: _peripheral,
-      service: service
-    },
-    animated: true
-  };
-  const topmost = frameModule.topmost();
-  topmost.navigate(navigationEntry);
-}
-
 function onBackTap(args) {
   // going back to previous page
   frameModule.topmost().navigate({
@@ -280,7 +247,7 @@ function onBackTap(args) {
 exports.currentSpeed = currentSpeed;
 exports.pageLoaded = pageLoaded;
 exports.onNavigatingFrom = onNavigatingFrom;
-exports.onServiceTap = onServiceTap;
 exports.onConnectionTap = onConnectionTap;
 exports.onBackTap = onBackTap;
 exports.onTapTap = onTapTap;
+exports.onSettingsTap = onSettingsTap;
