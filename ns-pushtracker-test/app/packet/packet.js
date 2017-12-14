@@ -36,6 +36,10 @@ function toString(data) {
     return str;
 }
 
+function toUint8Array(data) {
+    return Uint8Array.from(data);
+}
+
 function makePacketData(type, subtype, key, data) {
   const p = new Packet();
   p.makePacket(type, subtype, key, data);
@@ -88,6 +92,10 @@ Packet.prototype.toBuffer = function() {
 
 Packet.prototype.toString = function() {
     return toString(this.toBuffer());
+};
+
+Packet.prototype.toUint8Array = function() {
+    return toUint8Array(this.writableBuffer());
 };
 
 // BINDING WRAPPING
@@ -209,3 +217,4 @@ module.exports.decimalToHex = decimalToHex;
 module.exports.bufferToHex = bufferToHex;
 module.exports.makePacketData = makePacketData;
 module.exports.toString = toString;
+module.exports.toUint8Array = toUint8Array;

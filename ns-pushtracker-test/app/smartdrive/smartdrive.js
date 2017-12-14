@@ -83,7 +83,8 @@ function sendSettings(peri, settings) {
         p.SubType("SetSettings");
         p.data("settings", settingsData);
 
-        const data = p.toBuffer();
+        const data = p.toUint8Array();
+        console.log(data);
         console.log(`Sending Settings =>  ${Packet.toString(data)}`);
         bluetooth.write({
             peripheralUUID: peripheral.UUID,
@@ -97,8 +98,6 @@ function sendSettings(peri, settings) {
     catch (ex) {
         console.log("error sending settings");
         console.log(ex);
-        console.log(ex.fileName);
-        console.log(ex.lineNumber);
     }
 }
 
@@ -115,7 +114,7 @@ function sendTap(peri) {
         peripheralUUID: peripheral.UUID,
         serviceUUID: smartDriveUUID,
         characteristicUUID: controlCharacteristic,
-        value: tapData
+        value: Packet.toUint8Array(tapData)
     });
 }
 

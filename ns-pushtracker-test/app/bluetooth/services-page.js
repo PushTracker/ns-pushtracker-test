@@ -228,8 +228,10 @@ function connect() {
           // connect 
           SmartDrive.connect(peripheral, onNotify).then(() => {
             // what do we want to do here? send settings?
-            SmartDrive.sendSettings(peripheral, _settings);
-            Toast.makeText(`Sent Settings (${_settings.getControlMode().name}, ${_settings.acceleration}, ${_settings.maxSpeed})`).show();
+            setTimeout(() => {
+              SmartDrive.sendSettings(peripheral, _settings);
+              Toast.makeText(`Sent Settings (${_settings.getControlMode().name}, ${_settings.acceleration}, ${_settings.maxSpeed})`).show();
+            }, 1000);
           });
         }
       },
