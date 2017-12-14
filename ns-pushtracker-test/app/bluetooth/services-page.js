@@ -88,13 +88,38 @@ function onNotify(result) {
   p.destroy();
 }
 
-function updateConnectionButtonText() {
+function updateConnectionButtonText(newText) {
   if (page === null) {
     return;
   }
   const button = page.getViewById("connection");
   if (button !== null && button !== undefined) {
-    button.text = _peripheral.get("connected") ? "Disconnect" : "Connect";
+    if (newText === null || newText === undefined || newText === "") {
+      if (smartDrivePeripheral !== null) {
+        switch (smartDrivePeripheral.state) {
+          case "connecting":
+            newText = "Connecting";
+            break;
+          case "connected":
+            newText = "Disconnect";
+            break;
+          case "disconnecting":
+            newText = "Disconnecting";
+            break;
+          case "disconnected":
+            newText = "Connect";
+            break;
+          default:
+            console.log(`unknown state: ${smartDrivePeripheral.state}`);
+            newText = "Unknown";
+            break;
+        }
+      }
+      else {
+        newText = "Connect";
+      }
+    }
+    button.text = newText;
   }
 }
 
@@ -118,7 +143,7 @@ function onNavigatingFrom() {
 }
 
 function onConnectionTap(args) {
-  if (_peripheral.get("connected")) {
+  if (smartDrivePeripheral !== null && smartDrivePeripheral.state === "connected") {
     disconnect();
   }
   else {
@@ -154,6 +179,7 @@ function onSettingsTap() {
 }
 
 function disconnect() {
+  updateConnectionButtonText("Disconnecting");
   // if we're a smartDrive, unsubscribe from all characteristics
   SmartDrive.disconnect(smartDrivePeripheral).then(() => {
     console.log(`Disconnecting peripheral ${smartDrivePeripheral.UUID}`);
@@ -163,9 +189,11 @@ function disconnect() {
       }
     ).then(() => {
         smartDrivePeripheral.state = "disconnected";
-        console.log(smartDrivePeripheral.state);
+        updateConnectionButtonText();
       },
       (err) => {
+        smartDrivePeripheral.state = "disconnected";
+        updateConnectionButtonText();
         console.log(err);
         // still going back to previous page
         frameModule.topmost().navigate({
@@ -181,56 +209,55 @@ function disconnect() {
 }
 
 function connect() {
-  _peripheral.set("connected", false);
+  updateConnectionButtonText("Connecting");
+
   const discoveredServices = new observableArray.ObservableArray();
   page.bindingContext = _peripheral;
-    bluetooth.connect(
-    {
-      UUID: _peripheral.UUID,
-      // NOTE: we could just use the promise as this cb is only invoked once
-      onConnected: function (peripheral) {
-        _peripheral.set("connected", true);
-        updateConnectionButtonText();
-        //console.log("------- Peripheral connected: " + JSON.stringify(peripheral));
-        peripheral.services.forEach((value) => {
-          //console.log("---- ###### adding service: " + value.UUID);
-          discoveredServices.push(observable.fromObject(value));
-        });
+  bluetooth.connect({
+    UUID: _peripheral.UUID,
+    // NOTE: we could just use the promise as this cb is only invoked once
+    onConnected: function (peripheral) {
+      //console.log("------- Peripheral connected: " + JSON.stringify(peripheral));
+      peripheral.services.forEach((value) => {
+        //console.log("---- ###### adding service: " + value.UUID);
+        discoveredServices.push(observable.fromObject(value));
+      });
 
-        //updateServicesListHeight(40 * peripheral.services.length);
+      //updateServicesListHeight(40 * peripheral.services.length);
 
-        _peripheral.set("peripheral", peripheral);
-        
-        _peripheral.set("isSmartDrive", true);
+      _peripheral.set("peripheral", peripheral);
+      
+      _peripheral.set("isSmartDrive", true);
 
-        // if this is a smartDrive, subscribe to characteristics
-        if (SmartDrive.peripheralIsSmartDrive(peripheral)) {
-          _peripheral.set("isSmartDrive", true);
-          smartDrivePeripheral = peripheral;
-          // connect 
-          SmartDrive.connect(peripheral, onNotify).then(() => {
-            // what do we want to do here? send settings?
-            /*
-            setTimeout(() => {
-              SmartDrive.sendSettings(peripheral, _settings);
-              Toast.makeText(`Sent Settings (${_settings.getControlMode().name}, ${_settings.acceleration}, ${_settings.maxSpeed})`).show();
-            }, 1000);
-            */
-          });
-        }
-      },
-      onDisconnected: function (peripheral) {
-        // let the user know we were disconnected
-        _peripheral.set("connected", false);
-        updateConnectionButtonText();
-        dialogs.alert({
-          title: "Disconnected",
-          message: `Disconnected from peripheral: ${JSON.stringify(peripheral)}`,
-          okButtonText: "OK, thanks"
+      // if this is a smartDrive, subscribe to characteristics
+      if (SmartDrive.peripheralIsSmartDrive(peripheral)) {
+        smartDrivePeripheral = peripheral;
+        // connect 
+        SmartDrive.connect(peripheral, onNotify).then(() => {
+          // what do we want to do here? send settings?
+          updateConnectionButtonText();
+          /*
+          setTimeout(() => {
+            SmartDrive.sendSettings(peripheral, _settings);
+            Toast.makeText(`Sent Settings (${_settings.getControlMode().name}, ${_settings.acceleration}, ${_settings.maxSpeed})`).show();
+          }, 1000);
+          */
         });
       }
+      else {
+        updateConnectionButtonText();
+      }
+    },
+    onDisconnected: function (peripheral) {
+      // let the user know we were disconnected
+      updateConnectionButtonText();
+      dialogs.alert({
+        title: "Disconnected",
+        message: `Disconnected from peripheral: ${JSON.stringify(peripheral)}`,
+        okButtonText: "OK, thanks"
+      });
     }
-  );
+  });
 }
 
 function onBackTap(args) {
