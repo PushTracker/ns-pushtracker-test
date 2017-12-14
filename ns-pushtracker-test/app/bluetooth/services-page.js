@@ -223,12 +223,8 @@ function connect() {
         discoveredServices.push(observable.fromObject(value));
       });
 
-      //updateServicesListHeight(40 * peripheral.services.length);
-
       _peripheral.set("peripheral", peripheral);
       
-      _peripheral.set("isSmartDrive", true);
-
       // if this is a smartDrive, subscribe to characteristics
       if (SmartDrive.peripheralIsSmartDrive(peripheral)) {
         smartDrivePeripheral = peripheral;
