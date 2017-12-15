@@ -8,61 +8,29 @@
             tap="onBackTap"
             ios.position="right">
         </ActionItem>
-        <Label class="action-bar-title" text="{{ name }}"></Label>
+        <Label class="action-bar-title" text="{{ peripheral.name }}"></Label>
     </ActionBar>
     <StackLayout orientation="vertical">
         <StackLayout horizontalAlignment="center" orientation="horizontal" class="tab-content">
             <Button id="connection" tap="onConnectionTap" class="button button-positive" />
             <Button text="Send Settings" tap="onSettingsTap" class="button button-positive" />
         </StackLayout>
-        <chart:RadCartesianChart id="cartesianChart">
+        <Label class="title-label" horizontalAlignment="center" text="Tap on chart or with accelerometer to send Tap to SD"/>
+        <Label class="title-label" horizontalAlignment="center" id="chartTitle"/>
+        <chart:RadCartesianChart height="400" tap="onTapTap">
             <chart:RadCartesianChart.series>
-                <chart:LineSeries items="currentSpeedData" categoryProperty="timeStamp" valueProperty="Amount">
-                    <chart:LineSeries.horizontalAxis>
-                        <chart:DateTimeContinuousAxis minimum="01/12/2014" maximum="01/10/2015" majorStep="Month" dateFormat="MMM-dd" labelFitMode="Rotate" labelRotationAngle="1.2"/>
-                    </chart:LineSeries.horizontalAxis>
-                    <chart:LineSeries.verticalAxis>
-                        <chart:LinearAxis/>
-                    </chart:LineSeries.verticalAxis>
+                <chart:LineSeries
+                items="{{ currentSpeedData }}"
+                categoryProperty="timeStamp"
+                valueProperty="Current Speed">
+                <chart:LineSeries.horizontalAxis>
+                    <chart:DateTimeContinuousAxis dateFormat="mm:ss.SSS" labelFitMode="Rotate" />
+                </chart:LineSeries.horizontalAxis>
+                <chart:LineSeries.verticalAxis>
+                    <chart:LinearAxis labelLayoutMode="Outer" />
+                </chart:LineSeries.verticalAxis>
                 </chart:LineSeries>
             </chart:RadCartesianChart.series>
         </chart:RadCartesianChart>
-        <!--
-        <gauge:RadRadialGauge id="gaugeView" row="0" rowSpan="2" title="Current Speed" tap="onTapTap">
-            <gauge:RadRadialGauge.titleStyle>
-                <gauge:TitleStyle textColor="black" ios:verticalOffset="20" android:verticalOffset="75"/>
-            </gauge:RadRadialGauge.titleStyle>
-            <gauge:RadRadialGauge.scales>
-                <gauge:RadialScale minimum="0.0" maximum="6.0" radius="0.7">
-                    <gauge:RadialScale.scaleStyle>
-                        <gauge:ScaleStyle majorTicksCount="7" minorTicksCount="20" lineThickness="2" labelsOffset="0.1" lineColor="gray" labelsCount="7" ticksOffset="0"
-                        labelsLayoutMode="Outer" ticksLayoutMode="Outer" />
-                    </gauge:RadialScale.scaleStyle>
-                    <gauge:RadialScale.indicators>
-                        <gauge:RadialBarIndicator minimum="0" maximum="3.5" location="0.69">
-                            <gauge:RadialBarIndicator.indicatorStyle>
-                                <gauge:BarIndicatorStyle fillColor="green" barWidth="0.08"/>
-                            </gauge:RadialBarIndicator.indicatorStyle>
-                        </gauge:RadialBarIndicator>
-                        <gauge:RadialBarIndicator minimum="3.5" maximum="4.5" location="0.69">
-                            <gauge:RadialBarIndicator.indicatorStyle>
-                                <gauge:BarIndicatorStyle fillColor="yellow" barWidth="0.08"/>
-                            </gauge:RadialBarIndicator.indicatorStyle>
-                        </gauge:RadialBarIndicator>
-                        <gauge:RadialBarIndicator minimum="4.5" maximum="6.0" location="0.69">
-                            <gauge:RadialBarIndicator.indicatorStyle>
-                                <gauge:BarIndicatorStyle fillColor="red" barWidth="0.08"/>
-                            </gauge:RadialBarIndicator.indicatorStyle>
-                        </gauge:RadialBarIndicator>
-                        <gauge:RadialNeedle id="speedNeedle" value="{{ currentSpeed }}">
-                            <gauge:RadialNeedle.needleStyle>
-                                <gauge:NeedleStyle length="0.5" android:topWidth="8" ios:topWidth="3" android:bottomWidth="8" ios:bottomWidth="3"/>
-                            </gauge:RadialNeedle.needleStyle>
-                        </gauge:RadialNeedle>
-                    </gauge:RadialScale.indicators>
-                </gauge:RadialScale>
-            </gauge:RadRadialGauge.scales>
-        </gauge:RadRadialGauge>
-        !-->
     </StackLayout>
 </Page>

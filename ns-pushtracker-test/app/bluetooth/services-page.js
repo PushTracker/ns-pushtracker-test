@@ -9,43 +9,46 @@ const bluetooth = require("nativescript-bluetooth");
 const Packet = require("../packet/packet");
 const SmartDrive = require("../smartdrive/smartdrive.js");
 
+const pageContext = new observable.Observable();
+
+const accelerometer = require("nativescript-accelerometer");
+const Toast = require("nativescript-toast");
+
 let page = null;
 let _peripheral = null;
 let _settings = null;
 let smartDrivePeripheral = null;
 
-function currentSpeedData() {
-  const a = new observableArray.ObservableArray();
-  a.push(observable.fromObject({ timeStamp: new Date(2015, 1, 11).getTime(),
-      Amount: 1 }));
-  a.push(observable.fromObject({ timeStamp: new Date(2015, 2, 11).getTime(),
-      Amount: 2 }));
-  a.push(observable.fromObject({ timeStamp: new Date(2015, 3, 11).getTime(),
-      Amount: 3 }));
-  a.push(observable.fromObject({ timeStamp: new Date(2015, 4, 11).getTime(),
-      Amount: 1 }));
-
-  return a;
-  /*
-  return [
-    { timeStamp: new Date(2015, 1, 11).getTime(),
-      currentSpeed: 1.0 },
-    { timeStamp: new Date(2015, 2, 11).getTime(),
-      currentSpeed: 2.0 },
-    { timeStamp: new Date(2015, 3, 11).getTime(),
-      currentSpeed: 3.0 },
-    { timeStamp: new Date(2015, 4, 11).getTime(),
-      currentSpeed: 2.0 },
-    { timeStamp: new Date(2015, 5, 11).getTime(),
-      currentSpeed: 1.0 }
-  ];//new observableArray.ObservableArray();
-  */
-}
-
 let currentSpeed = 0;
 
-const accelerometer = require("nativescript-accelerometer");
-const Toast = require("nativescript-toast");
+const maxSpeedData = 50;
+pageContext.currentSpeedData = new observableArray.ObservableArray([
+]);
+
+function pageLoaded(args) {
+  page = args.object;
+
+  page.bindingContext = pageContext;
+
+  // might as well not load the rest of the page in this case (nav back)
+  if (page.navigationContext === undefined) {
+    return;
+  }
+  else {
+    _peripheral = page.navigationContext.peripheral;
+    _settings = page.navigationContext.settings;
+  }
+
+  pageContext.peripheral = _peripheral;
+
+  connect();
+  initAccel();
+}
+
+function onNavigatingFrom() {
+  stopAccel();
+  disconnect();
+}
 
 function initAccel() {
     stopAccel();
@@ -53,23 +56,6 @@ function initAccel() {
         sensorDelay: "game"
     };
     accelerometer.startAccelerometerUpdates(handleAccelData, accelOptions);
-}
-
-function updateSpeedDisplay(speed) {
-    if (page === null) {
-        return;
-    }
-
-    const gauge = frameModule.topmost().getViewById("gaugeView");
-    gauge.title = `Current Speed:\n${speed.toFixed(2)} mph`;
-    const scale = gauge.scales.getItem(0);
-    const speedNeedle = scale.indicators.getItem(scale.indicators.length - 1);
-
-    // update height of the list view accordingly
-    //const speedNeedle = page.getViewById("speedNeedle");
-    if (speedNeedle !== null && speedNeedle !== undefined) {
-        speedNeedle.value = speed;
-    }
 }
 
 function stopAccel() {
@@ -99,6 +85,30 @@ function handleAccelData(accelData) {
     }
 }
 
+function updateSpeedDisplay(speed) {
+    if (page === null) {
+        return;
+    }
+
+    const chartLabel = frameModule.topmost().getViewById("chartTitle");
+    if (chartLabel !== null && chartLabel !== undefined) {
+      chartLabel.text = `Current Speed:\n${speed.toFixed(2)} mph`;
+    }
+
+    const gauge = frameModule.topmost().getViewById("gaugeView");
+    if (gauge !== null && gauge !== undefined) {
+      gauge.title = `Current Speed:\n${speed.toFixed(2)} mph`;
+      const scale = gauge.scales.getItem(0);
+      const speedNeedle = scale.indicators.getItem(scale.indicators.length - 1);
+
+      // update height of the list view accordingly
+      //const speedNeedle = page.getViewById("speedNeedle");
+      if (speedNeedle !== null && speedNeedle !== undefined) {
+          speedNeedle.value = speed;
+      }
+    }
+}
+
 function onNotify(result) {
   const data = new Uint8Array(result.value);
   const p = new Packet.Packet(data);
@@ -107,13 +117,14 @@ function onNotify(result) {
     if (p.SubType() === "MotorInfo") {
       currentSpeed = p.data("motorInfo").speed;
       //console.log(`Current speed = ${currentSpeed} mph`);
-      /*
-      currentSpeedData.push(observable.fromObject({
-        timeStamp: new Date(),
+      pageContext.currentSpeedData.push({ //observable.fromObject({
+        timeStamp: new Date().getTime(),
         "Current Speed": currentSpeed
-      }));
+      });
+      if (pageContext.currentSpeedData.length > maxSpeedData) {
+        pageContext.currentSpeedData.splice(0, pageContext.currentSpeedData.length - maxSpeedData);
+      }
       updateSpeedDisplay(currentSpeed);
-      */
     }
   }
   else {
@@ -155,28 +166,6 @@ function updateConnectionButtonText(newText) {
     }
     button.text = newText;
   }
-}
-
-function pageLoaded(args) {
-  page = args.object;
-
-  // might as well not load the rest of the page in this case (nav back)
-  if (page.navigationContext === undefined) {
-    return;
-  }
-
-  _peripheral = page.navigationContext.peripheral;
-  _settings = page.navigationContext.settings;
-
-  page.bindingContext = _peripheral;
-
-  connect();
-  initAccel();
-}
-
-function onNavigatingFrom() {
-  stopAccel();
-  disconnect();
 }
 
 function onConnectionTap(args) {
@@ -240,6 +229,13 @@ function disconnect() {
 function connect() {
   updateConnectionButtonText("Connecting");
 
+  if (_peripheral === null || _peripheral === undefined ||
+      _peripheral.UUID === null || _peripheral.UUID === undefined) {
+        return;
+  }
+
+  pageContext.currentSpeedData.splice(0, pageContext.currentSpeedData.length);
+
   const discoveredServices = new observableArray.ObservableArray();
   bluetooth.connect({
     UUID: _peripheral.UUID,
@@ -260,12 +256,6 @@ function connect() {
         SmartDrive.connect(peripheral, onNotify).then(() => {
           // what do we want to do here? send settings?
           updateConnectionButtonText();
-          /*
-          setTimeout(() => {
-            SmartDrive.sendSettings(peripheral, _settings);
-            Toast.makeText(`Sent Settings (${_settings.getControlMode().name}, ${_settings.acceleration}, ${_settings.maxSpeed})`).show();
-          }, 1000);
-          */
         });
       }
       else {
@@ -274,8 +264,10 @@ function connect() {
     },
     onDisconnected: function (peripheral) {
       // let the user know we were disconnected
-      smartDrivePeripheral.state = "disconnected";
-      updateConnectionButtonText();
+      if (smartDrivePeripheral !== null) {
+        smartDrivePeripheral.state = "disconnected";
+      }
+      updateConnectionButtonText("Disconnected");
       dialogs.alert({
         title: "Disconnected",
         message: `Disconnected from peripheral: ${JSON.stringify(peripheral)}`,
@@ -303,4 +295,3 @@ exports.onConnectionTap = onConnectionTap;
 exports.onBackTap = onBackTap;
 exports.onTapTap = onTapTap;
 exports.onSettingsTap = onSettingsTap;
-exports.currentSpeedData = currentSpeedData;
