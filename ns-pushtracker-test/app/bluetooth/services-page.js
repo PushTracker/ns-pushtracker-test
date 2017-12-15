@@ -14,6 +14,34 @@ let _peripheral = null;
 let _settings = null;
 let smartDrivePeripheral = null;
 
+function currentSpeedData() {
+  const a = new observableArray.ObservableArray();
+  a.push(observable.fromObject({ timeStamp: new Date(2015, 1, 11).getTime(),
+      Amount: 1 }));
+  a.push(observable.fromObject({ timeStamp: new Date(2015, 2, 11).getTime(),
+      Amount: 2 }));
+  a.push(observable.fromObject({ timeStamp: new Date(2015, 3, 11).getTime(),
+      Amount: 3 }));
+  a.push(observable.fromObject({ timeStamp: new Date(2015, 4, 11).getTime(),
+      Amount: 1 }));
+
+  return a;
+  /*
+  return [
+    { timeStamp: new Date(2015, 1, 11).getTime(),
+      currentSpeed: 1.0 },
+    { timeStamp: new Date(2015, 2, 11).getTime(),
+      currentSpeed: 2.0 },
+    { timeStamp: new Date(2015, 3, 11).getTime(),
+      currentSpeed: 3.0 },
+    { timeStamp: new Date(2015, 4, 11).getTime(),
+      currentSpeed: 2.0 },
+    { timeStamp: new Date(2015, 5, 11).getTime(),
+      currentSpeed: 1.0 }
+  ];//new observableArray.ObservableArray();
+  */
+}
+
 let currentSpeed = 0;
 
 const accelerometer = require("nativescript-accelerometer");
@@ -79,7 +107,13 @@ function onNotify(result) {
     if (p.SubType() === "MotorInfo") {
       currentSpeed = p.data("motorInfo").speed;
       //console.log(`Current speed = ${currentSpeed} mph`);
+      /*
+      currentSpeedData.push(observable.fromObject({
+        timeStamp: new Date(),
+        "Current Speed": currentSpeed
+      }));
       updateSpeedDisplay(currentSpeed);
+      */
     }
   }
   else {
@@ -133,6 +167,9 @@ function pageLoaded(args) {
 
   _peripheral = page.navigationContext.peripheral;
   _settings = page.navigationContext.settings;
+
+  page.bindingContext = _peripheral;
+
   connect();
   initAccel();
 }
@@ -195,14 +232,6 @@ function disconnect() {
         smartDrivePeripheral.state = "disconnected";
         updateConnectionButtonText();
         console.log(err);
-        // still going back to previous page
-        frameModule.topmost().navigate({
-          moduleName: "settings/settings-page",
-          animated: true,
-          transition: {
-            name: "slideRight"
-          }
-        });
       }
     );
   });
@@ -212,7 +241,6 @@ function connect() {
   updateConnectionButtonText("Connecting");
 
   const discoveredServices = new observableArray.ObservableArray();
-  page.bindingContext = _peripheral;
   bluetooth.connect({
     UUID: _peripheral.UUID,
     // NOTE: we could just use the promise as this cb is only invoked once
@@ -246,6 +274,7 @@ function connect() {
     },
     onDisconnected: function (peripheral) {
       // let the user know we were disconnected
+      smartDrivePeripheral.state = "disconnected";
       updateConnectionButtonText();
       dialogs.alert({
         title: "Disconnected",
@@ -274,3 +303,4 @@ exports.onConnectionTap = onConnectionTap;
 exports.onBackTap = onBackTap;
 exports.onTapTap = onTapTap;
 exports.onSettingsTap = onSettingsTap;
+exports.currentSpeedData = currentSpeedData;

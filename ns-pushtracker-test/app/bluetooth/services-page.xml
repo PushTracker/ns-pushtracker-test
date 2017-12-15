@@ -1,4 +1,5 @@
 <Page xmlns="http://www.nativescript.org/tns.xsd"
+      xmlns:chart="nativescript-pro-ui/chart"
       xmlns:gauge="nativescript-pro-ui/gauges"
       loaded="pageLoaded" 
       navigatingFrom="onNavigatingFrom">
@@ -7,26 +8,36 @@
             tap="onBackTap"
             ios.position="right">
         </ActionItem>
-        <Label class="action-bar-title" text="Services"></Label>
+        <Label class="action-bar-title" text="{{ name }}"></Label>
     </ActionBar>
-    
     <StackLayout orientation="vertical">
-        <StackLayout orientation="horizontal" class="tab-content">
+        <StackLayout horizontalAlignment="center" orientation="horizontal" class="tab-content">
             <Button id="connection" tap="onConnectionTap" class="button button-positive" />
             <Button text="Send Settings" tap="onSettingsTap" class="button button-positive" />
         </StackLayout>
+        <chart:RadCartesianChart id="cartesianChart">
+            <chart:RadCartesianChart.series>
+                <chart:LineSeries items="currentSpeedData" categoryProperty="timeStamp" valueProperty="Amount">
+                    <chart:LineSeries.horizontalAxis>
+                        <chart:DateTimeContinuousAxis minimum="01/12/2014" maximum="01/10/2015" majorStep="Month" dateFormat="MMM-dd" labelFitMode="Rotate" labelRotationAngle="1.2"/>
+                    </chart:LineSeries.horizontalAxis>
+                    <chart:LineSeries.verticalAxis>
+                        <chart:LinearAxis/>
+                    </chart:LineSeries.verticalAxis>
+                </chart:LineSeries>
+            </chart:RadCartesianChart.series>
+        </chart:RadCartesianChart>
+        <!--
         <gauge:RadRadialGauge id="gaugeView" row="0" rowSpan="2" title="Current Speed" tap="onTapTap">
             <gauge:RadRadialGauge.titleStyle>
                 <gauge:TitleStyle textColor="black" ios:verticalOffset="20" android:verticalOffset="75"/>
             </gauge:RadRadialGauge.titleStyle>
-            <!-- >> gauges-scales-add-scales -->
             <gauge:RadRadialGauge.scales>
                 <gauge:RadialScale minimum="0.0" maximum="6.0" radius="0.7">
                     <gauge:RadialScale.scaleStyle>
                         <gauge:ScaleStyle majorTicksCount="7" minorTicksCount="20" lineThickness="2" labelsOffset="0.1" lineColor="gray" labelsCount="7" ticksOffset="0"
                         labelsLayoutMode="Outer" ticksLayoutMode="Outer" />
                     </gauge:RadialScale.scaleStyle>
-                    <!-- >> gauges-scales-add-indicators -->
                     <gauge:RadialScale.indicators>
                         <gauge:RadialBarIndicator minimum="0" maximum="3.5" location="0.69">
                             <gauge:RadialBarIndicator.indicatorStyle>
@@ -49,10 +60,9 @@
                             </gauge:RadialNeedle.needleStyle>
                         </gauge:RadialNeedle>
                     </gauge:RadialScale.indicators>
-                    <!-- << gauges-scales-add-indicators -->
                 </gauge:RadialScale>
             </gauge:RadRadialGauge.scales>
         </gauge:RadRadialGauge>
+        !-->
     </StackLayout>
-
 </Page>
