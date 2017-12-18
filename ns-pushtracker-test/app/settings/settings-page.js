@@ -33,6 +33,47 @@ function onNavigatingTo(args) {
         return i;
     }
 
+    try {
+        const data_control = bluetooth._bluetooth.makeAdvCharacteristic({
+            UUID: "58daaa15-f2b2-4cd9-b827-5807b267dae1",
+            gattProperty: android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ | android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE | android.bluetooth.BluetoothGattCharacteristic.PROPERTY_INDICATE,
+            gattPermissions: android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE | android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ
+        });
+        const App_data = bluetooth._bluetooth.makeAdvCharacteristic({
+            UUID: "68208ebf-f655-4a2d-98f4-20d7d860c471",
+            gattProperty: android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ | android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE | android.bluetooth.BluetoothGattCharacteristic.PROPERTY_INDICATE,
+            gattPermissions: android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE | android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ
+        });
+        const OTA_data = bluetooth._bluetooth.makeAdvCharacteristic({
+            UUID: "9272e309-cd33-4d83-a959-b54cc7a54d1f",
+            gattProperty: android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ | android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE | android.bluetooth.BluetoothGattCharacteristic.PROPERTY_INDICATE,
+            gattPermissions: android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE | android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ
+        });
+        const WB_data = bluetooth._bluetooth.makeAdvCharacteristic({
+            UUID: "8489625f-6c73-4fc0-8bcc-735bb173a920",
+            gattProperty: android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ | android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE | android.bluetooth.BluetoothGattCharacteristic.PROPERTY_INDICATE,
+            gattPermissions: android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE | android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ
+        });
+        const DU_data = bluetooth._bluetooth.makeAdvCharacteristic({
+            UUID: "5177fda8-1003-4254-aeb9-7f9edb3cc9cf",
+            gattProperty: android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ | android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE | android.bluetooth.BluetoothGattCharacteristic.PROPERTY_INDICATE,
+            gattPermissions: android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE | android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ
+        });
+        const app_service = bluetooth._bluetooth.makeAdvService({
+            UUID: "9358ac8f-6343-4a31-b4e0-4b13a2b45d86",
+            serviceType: android.bluetooth.BluetoothGattService.SERVICE_TYPE_PRIMARY
+        });
+        app_service.addCharacteristic(data_control);
+        app_service.addCharacteristic(App_data);
+        app_service.addCharacteristic(OTA_data);
+        app_service.addCharacteristic(WB_data);
+        app_service.addCharacteristic(DU_data);
+        bluetooth._bluetooth.addService(app_service);
+    }
+    catch (ex) {
+        console.log(ex);
+    }
+
     // add peripherals to settings
     settings.set("peripherals", bluetooth.peripherals);
 
