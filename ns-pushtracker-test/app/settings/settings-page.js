@@ -34,6 +34,8 @@ function onNavigatingTo(args) {
     }
 
     try {
+        bluetooth._bluetooth.clearServices();
+
         const d1 = bluetooth._bluetooth.makeDescriptor({
             UUID: "2900",
             permissions: android.bluetooth.BluetoothGattDescriptor.PERMISSION_READ | 
