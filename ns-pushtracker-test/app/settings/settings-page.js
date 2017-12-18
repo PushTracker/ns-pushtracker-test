@@ -98,7 +98,10 @@ function onPeripheralModeSupportedTap() {
 function onStartAdvertisementTap() {
     try {
         bluetooth.startAdvertising({
-            settings: {},
+            UUID: "9358ac8f-6343-4a31-b4e0-4b13a2b45d86",
+            settings: {
+                connectable: true
+            },
             data: {}
         })
         .then(() => {
