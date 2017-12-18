@@ -36,17 +36,26 @@ function onNavigatingTo(args) {
     try {
         const d1 = bluetooth._bluetooth.makeDescriptor({
             UUID: "2900",
-            permissions: android.bluetooth.BluetoothGattDescriptor.PERMISSION_READ | android.bluetooth.BluetoothGattDescriptor.PERMISSION_WRITE
+            permissions: android.bluetooth.BluetoothGattDescriptor.PERMISSION_READ | 
+                android.bluetooth.BluetoothGattDescriptor.PERMISSION_WRITE |
+                android.bluetooth.BluetoothGattDescriptor.PERMISSION_READ_ENCRYPTED |
+                android.bluetooth.BluetoothGattDescriptor.PERMISSION_WRITE_ENCRYPTED
         });
         const d2 = bluetooth._bluetooth.makeDescriptor({
             UUID: "2902",
-            permissions: android.bluetooth.BluetoothGattDescriptor.PERMISSION_READ | android.bluetooth.BluetoothGattDescriptor.PERMISSION_WRITE
+            permissions: android.bluetooth.BluetoothGattDescriptor.PERMISSION_READ | 
+                android.bluetooth.BluetoothGattDescriptor.PERMISSION_WRITE |
+                android.bluetooth.BluetoothGattDescriptor.PERMISSION_READ_ENCRYPTED |
+                android.bluetooth.BluetoothGattDescriptor.PERMISSION_WRITE_ENCRYPTED
         });
 
         const data_control = bluetooth._bluetooth.makeAdvCharacteristic({
             UUID: "58daaa15-f2b2-4cd9-b827-5807b267dae1",
             gattProperty: android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ | android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE | android.bluetooth.BluetoothGattCharacteristic.PROPERTY_INDICATE,
-            gattPermissions: android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE | android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ
+            gattPermissions: android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE | 
+                android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ |
+                android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ_ENCRYPTED |
+                android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE_ENCRYPTED
         });
         data_control.addDescriptor(d1);
         data_control.addDescriptor(d2);
@@ -54,7 +63,10 @@ function onNavigatingTo(args) {
         const App_data = bluetooth._bluetooth.makeAdvCharacteristic({
             UUID: "68208ebf-f655-4a2d-98f4-20d7d860c471",
             gattProperty: android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ | android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE | android.bluetooth.BluetoothGattCharacteristic.PROPERTY_INDICATE,
-            gattPermissions: android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE | android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ
+            gattPermissions: android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE | 
+                android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ |
+                android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ_ENCRYPTED |
+                android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE_ENCRYPTED
         });
         App_data.addDescriptor(d1);
         App_data.addDescriptor(d2);
@@ -62,7 +74,10 @@ function onNavigatingTo(args) {
         const OTA_data = bluetooth._bluetooth.makeAdvCharacteristic({
             UUID: "9272e309-cd33-4d83-a959-b54cc7a54d1f",
             gattProperty: android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ | android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE | android.bluetooth.BluetoothGattCharacteristic.PROPERTY_INDICATE,
-            gattPermissions: android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE | android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ
+            gattPermissions: android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE | 
+                android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ |
+                android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ_ENCRYPTED |
+                android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE_ENCRYPTED
         });
         OTA_data.addDescriptor(d1);
         OTA_data.addDescriptor(d2);
@@ -70,7 +85,10 @@ function onNavigatingTo(args) {
         const WB_data = bluetooth._bluetooth.makeAdvCharacteristic({
             UUID: "8489625f-6c73-4fc0-8bcc-735bb173a920",
             gattProperty: android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ | android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE | android.bluetooth.BluetoothGattCharacteristic.PROPERTY_INDICATE,
-            gattPermissions: android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE | android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ
+            gattPermissions: android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE | 
+                android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ |
+                android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ_ENCRYPTED |
+                android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE_ENCRYPTED
         });
         WB_data.addDescriptor(d1);
         WB_data.addDescriptor(d2);
@@ -78,7 +96,10 @@ function onNavigatingTo(args) {
         const DU_data = bluetooth._bluetooth.makeAdvCharacteristic({
             UUID: "5177fda8-1003-4254-aeb9-7f9edb3cc9cf",
             gattProperty: android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ | android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE | android.bluetooth.BluetoothGattCharacteristic.PROPERTY_INDICATE,
-            gattPermissions: android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE | android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ
+            gattPermissions: android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE | 
+                android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ |
+                android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ_ENCRYPTED |
+                android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE_ENCRYPTED
         });
         DU_data.addDescriptor(d1);
         DU_data.addDescriptor(d2);
