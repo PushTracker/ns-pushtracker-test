@@ -4,6 +4,7 @@ const segmentedBarModule = require("ui/segmented-bar");
 
 const SettingsViewModel = require("./settings-view-model");
 const bluetooth = require("../bluetooth/bluetooth");
+const Toast = require("nativescript-toast");
 
 const settings = new SettingsViewModel();
 let page = null;
@@ -77,24 +78,58 @@ function onSaveSettingsTap(args) {
 
 // bluetooth interaction
 function onPeripheralModeSupportedTap() {
-    /*
-    const bluetoothAdapter = bluetooth._bluetooth.getAdapter();
-    console.log(bluetoothAdapter.isMultipleAdvertisementSupported());
-    console.log(bluetoothAdapter.isOffloadedFilteringSupported());
-    console.log(bluetoothAdapter.isOffloadedScanBatchingSupported());
-    console.log(bluetoothAdapter.isLeExtendedAdvertisingSupported());
-    console.log(bluetoothAdapter.isLePeriodicAdvertisingSupported());
-    */
-    bluetooth.isPeripheralModeSupported().then((supported) => {
-        dialogsModule.alert({
-            title: "Peripheral Mode Supported?",
-            message: supported ? "Yes" : "No",
-            okButtonText: "OK, Thanks"
+    try {
+        bluetooth.isPeripheralModeSupported().then((supported) => {
+            dialogsModule.alert({
+                title: "Peripheral Mode Supported?",
+                message: supported ? "Yes" : "No",
+                okButtonText: "OK, Thanks"
+            });
+        })
+        .catch((err) => {
+            console.log(err);
         });
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+    }
+    catch (ex) {
+        console.log(ex);
+    }
+}
+
+function onStartAdvertisementTap() {
+    try {
+        bluetooth.startAdvertising({
+            settings: {},
+            data: {}
+        })
+        .then(() => {
+            console.log("Advertise started!");
+            Toast.makeText("Advertising started").show();
+        })
+        .catch((err) => {
+            console.log("Couldn't start advertising: "+err);
+            Toast.makeText("Couldn't start advertising: "+err).show();
+        });
+    }
+    catch (ex) {
+        console.log(ex);
+    }
+}
+
+function onStopAdvertisementTap() {
+    try {
+        bluetooth.stopAdvertising()
+        .then(() => {
+            console.log("Advertise stopped!");
+            Toast.makeText("Advertising stopped").show();
+        })
+        .catch((err) => {
+            console.log("Couldn't stop advertising: "+err);
+            Toast.makeText("Couldn't stop advertising: "+err).show();
+        });
+    }
+    catch (ex) {
+        console.log(ex);
+    }
 }
 
 function onBluetoothEnabledTap() {
@@ -242,4 +277,6 @@ exports.onPeripheralTap = onPeripheralTap;
 exports.onEnableBluetoothTap = onEnableBluetoothTap;
 exports.onPeripheralModeSupportedTap = onPeripheralModeSupportedTap;
 exports.onBluetoothEnabledTap = onBluetoothEnabledTap;
+exports.onStartAdvertisementTap = onStartAdvertisementTap;
+exports.onStopAdvertisementTap = onStopAdvertisementTap;
 exports.doClearPeripherals = doClearPeripherals;

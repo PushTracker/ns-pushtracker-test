@@ -236,22 +236,17 @@ function connect() {
 
   pageContext.currentSpeedData.splice(0, pageContext.currentSpeedData.length);
 
-  const discoveredServices = new observableArray.ObservableArray();
   bluetooth.connect({
     UUID: _peripheral.UUID,
     // NOTE: we could just use the promise as this cb is only invoked once
     onConnected: function (peripheral) {
-      //console.log("------- Peripheral connected: " + JSON.stringify(peripheral));
-      peripheral.services.forEach((value) => {
-        //console.log("---- ###### adding service: " + value.UUID);
-        discoveredServices.push(observable.fromObject(value));
-      });
+
+      smartDrivePeripheral = peripheral;
 
       _peripheral.set("peripheral", peripheral);
       
       // if this is a smartDrive, subscribe to characteristics
       if (SmartDrive.peripheralIsSmartDrive(peripheral)) {
-        smartDrivePeripheral = peripheral;
         // connect 
         SmartDrive.connect(peripheral, onNotify).then(() => {
           // what do we want to do here? send settings?

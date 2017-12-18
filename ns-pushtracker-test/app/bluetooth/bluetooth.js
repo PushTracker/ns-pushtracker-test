@@ -45,6 +45,8 @@ exports._bluetooth = bluetooth;
 exports.isPeripheralModeSupported = bluetooth.isPeripheralModeSupported;
 exports.isBluetoothEnabled = bluetooth.isBluetoothEnabled;
 exports.setDiscoverable = bluetooth.setDiscoverable;
+exports.startAdvertising = bluetooth.startAdvertising;
+exports.stopAdvertising = bluetooth.stopAdvertising;
 exports.disable = bluetooth.disable;
 exports.enable = bluetooth.enable;
 // what we add / wrap

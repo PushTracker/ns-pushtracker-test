@@ -14,20 +14,20 @@
         <StackLayout horizontalAlignment="center" orientation="horizontal" class="tab-content">
             <Button id="connection" tap="onConnectionTap" class="button button-positive" />
             <Button text="Send Settings" tap="onSettingsTap" class="button button-positive" />
+            <Button text="Send Tap" tap="onTapTap" class="button button-positive" />
         </StackLayout>
-        <Label class="title-label" horizontalAlignment="center" text="Tap on chart or with accelerometer to send Tap to SD"/>
         <Label class="title-label" horizontalAlignment="center" id="chartTitle"/>
-        <chart:RadCartesianChart height="400" tap="onTapTap">
+        <chart:RadCartesianChart height="400">
             <chart:RadCartesianChart.series>
                 <chart:LineSeries
                 items="{{ currentSpeedData }}"
                 categoryProperty="timeStamp"
                 valueProperty="Current Speed">
                 <chart:LineSeries.horizontalAxis>
-                    <chart:DateTimeContinuousAxis dateFormat="mm:ss.SSS" labelFitMode="Rotate" />
+                    <chart:DateTimeContinuousAxis allowZoom="true" allowPan="true" dateFormat="mm:ss.SSS" labelFitMode="Rotate" labelInterval="AutoStep" />
                 </chart:LineSeries.horizontalAxis>
                 <chart:LineSeries.verticalAxis>
-                    <chart:LinearAxis labelLayoutMode="Outer" />
+                    <chart:LinearAxis allowZoom="true" allowPan="true" labelLayoutMode="Outer" />
                 </chart:LineSeries.verticalAxis>
                 </chart:LineSeries>
             </chart:RadCartesianChart.series>
