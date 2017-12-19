@@ -71,12 +71,26 @@ function onDrawerButtonTap(args) {
 }
 
 function onSaveSettingsTap(args) {
-    dialogsModule.confirm({
-        title: "Save Settings?",
-        message: "Send these settings to the PushTracker?",
-        okButtonText: "Yes",
-        cancelButtonText: "No"
-    });
+    if (hasPushTrackerConnected()) {
+        selectPushTracker()
+        .then((pt) => {
+            if (pt !== null && pt !== undefined) {
+                dialogsModule.confirm({
+                    title: "Save Settings?",
+                    message: "Send these settings to the PushTracker?",
+                    okButtonText: "Yes",
+                    cancelButtonText: "No"
+                });
+            }
+        });
+    }
+    else {
+        dialogsModule.alert({
+            title: "Error",
+            message: "No PushTracker is connected!",
+            okButtonText: "OK"
+        });
+    }
 }
 
 // bluetooth interaction
@@ -107,12 +121,81 @@ function deleteServices() {
     }
 }
 
-function getConnectedPushTracker() {
-    // should pop up dialog if more than one are connected
+function selectDialog(options) {
+    // options should be of form....
+    return new Promise((resolve, reject) => {
+        dialogsModule.action({
+            message: options.message || "Select",
+            cancelButtonText: options.cancelButtonText || "Cancel",
+            actions: options.actions || []
+        })
+        .then((result) => {
+            resolve(result !== "Cancel" ? result : null);
+        })
+        .catch((err) => {
+            reject(err);
+        });
+    });
+}
+
+function selectPushTracker() {
+    const pts = getConnectedPushTrackers();
+    if (pts.length > 1) {
+        const options = {
+            message: "Select PushTracker",
+            actions: pts
+        };
+
+        return selectDialog(options)
+            .then((selection) => {
+                return selection;
+            })
+            .catch((err) => {
+                console.log(err);
+
+                return null;
+            });
+    }
+    else {
+        return new Promise((resolve, reject) => {
+            if (pts.length) {
+                resolve(pts[0]);
+            }
+            else {
+                reject();
+            }
+        });
+    }
+}
+
+function getConnectedPushTrackers() {
+    try {
+        const pts = bluetooth._bluetooth.getServerConnectedDevices();
+        const pushTrackers = [];
+        for (let i = 0; i < pts.size(); i++) {
+            pushTrackers.push(`${pts.get(i)}`);
+        }
+
+        return pushTrackers;
+    }
+    catch (ex) {
+        console.log(ex);
+
+        return [];
+    }
 }
 
 function hasPushTrackerConnected() {
+    try {
+        const pts = getConnectedPushTrackers();
 
+        return pts.length > 0;
+    }
+    catch (ex) {
+        console.log(ex);
+
+        return false;
+    }
 }
 
 function addServices() {
