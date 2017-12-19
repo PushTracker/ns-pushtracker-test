@@ -9,6 +9,9 @@ const Toast = require("nativescript-toast");
 const settings = new SettingsViewModel();
 let page = null;
 
+// only do once
+addServices();
+
 /* ***********************************************************
 * Use the "onNavigatingTo" handler to initialize the page binding context.
 *************************************************************/
@@ -95,9 +98,27 @@ function onPeripheralModeSupportedTap() {
     }
 }
 
-function onStartAdvertisementTap() {
+function deleteServices() {
     try {
         bluetooth._bluetooth.clearServices();
+    }
+    catch (ex) {
+        console.log(ex);
+    }
+}
+
+function getConnectedPushTracker() {
+    // should pop up dialog if more than one are connected
+}
+
+function hasPushTrackerConnected() {
+
+}
+
+function addServices() {
+    try {
+        bluetooth._bluetooth.startGattServer();
+        deleteServices();
 
         console.log("making service");
         const appService = bluetooth._bluetooth.makeAdvService({
@@ -147,27 +168,45 @@ function onStartAdvertisementTap() {
             appService.addCharacteristic(c);
         });
 
-        bluetooth._bluetooth.addService(appService);
+        bluetooth._bluetooth.addService(appService);   
     }
     catch (ex) {
         console.log(ex);
     }
+}
 
+function onStartAdvertisementTap() {
     try {
-        bluetooth.startAdvertising({
-            UUID: "9358ac8f-6343-4a31-b4e0-4b13a2b45d86",
-            settings: {
-                connectable: true
-            },
-            data: {}
-        })
-        .then(() => {
-            console.log("Advertise started!");
-            Toast.makeText("Advertising started").show();
+        bluetooth.isPeripheralModeSupported().then((supported) => {
+            if (!supported) {
+                dialogsModule.alert({
+                    title: "Not Supported!",
+                    message: "Peripheral mode is not supported on this device!",
+                    okButtonText: "OK"
+                });
+
+                return;
+            }
+            else {
+                bluetooth.startAdvertising({
+                    UUID: "9358ac8f-6343-4a31-b4e0-4b13a2b45d86",
+                    settings: {
+                        connectable: true
+                    },
+                    data: {}
+                })
+                .then(() => {
+                    console.log("Advertise started!");
+                    Toast.makeText("Advertising started").show();
+                })
+                .catch((err) => {
+                    console.log("Couldn't start advertising: " + err);
+                    Toast.makeText("Couldn't start advertising: " + err).show();
+                });
+            }
         })
         .catch((err) => {
-            console.log("Couldn't start advertising: "+err);
-            Toast.makeText("Couldn't start advertising: "+err).show();
+            console.log(err);
         });
     }
     catch (ex) {
