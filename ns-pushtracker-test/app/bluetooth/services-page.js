@@ -24,6 +24,7 @@ let currentSpeed = 0;
 const maxSpeedData = 50;
 pageContext.currentSpeedData = new observableArray.ObservableArray([
 ]);
+pageContext.peripheral = new observable.fromObject({ name: "" });
 
 function pageLoaded(args) {
   page = args.object;
@@ -39,7 +40,9 @@ function pageLoaded(args) {
     _settings = page.navigationContext.settings;
   }
 
-  pageContext.peripheral = _peripheral;
+  pageContext.peripheralName = _peripheral.name;
+  console.log(_peripheral.name);
+  pageContext.peripheral.name = _peripheral.name;
 
   connect();
   initAccel();

@@ -171,9 +171,16 @@ function selectPushTracker() {
 function getConnectedPushTrackers() {
     try {
         const pts = bluetooth._bluetooth.getServerConnectedDevices();
+        const sds = [];
+        bluetooth.peripherals.map((p) => {
+            sds.push(`${p.UUID}`);
+        });
         const pushTrackers = [];
         for (let i = 0; i < pts.size(); i++) {
-            pushTrackers.push(`${pts.get(i)}`);
+            const pt = `${pts.get(i)}`;
+            if (sds.indexOf(pt) === -1) {
+                pushTrackers.push(pt);
+            }
         }
 
         return pushTrackers;
