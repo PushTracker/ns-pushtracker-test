@@ -13,7 +13,7 @@ let page = null;
 * Use the "onNavigatingTo" handler to initialize the page binding context.
 *************************************************************/
 function onNavigatingTo(args) {
-    bluetooth._bluetooth.setCharacteristicLogging(false);
+    bluetooth._bluetooth.setCharacteristicLogging(true);
     /* ***********************************************************
     * The "onNavigatingTo" event handler lets you detect if the user navigated with a back button.
     * Skipping the re-initialization on back navigation means the user will see the
@@ -31,58 +31,6 @@ function onNavigatingTo(args) {
         i.title = o.name;
 
         return i;
-    }
-
-    try {
-        bluetooth._bluetooth.clearServices();
-
-        const appService = bluetooth._bluetooth.makeAdvService({
-            UUID: "9358ac8f-6343-4a31-b4e0-4b13a2b45d86",
-            serviceType: android.bluetooth.BluetoothGattService.SERVICE_TYPE_PRIMARY
-        });
-
-        const d1 = bluetooth._bluetooth.makeDescriptor({
-            UUID: "2900",
-            permissions: android.bluetooth.BluetoothGattDescriptor.PERMISSION_READ | 
-                android.bluetooth.BluetoothGattDescriptor.PERMISSION_WRITE |
-                android.bluetooth.BluetoothGattDescriptor.PERMISSION_READ_ENCRYPTED |
-                android.bluetooth.BluetoothGattDescriptor.PERMISSION_WRITE_ENCRYPTED
-        });
-        const d2 = bluetooth._bluetooth.makeDescriptor({
-            UUID: "2902",
-            permissions: android.bluetooth.BluetoothGattDescriptor.PERMISSION_READ | 
-                android.bluetooth.BluetoothGattDescriptor.PERMISSION_WRITE |
-                android.bluetooth.BluetoothGattDescriptor.PERMISSION_READ_ENCRYPTED |
-                android.bluetooth.BluetoothGattDescriptor.PERMISSION_WRITE_ENCRYPTED
-        });
-
-        const charUUIDs = [
-            "58daaa15-f2b2-4cd9-b827-5807b267dae1",
-            "68208ebf-f655-4a2d-98f4-20d7d860c471",
-            "9272e309-cd33-4d83-a959-b54cc7a54d1f",
-            "8489625f-6c73-4fc0-8bcc-735bb173a920",
-            "5177fda8-1003-4254-aeb9-7f9edb3cc9cf"
-        ];
-        charUUIDs.map((cuuid) => {
-            const c = bluetooth._bluetooth.makeAdvCharacteristic({
-                UUID: cuuid,
-                gattProperty: android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ | 
-                    android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE | 
-                    android.bluetooth.BluetoothGattCharacteristic.PROPERTY_INDICATE,
-                gattPermissions: android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE | 
-                    android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ |
-                    android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ_ENCRYPTED |
-                    android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE_ENCRYPTED
-            });
-            c.addDescriptor(d1);
-            c.addDescriptor(d2);
-            appService.addCharacteristic(c);
-        });
-
-        bluetooth._bluetooth.addService(appService);
-    }
-    catch (ex) {
-        console.log(ex);
     }
 
     // add peripherals to settings
@@ -149,6 +97,63 @@ function onPeripheralModeSupportedTap() {
 
 function onStartAdvertisementTap() {
     try {
+        bluetooth._bluetooth.clearServices();
+
+        console.log("making service");
+        const appService = bluetooth._bluetooth.makeAdvService({
+            UUID: "9358ac8f-6343-4a31-b4e0-4b13a2b45d86",
+            serviceType: android.bluetooth.BluetoothGattService.SERVICE_TYPE_PRIMARY
+        });
+
+        const descriptorUUIDs = [
+            "2900",
+            "2902"
+        ];
+
+        const charUUIDs = [
+            "58daaa15-f2b2-4cd9-b827-5807b267dae1",
+            "68208ebf-f655-4a2d-98f4-20d7d860c471",
+            "9272e309-cd33-4d83-a959-b54cc7a54d1f",
+            "8489625f-6c73-4fc0-8bcc-735bb173a920",
+            "5177fda8-1003-4254-aeb9-7f9edb3cc9cf"
+        ];
+        charUUIDs.map((cuuid) => {
+            console.log("Making characteristic: "+cuuid);
+            const c = bluetooth._bluetooth.makeAdvCharacteristic({
+                UUID: cuuid,
+                gattProperty: android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ | 
+                    android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE | 
+                    android.bluetooth.BluetoothGattCharacteristic.PROPERTY_NOTIFY,
+                gattPermissions: android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE | 
+                    android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ
+            });
+            console.log("making descriptors");
+            const descriptors = descriptorUUIDs.map((duuid) => {
+                console.log("Making descriptor: "+duuid);
+                const d = bluetooth._bluetooth.makeDescriptor({
+                    UUID: duuid,
+                    permissions: android.bluetooth.BluetoothGattDescriptor.PERMISSION_READ | 
+                        android.bluetooth.BluetoothGattDescriptor.PERMISSION_WRITE
+                });
+                d.setValue(new Array([0x00, 0x00]));
+
+                return d;
+            });
+            descriptors.map((d) => {
+                c.addDescriptor(d);
+            });
+            c.setValue(0, android.bluetooth.BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+            c.setWriteType(android.bluetooth.BluetoothGattCharacteristic.WRTIE_TYPE_DEFAULT);
+            appService.addCharacteristic(c);
+        });
+
+        bluetooth._bluetooth.addService(appService);
+    }
+    catch (ex) {
+        console.log(ex);
+    }
+
+    try {
         bluetooth.startAdvertising({
             UUID: "9358ac8f-6343-4a31-b4e0-4b13a2b45d86",
             settings: {
@@ -172,6 +177,8 @@ function onStartAdvertisementTap() {
 
 function onStopAdvertisementTap() {
     try {
+        bluetooth._bluetooth.clearServices();
+
         bluetooth.stopAdvertising()
         .then(() => {
             console.log("Advertise stopped!");
