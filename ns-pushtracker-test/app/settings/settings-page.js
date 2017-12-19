@@ -1,6 +1,8 @@
 const dialogsModule = require("ui/dialogs");
 const frameModule = require("ui/frame");
 const segmentedBarModule = require("ui/segmented-bar");
+const buttonModule = require("ui/button");
+const gridModule = require("ui/layouts/grid-layout");
 
 const SettingsViewModel = require("./settings-view-model");
 const bluetooth = require("../bluetooth/bluetooth");
@@ -11,6 +13,36 @@ let page = null;
 
 // only do once
 addServices();
+
+function makePeripheralDebug() {
+    try {
+        if (bluetooth.isPeripheralModeSupported()) {
+            /*
+            <Button row="2" col="0" text="Start Advertisement" tap="onStartAdvertisementTap" class="button button-positive" />
+            <Button row="2" col="1" text="Stop Advertisement" tap="onStopAdvertisementTap" class="button button-positive" />
+            */
+            const startAdvBtn = new buttonModule.Button();
+            startAdvBtn.text = "Start Advertisement";
+            startAdvBtn.on(buttonModule.Button.tapEvent, onStartAdvertisementTap, this);
+            startAdvBtn.cssClasses = ["button", "button-positive"];
+            const stopAdvBtn = new buttonModule.Button();
+            stopAdvBtn.text = "Stop Advertisement";
+            stopAdvBtn.on(buttonModule.Button.tapEvent, onStopAdvertisementTap, this);
+            stopAdvBtn.cssClasses = ["button", "button-positive"];
+
+            const gridView = page.getViewById("bluetoothDebugGrid");
+            gridView.addChild(startAdvBtn);
+            gridModule.GridLayout.setRow(startAdvBtn, 1);
+            gridModule.GridLayout.setColumn(startAdvBtn, 0);
+            gridView.addChild(stopAdvBtn);
+            gridModule.GridLayout.setRow(stopAdvBtn, 1);
+            gridModule.GridLayout.setColumn(stopAdvBtn, 1);
+        }
+    }
+    catch (ex) {
+        console.log(ex);
+    }
+}
 
 /* ***********************************************************
 * Use the "onNavigatingTo" handler to initialize the page binding context.
@@ -35,6 +67,8 @@ function onNavigatingTo(args) {
 
         return i;
     }
+
+    makePeripheralDebug();
 
     // add peripherals to settings
     settings.set("peripherals", bluetooth.peripherals);

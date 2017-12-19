@@ -105,13 +105,9 @@
                         <Button row="0" colSpan="2" text="is bluetooth enabled?" tap="onBluetoothEnabledTap" class="button button-positive" />
                     </iOS>
                     <Android>
-                        <GridLayout row="0" colSpan="2" rows="auto, auto, auto" columns="*, *" class="tab-content" horizontalAlignment="center">
+                        <GridLayout id="bluetoothDebugGrid" row="0" colSpan="2" rows="auto, auto, auto" columns="*, *" class="tab-content" horizontalAlignment="center">
                             <Button row="0" col="0" text="disable" tap="doDisable" class="button button-danger" />
                             <Button row="0" col="1" text="enable bluetooth" tap="onEnableBluetoothTap" class="button button-positive" />
-                            <Button row="1" col="0" text="bluetooth enabled?" tap="onBluetoothEnabledTap" class="button button-positive" />
-                            <Button row="1" col="1" text="Peripheral Mode Supported?" tap="onPeripheralModeSupportedTap" class="button button-positive" />
-                            <Button row="2" col="0" text="Start Advertisement" tap="onStartAdvertisementTap" class="button button-positive" />
-                            <Button row="2" col="1" text="Stop Advertisement" tap="onStopAdvertisementTap" class="button button-positive" />
                         </GridLayout>
                     </Android>
                     <Button row="2" col="0" text="Scan for any peripheral" tap="doStartScanning" class="button button-neutral" />
