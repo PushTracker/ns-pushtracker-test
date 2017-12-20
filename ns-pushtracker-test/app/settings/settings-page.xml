@@ -65,20 +65,20 @@
         <nsDrawer:RadSideDrawer.mainContent>
             <ScrollView orientation="vertical">
             <StackLayout orientation="vertical">
-                <GridLayout rows="auto" columns="auto, *">
-                <Label text="Control Mode" class="settings-item" row="0" col="0"/>
-                <SegmentedBar horizontalAlignment="right" id="control_modes" row="0" col="1" selectedIndexChanged="{{ onControlModeSelected }}"/>
-                </GridLayout>
+                <DockLayout stretchLastChild="false">
+                <Label text="Control Mode" class="settings-item" dock="left"/>
+                <SegmentedBar id="control_modes" dock="right" selectedIndexChanged="{{ onControlModeSelected }}"/>
+                </DockLayout>
 
-                <GridLayout rows="auto" columns="auto, *">
-                <Label text="EZ-ON" class="settings-item" row="0" col="0"/>
-                <Switch horizontalAlignment="right" checked="{{ ezOn }}" row="0" col="1"/>
-                </GridLayout>
+                <DockLayout stretchLastChild="false">
+                <Label text="EZ-ON" class="settings-item" dock="left"/>
+                <Switch checked="{{ ezOn }}" dock="right" />
+                </DockLayout>
 
-                <GridLayout rows="auto" columns="auto, *">
-                <Label text="Units" class="settings-item" row="0" col="0"/>
-                <SegmentedBar horizontalAlignment="right" id="units" row="0" col="1" selectedIndexChanged="{{ onUnitsSelected }}"/>
-                </GridLayout>
+                <DockLayout stretchLastChild="false">
+                <Label text="Units" class="settings-item" dock="left"/>
+                <SegmentedBar id="units" dock="right" selectedIndexChanged="{{ onUnitsSelected }}"/>
+                </DockLayout>
 
                 <Label text="Acceleration" class="settings-item" />
                 <GridLayout rows="auto" columns="*, auto">
