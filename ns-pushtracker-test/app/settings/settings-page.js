@@ -6,6 +6,7 @@ const gridModule = require("ui/layouts/grid-layout");
 
 const SettingsViewModel = require("./settings-view-model");
 const bluetooth = require("../bluetooth/bluetooth");
+const Packet = require("../packet/packet");
 const Toast = require("nativescript-toast");
 
 const settings = new SettingsViewModel();
@@ -243,6 +244,12 @@ function onDeviceBondChange(device, bondStatus) {
     }
 }
 
+function onCharacteristicWrite(device, requestId, characteristic, preparedWrite, responseNeeded, offset, value) {
+  const data = new Uint8Array(value);
+  const p = new Packet.Packet(data);
+  console.log(`${p.Type()}::${p.SubType()} ${p.toString()}`);
+}
+
 function deleteServices() {
     try {
         bluetooth._bluetooth.clearServices();
@@ -260,7 +267,8 @@ function addServices() {
                 deleteServices();
 
                 bluetooth._bluetooth.setGattServerCallbacks({
-                    onBondStatusChange: onDeviceBondChange
+                    onBondStatusChange: onDeviceBondChange,
+                    onCharacteristicWrite: onCharacteristicWrite
                 });
 
                 console.log("making service");
