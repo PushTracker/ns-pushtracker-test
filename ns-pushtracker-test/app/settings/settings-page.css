@@ -1,5 +1,7 @@
 .action-item {
     color: white;
+    font-size: 18;
+    text-transform: none;
 }
 
 .settings-item {
