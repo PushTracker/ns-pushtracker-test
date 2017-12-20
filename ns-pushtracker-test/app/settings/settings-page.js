@@ -7,10 +7,14 @@ const gridModule = require("ui/layouts/grid-layout");
 const SettingsViewModel = require("./settings-view-model");
 const bluetooth = require("../bluetooth/bluetooth");
 const Packet = require("../packet/packet");
+const Binding = require("../packet/packet_bindings");
+
 const Toast = require("nativescript-toast");
 
 const settings = new SettingsViewModel();
 let page = null;
+
+let pushTrackerDataCharacteristic = null;
 
 // only do once
 addServices();
@@ -103,17 +107,88 @@ function onDrawerButtonTap(args) {
     sideDrawer.showDrawer();
 }
 
+function sendSettings(device) {
+    if (pushTrackerDataCharacteristic === null || pushTrackerDataCharacteristic === undefined || device === null || device === undefined) {
+        return;
+    }
+    try {
+        const cm = settings.getControlMode().name;
+        const u = settings.getUnits().name;
+
+        const p = new Packet.Packet();
+        const settingsData = p.data("settings");
+
+        let controlMode = "Off";
+        let units = "English";
+        let tapSens = 1.0;
+        let accel = 0.3;
+        let speed = 0.7;
+
+        if (cm === "MX1") {
+            controlMode = "Beginner";
+        }
+        else if (cm === "MX2") {
+            controlMode = "Intermediate";
+        }
+        else if (cm === "MX2+") {
+            controlMode = "Advanced";
+        }
+        if (u === "Metric") {
+            units = "Metric";
+        }
+        tapSens = settings.tapSensitivity / 100.0;
+        accel = settings.acceleration / 100.0;
+        speed = settings.maxSpeed / 100.0;
+
+        settingsData.ControlMode = Binding.SmartDriveControlMode[controlMode];
+        settingsData.Units = Binding.Units[units];
+        settingsData.Flags = settings.ezOn ? 1 : 0;
+        settingsData.Padding = 0;
+        settingsData.TapSensitivity = tapSens;
+        settingsData.Acceleration = accel;
+        settingsData.MaxSpeed = speed;
+        p.Type("Command");
+        p.SubType("SetSettings");
+        p.data("settings", settingsData);
+
+        const data = Array.create("byte", 18);
+        const pdata = p.toUint8Array();
+        for (let i = 0; i < 18; i++) {
+            data[i] = pdata[i];
+        }
+        console.log(`Sending Settings =>  ${Packet.toString(pdata)}`);
+        pushTrackerDataCharacteristic.setValue(data);
+        bluetooth._bluetooth._gattServer.notifyCharacteristicChanged(device, pushTrackerDataCharacteristic, false);
+        // free up memory
+        p.destroy();
+    }
+    catch (ex) {
+        console.log("error sending settings");
+        console.log(ex);
+    }
+}
+
 function onSaveSettingsTap(args) {
+    let selectedPushTracker = null;
     if (hasPushTrackerConnected()) {
         selectPushTracker()
-        .then((pt) => {
-            if (pt !== null && pt !== undefined) {
-                dialogsModule.confirm({
+        .then((selection) => {
+            if (selection) {
+                selectedPushTracker = selection;
+
+                return dialogsModule.confirm({
                     title: "Save Settings?",
                     message: "Send these settings to the PushTracker?",
                     okButtonText: "Yes",
                     cancelButtonText: "No"
                 });
+            }
+
+            return null;
+        }).then((result) => {
+            if (result) {
+                sendSettings(selectedPushTracker);
+                Toast.makeText("Sent settings").show();
             }
         });
     }
@@ -167,12 +242,16 @@ function selectPushTracker() {
     if (pts.length > 1) {
         const options = {
             message: "Select PushTracker",
-            actions: pts
+            actions: pts.map((pt) => { return `${pt}`; })
         };
 
         return selectDialog(options)
             .then((selection) => {
-                return selection;
+                if (selection) {
+                    return pts.filter((pt) => { return `${pt}` === selection; })[0];
+                }
+
+                return null;
             })
             .catch((err) => {
                 console.log(err);
@@ -201,7 +280,7 @@ function getConnectedPushTrackers() {
         });
         const pushTrackers = [];
         for (let i = 0; i < pts.size(); i++) {
-            const pt = `${pts.get(i)}`;
+            const pt = pts.get(i);
             if (sds.indexOf(pt) === -1) {
                 pushTrackers.push(pt);
             }
@@ -289,6 +368,7 @@ function addServices() {
                     "8489625f-6c73-4fc0-8bcc-735bb173a920",
                     "5177fda8-1003-4254-aeb9-7f9edb3cc9cf"
                 ];
+                const ptDataChar = charUUIDs[1];
                 charUUIDs.map((cuuid) => {
                     console.log("Making characteristic: "+cuuid);
                     const c = bluetooth._bluetooth.makeAdvCharacteristic({
@@ -316,6 +396,9 @@ function addServices() {
                     });
                     c.setValue(0, android.bluetooth.BluetoothGattCharacteristic.FORMAT_UINT8, 0);
                     c.setWriteType(android.bluetooth.BluetoothGattCharacteristic.WRTIE_TYPE_DEFAULT);
+                    if (cuuid === ptDataChar) {
+                        pushTrackerDataCharacteristic = c;
+                    }
                     appService.addCharacteristic(c);
                 });
 
