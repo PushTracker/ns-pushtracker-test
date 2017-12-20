@@ -65,40 +65,40 @@
         <nsDrawer:RadSideDrawer.mainContent>
             <ScrollView orientation="vertical">
             <StackLayout orientation="vertical">
-                <GridLayout horizontalAlignment="left" rows="auto" columns="*, auto">
-                <Label text="Control Mode" class="sidedrawer-list-item" style="padding: 0; margin: 0;" row="0" col="0"/>
-                <SegmentedBar id="control_modes" row="0" col="1" selectedIndexChanged="{{ onControlModeSelected }}"/>
+                <GridLayout rows="auto" columns="auto, *">
+                <Label text="Control Mode" class="settings-item" row="0" col="0"/>
+                <SegmentedBar horizontalAlignment="right" id="control_modes" row="0" col="1" selectedIndexChanged="{{ onControlModeSelected }}"/>
                 </GridLayout>
 
-                <GridLayout horizontalAlignment="left" rows="auto" columns="*, auto">
-                <Label text="EZ-ON" class="sidedrawer-list-item" row="0" col="0"/>
-                <Switch checked="{{ ezOn }}" row="0" col="1"/>
+                <GridLayout rows="auto" columns="auto, *">
+                <Label text="EZ-ON" class="settings-item" row="0" col="0"/>
+                <Switch horizontalAlignment="right" checked="{{ ezOn }}" row="0" col="1"/>
                 </GridLayout>
 
-                <GridLayout horizontalAlignment="center" rows="auto" columns="*, auto">
-                <Label text="Units" class="sidedrawer-list-item" row="0" col="0"/>
-                <SegmentedBar id="units" row="0" col="1" selectedIndexChanged="{{ onUnitsSelected }}"/>
+                <GridLayout rows="auto" columns="auto, *">
+                <Label text="Units" class="settings-item" row="0" col="0"/>
+                <SegmentedBar horizontalAlignment="right" id="units" row="0" col="1" selectedIndexChanged="{{ onUnitsSelected }}"/>
                 </GridLayout>
 
-                <Label text="Acceleration" class="sidedrawer-list-item" />
+                <Label text="Acceleration" class="settings-item" />
                 <GridLayout rows="auto" columns="*, auto">
-                <Slider verticalAlignment="center" value="{{ acceleration }}" row="0" col="0"/>
-                <Label verticalAlignment="center" style="min-width: 50" text="{{ getAccelerationLabel() }}" row="0" col="1"/>
+                <Slider verticalAlignment="center" class="settings-slider" value="{{ acceleration }}" row="0" col="0"/>
+                <Label verticalAlignment="center" class="settings-slider-label" style="min-width: 50" text="{{ getAccelerationLabel() }}" row="0" col="1"/>
                 </GridLayout>
 
-                <Label text="Max Speed" class="sidedrawer-list-item" />
+                <Label text="Max Speed" class="settings-item" />
                 <GridLayout rows="auto" columns="*, auto">
-                <Slider verticalAlignment="center" value="{{ maxSpeed }}" row="0" col="0"/>
-                <Label verticalAlignment="center" style="min-width: 50" text="{{ getMaxSpeedLabel() }}" row="0" col="1"/>
+                <Slider verticalAlignment="center" class="settings-slider" value="{{ maxSpeed }}" row="0" col="0"/>
+                <Label verticalAlignment="center" class="settings-slider-label" style="min-width: 50" text="{{ getMaxSpeedLabel() }}" row="0" col="1"/>
                 </GridLayout>
 
-                <Label text="Tap Sensitivity" class="sidedrawer-list-item" />
+                <Label text="Tap Sensitivity" class="settings-item" />
                 <GridLayout rows="auto" columns="*, auto">
-                <Slider verticalAlignment="center" value="{{ tapSensitivity }}" row="0" col="0"/>
-                <Label verticalAlignment="center" style="min-width: 50" text="{{ getTapSensitivityLabel() }}" row="0" col="1"/>
+                <Slider verticalAlignment="center" class="settings-slider" value="{{ tapSensitivity }}" row="0" col="0"/>
+                <Label verticalAlignment="center" class="settings-slider-label" style="min-width: 50" text="{{ getTapSensitivityLabel() }}" row="0" col="1"/>
                 </GridLayout>
 
-                <Label text="Debug Menu:" />
+                <Label text="Debug Menu:" class="debug-label"/>
 
                 <GridLayout columns="*, *" rows="auto, auto, auto, auto, auto" horizontalAlignment="center" class="tab-content">
                     <iOS>
