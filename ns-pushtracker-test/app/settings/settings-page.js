@@ -228,6 +228,21 @@ function hasPushTrackerConnected() {
     }
 }
 
+function onDeviceBondChange(device, bondStatus) {
+    switch (bondStatus) {
+        case android.bluetooth.BluetoothDevice.BOND_BONDING:
+            break;
+        case android.bluetooth.BluetoothDevice.BOND_BONDED:
+            bluetooth._bluetooth.removeBond(device);
+            Toast.makeText(`Paired with ${device}`).show();
+            break;
+        case android.bluetooth.BluetoothDevice.BOND_NONE:
+            break;
+        default:
+            break;
+    }
+}
+
 function deleteServices() {
     try {
         bluetooth._bluetooth.clearServices();
@@ -243,6 +258,10 @@ function addServices() {
             if (supported) {
                 bluetooth._bluetooth.startGattServer();
                 deleteServices();
+
+                bluetooth._bluetooth.setGattServerCallbacks({
+                    onBondStatusChange: onDeviceBondChange
+                });
 
                 console.log("making service");
                 const appService = bluetooth._bluetooth.makeAdvService({
