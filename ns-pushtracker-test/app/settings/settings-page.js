@@ -108,7 +108,7 @@ function onDrawerButtonTap(args) {
 }
 
 function sendSettings(device) {
-    if (pushTrackerDataCharacteristic === null || pushTrackerDataCharacteristic === undefined || device === null || device === undefined) {
+    if (pushTrackerDataCharacteristic === null || pushTrackerDataCharacteristic === undefined) {
         return;
     }
     try {
@@ -158,7 +158,6 @@ function sendSettings(device) {
         }
         console.log(`Sending Settings =>  ${Packet.toString(pdata)}`);
         pushTrackerDataCharacteristic.setValue(data);
-        bluetooth._bluetooth._gattServer.notifyCharacteristicChanged(device, pushTrackerDataCharacteristic, false);
         // free up memory
         p.destroy();
     }
@@ -168,13 +167,19 @@ function sendSettings(device) {
     }
 }
 
+function notifyPushTrackers(pushTrackers) {
+    pushTrackers.map((pt) => {
+        bluetooth._bluetooth._gattServer.notifyCharacteristicChanged(pt, pushTrackerDataCharacteristic, false);
+    });
+}
+
 function onSaveSettingsTap(args) {
-    let selectedPushTracker = null;
+    let selectedPushTrackers = null;
     if (hasPushTrackerConnected()) {
-        selectPushTracker()
+        selectPushTrackers()
         .then((selection) => {
             if (selection) {
-                selectedPushTracker = selection;
+                selectedPushTrackers = selection;
 
                 return dialogsModule.confirm({
                     title: "Save Settings?",
@@ -187,7 +192,8 @@ function onSaveSettingsTap(args) {
             return null;
         }).then((result) => {
             if (result) {
-                sendSettings(selectedPushTracker);
+                sendSettings();
+                notifyPushTrackers(selectedPushTrackers);
                 Toast.makeText("Sent settings").show();
             }
         });
@@ -237,18 +243,23 @@ function selectDialog(options) {
     });
 }
 
-function selectPushTracker() {
+function selectPushTrackers() {
     const pts = getConnectedPushTrackers();
     if (pts.length > 1) {
         const options = {
             message: "Select PushTracker",
-            actions: pts.map((pt) => { return `${pt}`; })
+            actions: pts.map((pt) => { return `${pt}`; }).concat(['All'])
         };
 
         return selectDialog(options)
             .then((selection) => {
                 if (selection) {
-                    return pts.filter((pt) => { return `${pt}` === selection; })[0];
+                    if (selection === 'All') {
+                        return pts;
+                    }
+                    else {
+                        return pts.filter((pt) => { return `${pt}` === selection; });
+                    }
                 }
 
                 return null;
@@ -262,7 +273,7 @@ function selectPushTracker() {
     else {
         return new Promise((resolve, reject) => {
             if (pts.length) {
-                resolve(pts[0]);
+                resolve(pts);
             }
             else {
                 reject();
