@@ -1,8 +1,4 @@
-SegmentedBar .item {
-    width: 100;
-}
-
-.action-bar-title {
+.action-item {
     color: white;
 }
 

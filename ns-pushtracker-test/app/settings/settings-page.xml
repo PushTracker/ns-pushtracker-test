@@ -20,10 +20,12 @@
             ios.position="left">
         </ActionItem>
 
-        <ActionItem text="Save"
-            tap="onSaveSettingsTap"
-            ios.position="right">
+        <ActionItem ios.position="right" tap="onSaveSettingsTap">
+            <ActionItem.actionView>
+                <Button text="Save" tap="onSaveSettingsTap" class="action-item"/>
+            </ActionItem.actionView>
         </ActionItem>
+
         <Label class="action-bar-title" text="Settings"></Label>
     </ActionBar>
 

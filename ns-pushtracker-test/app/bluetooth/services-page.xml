@@ -4,10 +4,13 @@
       loaded="pageLoaded" 
       navigatingFrom="onNavigatingFrom">
     <ActionBar class="action-bar">
-        <ActionItem text="Back"
-            tap="onBackTap"
-            ios.position="right">
+
+        <ActionItem ios.position="right" tap="onBackTap">
+            <ActionItem.actionView>
+                <Button text="Back" tap="onBackTap" class="action-item"/>
+            </ActionItem.actionView>
         </ActionItem>
+
         <Label class="action-bar-title" text="{{ peripheral.name }}"></Label>
     </ActionBar>
     <StackLayout orientation="vertical">
