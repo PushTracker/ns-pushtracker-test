@@ -22,7 +22,7 @@ function DailyInfo(arr) {
 function getDate(di) {
     const date = new Date(
 	di.data.year,
-	di.data.month,
+	di.data.month-1, // they use month as zero indexed
 	di.data.day
     );
     console.log(date);

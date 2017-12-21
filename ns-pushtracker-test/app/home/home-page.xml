@@ -74,11 +74,13 @@
 		<chart:RadLegendView position="Top" enableSelection="false" />
 	      </chart:RadCartesianChart.legend>
 	    </chart:RadCartesianChart>
-	    <StackLayout orientation="horizontal">
-	      <Button text="Year"/>
-	      <Button text="Month"/>
-	      <Button text="Week"/>
-	    </StackLayout>
+	    <SegmentedBar>
+	      <SegmentedBar.items>
+		<SegmentedBarItem title="Year"/>
+		<SegmentedBarItem title="Month"/>
+		<SegmentedBarItem title="Week"/>
+	      </SegmentedBar.items>
+	    </SegmentedBar>
 	  </StackLayout>
         </nsDrawer:RadSideDrawer.mainContent>
     </nsDrawer:RadSideDrawer>

@@ -8,6 +8,8 @@ const DailyInfo = require("./daily-info");
 // HISTORICAL DATA
 const historicalDataKey = "PushTracker DaiyInfo History";
 function HistoricalData() {
+    this.viewSetting = "Week";
+
     this.data = [];
     this.load();
 }
@@ -45,10 +47,9 @@ HistoricalData.prototype.getDataSource = function(key) {
 	};
     });
     dataSource.push({
-	Date: new Date(2017, 11, 23).getTime(),
+	Date: new Date(2017, 10, 23).getTime(),
 	Value: 10
     });
-    console.log(JSON.stringify(dataSource, null, 4));
     return dataSource;
 };
 const historicalData = new HistoricalData();
