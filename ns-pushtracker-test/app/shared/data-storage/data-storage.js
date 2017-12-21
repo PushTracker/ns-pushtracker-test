@@ -4,6 +4,7 @@ const LS = require("nativescript-localstorage");
 const historicalDataKey = "PushTracker DaiyInfo History";
 function HistoricalData() {
     this.data = [];
+    this.load();
 }
 
 HistoricalData.prototype.save = function() {
@@ -11,7 +12,7 @@ HistoricalData.prototype.save = function() {
 };
 
 HistoricalData.prototype.load = function() {
-    this.data = LS.getItem(historicalDataKey);
+    this.data = LS.getItem(historicalDataKey) || [];
 };
 
 exports.HistoricalData = function() {
