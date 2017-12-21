@@ -349,6 +349,23 @@ function onCharacteristicWrite(device, requestId, characteristic, preparedWrite,
     }
 }
 
+function onDeviceConnectionStateChanged(device, status, newState) {
+    switch (newState) {
+        case android.bluetooth.BluetoothProfile.STATE_CONNECTED:
+            Toast.makeText(`${device} connected`).show();
+            break;
+        case android.bluetooth.BluetoothProfile.STATE_CONNECTING:
+            break;
+        case android.bluetooth.BluetoothProfile.STATE_DISCONNECTED:
+            Toast.makeText(`${device} disconnected`).show();
+            break;
+        case android.bluetooth.BluetoothProfile.STATE_DISCONNECTING:
+            break;
+        default:
+            break;
+    }
+}
+
 function deleteServices() {
     try {
         bluetooth._bluetooth.clearServices();
@@ -367,7 +384,8 @@ function addServices() {
 
                 bluetooth._bluetooth.setGattServerCallbacks({
                     onBondStatusChange: onDeviceBondChange,
-                    onCharacteristicWrite: onCharacteristicWrite
+                    onCharacteristicWrite: onCharacteristicWrite,
+                    onServerConnectionStateChange: onDeviceConnectionStateChanged
                 });
 
                 console.log("making service");
