@@ -389,7 +389,7 @@ function addServices() {
                 });
 
                 console.log("making service");
-                const appService = bluetooth._bluetooth.makeAdvService({
+                const appService = bluetooth._bluetooth.makeService({
                     UUID: "9358ac8f-6343-4a31-b4e0-4b13a2b45d86",
                     serviceType: android.bluetooth.BluetoothGattService.SERVICE_TYPE_PRIMARY
                 });
@@ -398,7 +398,6 @@ function addServices() {
                     "2900",
                     "2902"
                 ];
-
                 const charUUIDs = [
                     "58daaa15-f2b2-4cd9-b827-5807b267dae1",
                     "68208ebf-f655-4a2d-98f4-20d7d860c471",
@@ -409,7 +408,7 @@ function addServices() {
                 const ptDataChar = charUUIDs[1];
                 charUUIDs.map((cuuid) => {
                     console.log("Making characteristic: "+cuuid);
-                    const c = bluetooth._bluetooth.makeAdvCharacteristic({
+                    const c = bluetooth._bluetooth.makeCharacteristic({
                         UUID: cuuid,
                         gattProperty: android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ | 
                             android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE | 
