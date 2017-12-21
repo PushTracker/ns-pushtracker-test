@@ -9,6 +9,8 @@ const bluetooth = require("../bluetooth/bluetooth");
 const Packet = require("../packet/packet");
 const Binding = require("../packet/packet_bindings");
 
+const DailyInfo = require("../shared/data-storage/daily-info");
+
 const Toast = require("nativescript-toast");
 
 const settings = new SettingsViewModel();
@@ -335,9 +337,16 @@ function onDeviceBondChange(device, bondStatus) {
 }
 
 function onCharacteristicWrite(device, requestId, characteristic, preparedWrite, responseNeeded, offset, value) {
-  const data = new Uint8Array(value);
-  const p = new Packet.Packet(data);
-  console.log(`${p.Type()}::${p.SubType()} ${p.toString()}`);
+    const data = new Uint8Array(value);
+    const p = new Packet.Packet(data);
+    if (p.Type() === "Data" && p.SubType() === "DailyInfo") {
+        const di = DailyInfo.DailyInfo();
+        di.fromPacket(p);
+        console.log(JSON.stringify(di.data));
+    }
+    else {
+        console.log(`${p.Type()}::${p.SubType()} ${p.toString()}`);
+    }
 }
 
 function deleteServices() {
