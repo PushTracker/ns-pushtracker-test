@@ -25,7 +25,6 @@ function getDate(di) {
 	di.data.month-1, // they use month as zero indexed
 	di.data.day
     );
-    console.log(date);
     return date;
 };
 

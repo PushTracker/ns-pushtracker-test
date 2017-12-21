@@ -52,6 +52,28 @@ HistoricalData.prototype.getDataSource = function(key) {
     });
     return dataSource;
 };
+
+HistoricalData.prototype.getDataSourceAverage = function(key) {
+    let sum = 0;
+    let ds = this.getDataSource(key);
+    let earliest = null;
+    let latest = null;
+    ds.map((el) => {
+	if (earliest === null || el.Date < earliest) {
+	    earliest = el.Date;
+	}
+	if (latest === null || el.Date > latest) {
+	    latest = el.Date;
+	}
+	sum += el.Value;
+    });
+    let avg = sum / ds.length;
+    const dataSource = [
+	{ Date: earliest, Value: avg },
+	{ Date: latest, Value: avg },
+    ];
+    return dataSource;
+};
 const historicalData = new HistoricalData();
 
 // SETTINGS
