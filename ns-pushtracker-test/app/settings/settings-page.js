@@ -460,7 +460,9 @@ function addServices() {
                     settings: {
                         connectable: true
                     },
-                    data: {}
+                    data: {
+			includeDeviceName: true
+		    }
                 })
                 .then(() => {
                     console.log("Advertise started!");
