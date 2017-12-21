@@ -19,6 +19,16 @@ function DailyInfo(arr) {
     }
 }
 
+function getDate(di) {
+    const date = new Date(
+	di.data.year,
+	di.data.month,
+	di.data.day
+    );
+    console.log(date);
+    return date;
+};
+
 DailyInfo.prototype.sameDayAs = function(di) {
     return this.data.year === di.data.year &&
 	this.data.month === di.data.month &&
@@ -51,3 +61,5 @@ DailyInfo.prototype.fromPacket = function(p) {
 module.exports.DailyInfo = function(bytes) {
     return new DailyInfo(bytes);
 };
+
+module.exports.getDate = getDate;

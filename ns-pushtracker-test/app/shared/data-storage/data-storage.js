@@ -3,6 +3,7 @@ const LS = require("nativescript-localstorage");
 const observableModule = require("data/observable");
 
 const SettingsViewModel = require("../../settings/settings-view-model");
+const DailyInfo = require("./daily-info");
 
 // HISTORICAL DATA
 const historicalDataKey = "PushTracker DaiyInfo History";
@@ -34,6 +35,21 @@ HistoricalData.prototype.update = function(dailyInfo) {
 	this.data.push(dailyInfo);
     }
     this.save();
+};
+
+HistoricalData.prototype.getDataSource = function(key) {
+    const dataSource = this.data.map((d) => {
+	return {
+	    Date: DailyInfo.getDate(d).getTime(),
+	    Value: d.data[key]
+	};
+    });
+    dataSource.push({
+	Date: new Date(2017, 11, 23).getTime(),
+	Value: 10
+    });
+    console.log(JSON.stringify(dataSource, null, 4));
+    return dataSource;
 };
 const historicalData = new HistoricalData();
 
