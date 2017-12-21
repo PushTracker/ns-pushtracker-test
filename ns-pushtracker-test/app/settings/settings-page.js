@@ -175,6 +175,17 @@ function notifyPushTrackers(pushTrackers) {
     });
 }
 
+function disconnectPushTrackers(pushTrackers) {
+    try {
+        pushTrackers.map((pt) => {
+            bluetooth._bluetooth.cancelServerConnection(pt);
+        });
+    }
+    catch (ex) {
+        console.log(ex);
+    }
+}
+
 function onSaveSettingsTap(args) {
     let selectedPushTrackers = null;
     if (hasPushTrackerConnected()) {
@@ -286,12 +297,15 @@ function selectPushTrackers() {
 
 function getConnectedPushTrackers() {
     try {
+        const pushTrackers = [];
         const pts = bluetooth._bluetooth.getServerConnectedDevices();
+        if (pts === null || pts === undefined || pts.size === undefined || pts.length === 0) {
+            return pushTrackers;
+        }
         const sds = [];
         bluetooth.peripherals.map((p) => {
             sds.push(`${p.UUID}`);
         });
-        const pushTrackers = [];
         for (let i = 0; i < pts.size(); i++) {
             const pt = pts.get(i);
             if (sds.indexOf(pt) === -1) {
@@ -440,6 +454,22 @@ function addServices() {
                 });
 
                 bluetooth._bluetooth.addService(appService);
+
+                bluetooth.startAdvertising({
+                    UUID: "9358ac8f-6343-4a31-b4e0-4b13a2b45d86",
+                    settings: {
+                        connectable: true
+                    },
+                    data: {}
+                })
+                .then(() => {
+                    console.log("Advertise started!");
+                    Toast.makeText("Advertising started").show();
+                })
+                .catch((err) => {
+                    console.log("Couldn't start advertising: " + err);
+                    Toast.makeText("Couldn't start advertising: " + err).show();
+                });
             }
         });
     }
@@ -461,21 +491,7 @@ function onStartAdvertisementTap() {
                 return;
             }
             else {
-                bluetooth.startAdvertising({
-                    UUID: "9358ac8f-6343-4a31-b4e0-4b13a2b45d86",
-                    settings: {
-                        connectable: true
-                    },
-                    data: {}
-                })
-                .then(() => {
-                    console.log("Advertise started!");
-                    Toast.makeText("Advertising started").show();
-                })
-                .catch((err) => {
-                    console.log("Couldn't start advertising: " + err);
-                    Toast.makeText("Couldn't start advertising: " + err).show();
-                });
+                addServices();
             }
         })
         .catch((err) => {
@@ -489,16 +505,15 @@ function onStartAdvertisementTap() {
 
 function onStopAdvertisementTap() {
     try {
-        bluetooth._bluetooth.clearServices();
-
         bluetooth.stopAdvertising()
         .then(() => {
-            console.log("Advertise stopped!");
+            disconnectPushTrackers(getConnectedPushTrackers());
+            //bluetooth._bluetooth.stopGattServer();
             Toast.makeText("Advertising stopped").show();
         })
         .catch((err) => {
-            console.log("Couldn't stop advertising: "+err);
-            Toast.makeText("Couldn't stop advertising: "+err).show();
+            console.log("Couldn't stop advertising: " + err);
+            Toast.makeText("Couldn't stop advertising: " + err).show();
         });
     }
     catch (ex) {
