@@ -55,7 +55,34 @@ function SettingsViewModel() {
 
         getTapSensitivityLabel: function() {
             return `${this.tapSensitivity}%`;
-        }
+        },
+
+	toObject: function() {
+	    var obj = {
+		controlMode: this.getControlMode().name,
+		ezOn: this.ezOn,
+		units: this.getUnits().name,
+		acceleration: this.acceleration,
+		maxSpeed: this.maxSpeed,
+		tapSensitivity: this.tapSensitivity
+	    };
+	    return obj;
+	},
+
+	fromObject: function(obj) {
+	    let cm = this.controlModes.map((c) => { return c.name }).indexOf(obj.controlMode);
+	    let un = this.units.map((u) => { return u.name }).indexOf(obj.units);
+
+	    if (cm < 0) cm = 2;
+	    if (un < 0) un = 0;
+	    
+	    this.controlModeSelection = cm;
+	    this.ezOn = obj.ezOn;
+	    this.unitsSelection = un;
+	    this.acceleration = obj.acceleration;
+	    this.maxSpeed = obj.maxSpeed;
+	    this.tapSensitivity = obj.tapSensitivity;
+	}
     });
 
     return viewModel;

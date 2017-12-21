@@ -19,6 +19,12 @@ function DailyInfo(arr) {
     }
 }
 
+DailyInfo.prototype.sameDayAs = function(di) {
+    return this.data.year === di.data.year &&
+	this.data.month === di.data.month &&
+	this.data.day === di.data.day;
+};
+
 DailyInfo.prototype.fromUint8Array = function(arr) {
     const p = new Packet.Packet(arr);
     this.fromPacket(p);

@@ -11,9 +11,11 @@ const Binding = require("../packet/packet_bindings");
 
 const DailyInfo = require("../shared/data-storage/daily-info");
 
+const DataStorage = require("../shared/data-storage/data-storage");
+
 const Toast = require("nativescript-toast");
 
-const settings = new SettingsViewModel();
+const settings = DataStorage.Settings.settings;
 let page = null;
 
 let pushTrackerDataCharacteristic = null;
@@ -357,6 +359,7 @@ function onCharacteristicWrite(device, requestId, characteristic, preparedWrite,
         const di = DailyInfo.DailyInfo();
         di.fromPacket(p);
         console.log(JSON.stringify(di.data));
+	DataStorage.HistoricalData.update(di);
     }
     else {
         console.log(`${p.Type()}::${p.SubType()} ${p.toString()}`);
