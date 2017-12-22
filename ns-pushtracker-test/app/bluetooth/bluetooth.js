@@ -1,3 +1,4 @@
+const dialogsModule = require("ui/dialogs");
 const observableModule = require("data/observable");
 const observableArray = require("data/observable-array");
 
@@ -12,6 +13,8 @@ const Binding = require("../packet/packet_bindings");
 const smartDriveServiceUUID = "0cd51666-e7cb-469b-8e4d-2742f1ba7723";
 
 const peripherals = new observableArray.ObservableArray();
+
+let pushTrackerDataCharacteristic = null;
 
 function scan(uuids, onDiscoveredCallback) {
     peripherals.splice(0, peripherals.length);
@@ -192,7 +195,128 @@ function addServices() {
     }
 }
 
-// original 
+function notifyPushTrackers(pushTrackers) {
+    pushTrackers.map((pt) => {
+        bluetooth._gattServer.notifyCharacteristicChanged(pt, pushTrackerDataCharacteristic, false);
+    });
+}
+
+function disconnectPushTrackers(pushTrackers) {
+    try {
+        pushTrackers.map((pt) => {
+            bluetooth.cancelServerConnection(pt);
+        });
+    }
+    catch (ex) {
+        console.log(ex);
+    }
+}
+
+function selectDialog(options) {
+    // options should be of form....
+    return new Promise((resolve, reject) => {
+        dialogsModule.action({
+            message: options.message || "Select",
+            cancelButtonText: options.cancelButtonText || "Cancel",
+            actions: options.actions || []
+        })
+        .then((result) => {
+            resolve(result !== "Cancel" ? result : null);
+        })
+        .catch((err) => {
+            reject(err);
+        });
+    });
+}
+
+function selectPushTrackers() {
+    const pts = getConnectedPushTrackers();
+    if (pts.length > 1) {
+        const options = {
+            message: "Select PushTracker",
+            actions: pts.map((pt) => { return `${pt}`; }).concat(['All'])
+        };
+
+        return selectDialog(options)
+            .then((selection) => {
+                if (selection) {
+                    if (selection === 'All') {
+                        return pts;
+                    }
+                    else {
+                        return pts.filter((pt) => { return `${pt}` === selection; });
+                    }
+                }
+
+                return null;
+            })
+            .catch((err) => {
+                console.log(err);
+
+                return null;
+            });
+    }
+    else {
+        return new Promise((resolve, reject) => {
+            if (pts.length) {
+                resolve(pts);
+            }
+            else {
+                reject();
+            }
+        });
+    }
+}
+
+function getConnectedSmartDrives() {
+}
+
+function getConnectedPushTrackers() {
+    try {
+        const pushTrackers = [];
+        const pts = bluetooth.getServerConnectedDevices();
+        if (pts === null || pts === undefined || pts.size === undefined || pts.length === 0) {
+            return pushTrackers;
+        }
+        for (let i = 0; i < pts.size(); i++) {
+            const pt = pts.get(i);
+	    if (pt.getName() === "PushTracker") {
+                pushTrackers.push(pt);
+            }
+        }
+
+        return pushTrackers;
+    }
+    catch (ex) {
+        console.log(ex);
+
+        return [];
+    }
+}
+
+function hasPushTrackerConnected() {
+    try {
+        const pts = getConnectedPushTrackers();
+
+        return pts.length > 0;
+    }
+    catch (ex) {
+        console.log(ex);
+
+        return false;
+    }
+}
+
+function sendToPushTracker(data) {
+    if (pushTrackerDataCharacteristic === null || pushTrackerDataCharacteristic === undefined) {
+        return;
+    }
+    pushTrackerDataCharacteristic.setValue(data);
+};
+
+// original
+exports.sendToPushTracker = sendToPushTracker;
+exports.pushTrackerDataCharacteristic = pushTrackerDataCharacteristic;
 exports._bluetooth = bluetooth;
 exports.isPeripheralModeSupported = bluetooth.isPeripheralModeSupported;
 exports.isBluetoothEnabled = bluetooth.isBluetoothEnabled;
@@ -202,6 +326,11 @@ exports.stopAdvertising = bluetooth.stopAdvertising;
 exports.disable = bluetooth.disable;
 exports.enable = bluetooth.enable;
 // what we add / wrap
+exports.notifyPushTrackers = notifyPushTrackers;
+exports.disconnectPushTrackers = disconnectPushTrackers;
+exports.getConnectedPushTrackers = getConnectedPushTrackers;
+exports.hasPushTrackerConnected = hasPushTrackerConnected;
+exports.selectPushTrackers = selectPushTrackers;
 exports.addServices = addServices;
 exports.peripherals = peripherals;
 exports.clearPeripherals = clearPeripherals;

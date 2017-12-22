@@ -18,8 +18,6 @@ const Toast = require("nativescript-toast");
 const settings = DataStorage.Settings.settings;
 let page = null;
 
-let pushTrackerDataCharacteristic = null;
-
 function makePeripheralDebug() {
     try {
         bluetooth.isPeripheralModeSupported().then((supported) => {
@@ -108,9 +106,6 @@ function onDrawerButtonTap(args) {
 }
 
 function sendSettings(device) {
-    if (pushTrackerDataCharacteristic === null || pushTrackerDataCharacteristic === undefined) {
-        return;
-    }
     try {
         const cm = settings.getControlMode().name;
         const u = settings.getUnits().name;
@@ -157,7 +152,7 @@ function sendSettings(device) {
             data[i] = pdata[i];
         }
         console.log(`Sending Settings =>  ${Packet.toString(pdata)}`);
-        pushTrackerDataCharacteristic.setValue(data);
+	bluetooth.sendToPushTracker(data);
         // free up memory
         p.destroy();
     }
@@ -167,27 +162,10 @@ function sendSettings(device) {
     }
 }
 
-function notifyPushTrackers(pushTrackers) {
-    pushTrackers.map((pt) => {
-        bluetooth._bluetooth._gattServer.notifyCharacteristicChanged(pt, pushTrackerDataCharacteristic, false);
-    });
-}
-
-function disconnectPushTrackers(pushTrackers) {
-    try {
-        pushTrackers.map((pt) => {
-            bluetooth._bluetooth.cancelServerConnection(pt);
-        });
-    }
-    catch (ex) {
-        console.log(ex);
-    }
-}
-
 function onSaveSettingsTap(args) {
     let selectedPushTrackers = null;
-    if (hasPushTrackerConnected()) {
-        selectPushTrackers()
+    if (bluetooth.hasPushTrackerConnected()) {
+        bluetooth.selectPushTrackers()
         .then((selection) => {
             if (selection) {
                 selectedPushTrackers = selection;
@@ -204,7 +182,7 @@ function onSaveSettingsTap(args) {
         }).then((result) => {
             if (result) {
                 sendSettings();
-                notifyPushTrackers(selectedPushTrackers);
+                bluetooth.notifyPushTrackers(selectedPushTrackers);
                 Toast.makeText("Sent settings").show();
             }
         });
@@ -303,85 +281,6 @@ function selectDialog(options) {
     });
 }
 
-function selectPushTrackers() {
-    const pts = getConnectedPushTrackers();
-    if (pts.length > 1) {
-        const options = {
-            message: "Select PushTracker",
-            actions: pts.map((pt) => { return `${pt}`; }).concat(['All'])
-        };
-
-        return selectDialog(options)
-            .then((selection) => {
-                if (selection) {
-                    if (selection === 'All') {
-                        return pts;
-                    }
-                    else {
-                        return pts.filter((pt) => { return `${pt}` === selection; });
-                    }
-                }
-
-                return null;
-            })
-            .catch((err) => {
-                console.log(err);
-
-                return null;
-            });
-    }
-    else {
-        return new Promise((resolve, reject) => {
-            if (pts.length) {
-                resolve(pts);
-            }
-            else {
-                reject();
-            }
-        });
-    }
-}
-
-function getConnectedPushTrackers() {
-    try {
-        const pushTrackers = [];
-        const pts = bluetooth._bluetooth.getServerConnectedDevices();
-        if (pts === null || pts === undefined || pts.size === undefined || pts.length === 0) {
-            return pushTrackers;
-        }
-        const sds = [];
-        bluetooth.peripherals.map((p) => {
-            sds.push(`${p.UUID}`);
-        });
-        for (let i = 0; i < pts.size(); i++) {
-            const pt = pts.get(i);
-            if (sds.indexOf(pt) === -1) {
-                pushTrackers.push(pt);
-            }
-        }
-
-        return pushTrackers;
-    }
-    catch (ex) {
-        console.log(ex);
-
-        return [];
-    }
-}
-
-function hasPushTrackerConnected() {
-    try {
-        const pts = getConnectedPushTrackers();
-
-        return pts.length > 0;
-    }
-    catch (ex) {
-        console.log(ex);
-
-        return false;
-    }
-}
-
 function onStartAdvertisementTap() {
     try {
         bluetooth.isPeripheralModeSupported().then((supported) => {
@@ -427,7 +326,7 @@ function onStopAdvertisementTap() {
     try {
         bluetooth.stopAdvertising()
         .then(() => {
-            disconnectPushTrackers(getConnectedPushTrackers());
+            bluetooth.disconnectPushTrackers(bluetooth.getConnectedPushTrackers());
             Toast.makeText("Advertising stopped").show();
         })
         .catch((err) => {
