@@ -45,6 +45,7 @@ HistoricalData.prototype.update = function(dailyInfo) {
 	this.data.push(dailyInfo);
     }
     this.save();
+    this.updateDataSource();
 };
 
 HistoricalData.prototype.updateViewSetting = function(newViewSetting) {
