@@ -9,7 +9,7 @@ function DailyInfo(arr) {
         pushesWithout: 0,
         coastWith: 0,
         coastWithout: 0,
-        distance: 0,
+        distance: 0.0,
         speed: 0,
         ptBattery: 0,
         sdBattery: 0
