@@ -48,6 +48,14 @@ DailyInfo.prototype.sameDailyInfoAs = function(di) {
 	this.data.day === di.data.day;
 };
 
+DailyInfo.prototype.add = function(di) {
+    this.data.pushesWith += di.data.pushesWith;
+    this.data.pushesWithout += di.data.pushesWithout;
+    this.data.coastWith += di.data.coastWith;
+    this.data.coastWithout += di.data.coastWithout;
+    this.data.distance += di.data.distance;
+};
+
 DailyInfo.prototype.fromUint8Array = function(arr) {
     const p = new Packet.Packet(arr);
     this.fromPacket(p);

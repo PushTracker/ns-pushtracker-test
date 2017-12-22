@@ -55,6 +55,20 @@ HistoricalData.prototype.updateViewSetting = function(newViewSetting) {
     }
 };
 
+HistoricalData.prototype.getDailyInfoForMonth = function(date) {
+    var matching = this.data.filter((di) => {
+	var d = DailyInfo.getDate(di);
+	return d.getMonth() === date.getMonth() && d.getFullYear() === date.getFullYear();
+    });
+    var dailyInfo = new DailyInfo.DailyInfo();
+    matching.map((di) => {
+	dailyInfo.add(di);
+    });
+    var retObj = dailyInfo.data;
+    retObj.Date = date;
+    return retObj;
+};
+
 HistoricalData.prototype.getDailyInfoAtDate = function(date) {
     var matching = this.data.filter((d) => {
 	return DailyInfo.sameAsDate(d, date); 
@@ -89,34 +103,13 @@ HistoricalData.prototype.updateDataSource = function() {
 	numData = 12;
 	for (let i=0; i<numData; i++) {
 	    var date = (i).months().ago();
-	    var di = this.getDailyInfoAtDate(date);
+	    var di = this.getDailyInfoForMonth(date);
 	    this.dataSource.push(di);
 	}
 	break;
     default:
 	break;
     };
-};
-
-HistoricalData.prototype.getTimeDomain = function(ds) {
-    let earliest = null;
-    let latest = null;
-    ds.map((el) => {
-	if (earliest === null || el.Date < earliest) {
-	    earliest = el.Date;
-	}
-	if (latest === null || el.Date > latest) {
-	    latest = el.Date;
-	}
-    });
-    return {
-	begin: earliest,
-	end: latest,
-    };
-};
-
-HistoricalData.prototype.addDataInRange = function(key, start, stop) {
-    
 };
 const historicalData = new HistoricalData();
 
