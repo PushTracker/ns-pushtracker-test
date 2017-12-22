@@ -107,6 +107,9 @@ function deleteServices() {
 function addServices() {
     try {
         bluetooth.isPeripheralModeSupported().then((supported) => {
+	    return restart().then(() => { return supported; });
+	})
+	    .then((supported) => {
             if (supported) {
                 bluetooth.startGattServer();
                 deleteServices();
@@ -147,14 +150,13 @@ function addServices() {
                     });
                     console.log("making descriptors");
                     const descriptors = descriptorUUIDs.map((duuid) => {
-                        console.log("Making descriptor: "+duuid);
                         const d = bluetooth.makeDescriptor({
                             UUID: duuid,
                             permissions: android.bluetooth.BluetoothGattDescriptor.PERMISSION_READ | 
                                 android.bluetooth.BluetoothGattDescriptor.PERMISSION_WRITE
                         });
                         d.setValue(new Array([0x00, 0x00]));
-
+                        console.log("Making descriptor: "+duuid);
                         return d;
                     });
                     descriptors.map((d) => {
@@ -168,8 +170,6 @@ function addServices() {
                     appService.addCharacteristic(c);
                 });
 
-                bluetooth.addService(appService);
-
                 bluetooth.startAdvertising({
                     UUID: "9358ac8f-6343-4a31-b4e0-4b13a2b45d86",
                     settings: {
@@ -180,6 +180,7 @@ function addServices() {
 		    }
                 })
                 .then(() => {
+                    bluetooth.addService(appService);
                     console.log("Advertise started!");
                     Toast.makeText("Advertising started").show();
                 })
