@@ -78,7 +78,7 @@
 		  <chart:LinearAxis/>
 		</chart:RadCartesianChart.verticalAxis>
 		<chart:RadCartesianChart.legend>
-		  <chart:RadLegendView position="Top" enableSelection="false" />
+		  <chart:RadLegendView position="Top" enableSelection="true" />
 		</chart:RadCartesianChart.legend>
 	      </chart:RadCartesianChart>
 	    </StackLayout>
@@ -101,7 +101,7 @@
 		  <chart:LinearAxis/>
 		</chart:RadCartesianChart.verticalAxis>
 		<chart:RadCartesianChart.legend>
-		  <chart:RadLegendView position="Top" enableSelection="false" />
+		  <chart:RadLegendView position="Top" enableSelection="true" />
 		</chart:RadCartesianChart.legend>
 	      </chart:RadCartesianChart>
 	    </StackLayout>
@@ -123,7 +123,7 @@
 		  <chart:LinearAxis minimum="0.0" maximum="20.0"/>
 		</chart:RadCartesianChart.verticalAxis>
 		<chart:RadCartesianChart.legend>
-		  <chart:RadLegendView position="Top" enableSelection="false" />
+		  <chart:RadLegendView position="Top" enableSelection="true" />
 		</chart:RadCartesianChart.legend>
 	      </chart:RadCartesianChart>
 	    </StackLayout>

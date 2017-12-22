@@ -1,6 +1,10 @@
 require("./bundle-config");
 const application = require("application");
 
+const bluetooth = require("./bluetooth/bluetooth");
+
+bluetooth.addServices();
+
 application.start({ moduleName: "home/home-page" });
 
 /*
