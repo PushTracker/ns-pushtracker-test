@@ -14,9 +14,9 @@ function HistoricalData() {
     this.data = [];
     this.load();
     this.viewSetting = "Week";
-    this.dataSource = new observableArray.ObservableArray();
+    this.dataSource = new observableArray.ObservableArray();    
     this.dateFormat = observableModule.fromObject({ format: "MMM", labelFitMode: "" });
-    this.updateDataSource();
+    this.updateDataSources();
 }
 
 HistoricalData.prototype.save = function() {
@@ -46,11 +46,19 @@ HistoricalData.prototype.update = function(dailyInfo) {
 	this.data.push(dailyInfo);
     }
     this.save();
-    this.updateDataSource();
+    this.updateDataSources();
 };
 
 HistoricalData.prototype.getDateFormat = function() {
     return this.dateFormat;
+};
+
+HistoricalData.prototype.swapDataSource = function() {
+    this.updateAxesFormat();
+    this.dataSource.splice(0, this.dataSource.length);
+    this.dataSources[this.viewSetting].map((ds) => {
+	this.dataSource.push(ds);
+    });
 };
 
 HistoricalData.prototype.updateAxesFormat = function() {
@@ -81,7 +89,7 @@ HistoricalData.prototype.updateAxesFormat = function() {
 HistoricalData.prototype.updateViewSetting = function(newViewSetting) {
     if (newViewSetting !== undefined && newViewSetting !== null) {
 	this.viewSetting = newViewSetting;
-	this.updateDataSource();
+	this.swapDataSource();
     }
 };
 
@@ -109,38 +117,45 @@ HistoricalData.prototype.getDailyInfoAtDate = function(date) {
     return retObj;
 };
 
-HistoricalData.prototype.updateDataSource = function() {
-    this.dataSource.splice(0, this.dataSource.length);
-    this.updateAxesFormat();
-    let numData = 0;
-    switch (this.viewSetting) {
-    case "Week":
-	numData = 7;
-	for (let i=0; i<numData; i++) {
-	    var date = (i).days().ago();
-	    var di = this.getDailyInfoAtDate(date);
-	    this.dataSource.push(di);
-	}
-	break;
-    case "Month":
-	numData = 31;
-	for (let i=0; i<numData; i++) {
-	    var date = (i).days().ago();
-	    var di = this.getDailyInfoAtDate(date);
-	    this.dataSource.push(di);
-	}
-	break;
-    case "Year":
-	numData = 12;
-	for (let i=0; i<numData; i++) {
-	    var date = (i).months().ago();
-	    var di = this.getDailyInfoForMonth(date);
-	    this.dataSource.push(di);
-	}
-	break;
-    default:
-	break;
+HistoricalData.prototype.updateDataSources = function() {
+    console.log("updating data sources!");
+    this.dataSources = {
+	"Year": [],
+	"Month": [],
+	"Week": []
     };
+    ["Week", "Month", "Year"].map((vs) => {
+	let numData = 0;
+	switch (vs) {
+	case "Week":
+	    numData = 7;
+	    for (let i=0; i<numData; i++) {
+		var date = (i).days().ago();
+		var di = this.getDailyInfoAtDate(date);
+		this.dataSources[vs].push(di);
+	    }
+	    break;
+	case "Month":
+	    numData = 31;
+	    for (let i=0; i<numData; i++) {
+		var date = (i).days().ago();
+		var di = this.getDailyInfoAtDate(date);
+		this.dataSources[vs].push(di);
+	    }
+	    break;
+	case "Year":
+	    numData = 12;
+	    for (let i=0; i<numData; i++) {
+		var date = (i).months().ago();
+		var di = this.getDailyInfoForMonth(date);
+		this.dataSources[vs].push(di);
+	    }
+	    break;
+	default:
+	    break;
+	};
+    });
+    this.swapDataSource();
 };
 const historicalData = new HistoricalData();
 
