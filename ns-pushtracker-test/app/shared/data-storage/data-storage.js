@@ -15,6 +15,7 @@ function HistoricalData() {
     this.load();
     this.viewSetting = "Week";
     this.dataSource = new observableArray.ObservableArray();
+    this.dateFormat = observableModule.fromObject({ format: "MMM", labelFitMode: "" });
     this.updateDataSource();
 }
 
@@ -46,6 +47,35 @@ HistoricalData.prototype.update = function(dailyInfo) {
     }
     this.save();
     this.updateDataSource();
+};
+
+HistoricalData.prototype.getDateFormat = function() {
+    return this.dateFormat;
+};
+
+HistoricalData.prototype.updateAxesFormat = function() {
+    switch (this.viewSetting) {
+    case "Week":
+	this.dateFormat.set("format", "dd");
+	this.dateFormat.set("labelFitMode", "");
+	this.dateFormat.set("minimum", (6).days().ago());
+	this.dateFormat.set("maximum", (0).days().ago());
+	break;
+    case "Month":
+	this.dateFormat.set("format", "MMM-dd");
+	this.dateFormat.set("labelFitMode", "Rotate");
+	this.dateFormat.set("minimum", (30).days().ago());
+	this.dateFormat.set("maximum", (0).days().ago());
+	break;
+    case "Year":
+	this.dateFormat.set("format","MMM");
+	this.dateFormat.set("labelFitMode", "");
+	this.dateFormat.set("minimum", (11).months().ago());
+	this.dateFormat.set("maximum", (0).months().ago());
+	break;
+    default:
+	break;
+    };
 };
 
 HistoricalData.prototype.updateViewSetting = function(newViewSetting) {
@@ -81,6 +111,7 @@ HistoricalData.prototype.getDailyInfoAtDate = function(date) {
 
 HistoricalData.prototype.updateDataSource = function() {
     this.dataSource.splice(0, this.dataSource.length);
+    this.updateAxesFormat();
     let numData = 0;
     switch (this.viewSetting) {
     case "Week":
@@ -96,6 +127,7 @@ HistoricalData.prototype.updateDataSource = function() {
 	for (let i=0; i<numData; i++) {
 	    var date = (i).days().ago();
 	    var di = this.getDailyInfoAtDate(date);
+	    //console.log(JSON.stringify(di, null, 2));
 	    this.dataSource.push(di);
 	}
 	break;

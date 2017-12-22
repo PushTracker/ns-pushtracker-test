@@ -59,7 +59,7 @@
         -->
         <nsDrawer:RadSideDrawer.mainContent>
 	  <StackLayout class="page-content" orientation="vertical">
-	    <chart:RadCartesianChart id="cartesianChart" style="height: 75%">
+	    <chart:RadCartesianChart id="cartesianChart" style="height: 75%; width: 80%">
               <chart:RadCartesianChart.series>
 		<chart:BarSeries legendTitle="Pushes Without" stackMode="stack" items="{{ HistoricalDataSource }}" categoryProperty="Date" valueProperty="pushesWithout"/>
 		<chart:BarSeries legendTitle="Pushes With" stackMode="stack" items="{{ HistoricalDataSource }}" categoryProperty="Date" valueProperty="pushesWith"/>
@@ -68,7 +68,12 @@
 		-->
               </chart:RadCartesianChart.series>
               <chart:RadCartesianChart.horizontalAxis>
-		<chart:DateTimeContinuousAxis dateFormat=" " labelFitMode="Rotate"/>
+		<chart:DateTimeContinuousAxis
+		    allowZoom="true"
+		    minimum="{{ getDateFormat.minimum }}"
+		    maximum="{{ getDateFormat.maximum }}"
+		    dateFormat="{{ getDateFormat.format }}"
+		    labelFitMode="{{ getDateFormat.labelFitMode }}"/>
               </chart:RadCartesianChart.horizontalAxis>
               <chart:RadCartesianChart.verticalAxis>
 		<chart:LinearAxis/>

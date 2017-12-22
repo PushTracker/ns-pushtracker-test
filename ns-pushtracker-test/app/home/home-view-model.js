@@ -5,6 +5,8 @@ const DataStorage = require("../shared/data-storage/data-storage");
 function HomeViewModel() {
     const viewModel = observableModule.fromObject({
 	HistoricalDataSource: DataStorage.HistoricalData.getDataSource(),
+
+	getDateFormat: DataStorage.HistoricalData.getDateFormat(),
 	
         onDataRangeChanged: function(propertyChangeData) {
             var index = propertyChangeData.newIndex;
