@@ -118,7 +118,6 @@ HistoricalData.prototype.getDailyInfoAtDate = function(date) {
 };
 
 HistoricalData.prototype.updateDataSources = function() {
-    console.log("updating data sources!");
     this.dataSources = {
 	"Year": [],
 	"Month": [],

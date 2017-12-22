@@ -13,6 +13,8 @@ const DailyInfo = require("../shared/data-storage/daily-info");
 
 const DataStorage = require("../shared/data-storage/data-storage");
 
+const fs = require("file-system");
+
 const Toast = require("nativescript-toast");
 
 const settings = DataStorage.Settings.settings;
@@ -220,6 +222,55 @@ function onSaveSettingsTap(args) {
             okButtonText: "OK"
         });
     }
+}
+
+function onOTATap() {
+    dialogsModule.confirm({
+	title: "Check for Firmware Updates?",
+	message: "Would you like to see if there are newer firmwares for the PushTracker, SmartDrive Microcontroller, and SmartDrive Bluetooth?",
+	okButtonText: "Yes",
+	cancelButtonText: "No"
+    })
+	.then((result) => {
+	    if (result) {
+		return performSmartDriveOTA()
+		    .then(performSmartDriveBluetoothOTA)
+		    .then(performPushTrackerOTA);
+	    }
+	})
+	.catch((err) => {
+	    console.log(err);
+	});
+}
+
+function performSmartDriveOTA() {
+    return new Promise((resolve, reject) => {
+	var fname = __dirname + "/../shared/data/MX2+.14.ota";
+	var otaFile = fs.File.fromPath(fname);
+	var ota = otaFile.readSync();
+	console.log(`got MX2+ OTA, version: 0x${Number(ota[0]).toString(16)}`);
+	resolve();
+    });
+}
+
+function performSmartDriveBluetoothOTA() {
+    return new Promise((resolve, reject) => {
+	var fname = __dirname + "/../shared/data/SmartDriveBluetooth.14.ota";
+	var otaFile = fs.File.fromPath(fname);
+	var ota = otaFile.readSync();
+	console.log("got SDBT OTA");
+	resolve();
+    });
+}
+
+function performPushTrackerOTA() {
+    return new Promise((resolve, reject) => {
+	var fname = __dirname + "/../shared/data/PushTracker.14.ota";
+	var otaFile = fs.File.fromPath(fname);
+	var ota = otaFile.readSync();
+	console.log("got PT OTA");
+	resolve();
+    });
 }
 
 // bluetooth interaction
@@ -660,6 +711,8 @@ exports.onNavigatingFrom = onNavigatingFrom;
 exports.onUnloaded = onUnloaded;
 exports.onDrawerButtonTap = onDrawerButtonTap;
 exports.onSaveSettingsTap = onSaveSettingsTap;
+
+exports.onOTATap = onOTATap;
 
 exports.doSetDiscoverable = doSetDiscoverable;
 exports.doDisable = doDisable;

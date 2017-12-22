@@ -6,134 +6,136 @@
     xmlns:myDrawer="shared/my-drawer"
     xmlns="http://www.nativescript.org/tns.xsd">
 
-    <ActionBar class="action-bar">
-        <!-- 
-        Use the NavigationButton as a side-drawer button in Android because ActionItems are shown on the right side of the ActionBar
-        -->
-        <NavigationButton ios:visibility="collapsed" icon="res://menu" tap="onDrawerButtonTap"></NavigationButton>
-        <!-- 
-        Use the ActionItem for IOS with position set to left. Using the NavigationButton as a side-drawer button in iOS is not possible, because its function is to always navigate back in the application.
-        -->
-        <ActionItem icon="res://navigation/menu" 
-            android:visibility="collapsed" 
-            tap="onDrawerButtonTap"
-            ios.position="left">
-        </ActionItem>
+  <ActionBar class="action-bar">
+    <!-- 
+         Use the NavigationButton as a side-drawer button in Android because ActionItems are shown on the right side of the ActionBar
+    -->
+    <NavigationButton ios:visibility="collapsed" icon="res://menu" tap="onDrawerButtonTap"></NavigationButton>
+    <!-- 
+         Use the ActionItem for IOS with position set to left. Using the NavigationButton as a side-drawer button in iOS is not possible, because its function is to always navigate back in the application.
+    -->
+    <ActionItem icon="res://navigation/menu" 
+		android:visibility="collapsed" 
+		tap="onDrawerButtonTap"
+		ios.position="left">
+    </ActionItem>
 
-        <ActionItem ios.position="right" tap="onSaveSettingsTap">
-            <ActionItem.actionView>
-                <Button text="Save" tap="onSaveSettingsTap" class="action-item"/>
-            </ActionItem.actionView>
-        </ActionItem>
+    <ActionItem ios.position="right" tap="onSaveSettingsTap">
+      <ActionItem.actionView>
+        <Button text="Save" tap="onSaveSettingsTap" class="action-item"/>
+      </ActionItem.actionView>
+    </ActionItem>
 
-        <Label class="action-bar-title" text="Settings"></Label>
-    </ActionBar>
+    <Label class="action-bar-title" text="Settings"></Label>
+  </ActionBar>
+
+  <!--
+      RadSideDrawer is a UI component part of the Progress NativeScript UI set of components.
+      Learn more about the RadSideDrawer UI component and how it can be customized in this documentation article:
+      http://docs.telerik.com/devtools/nativescript-ui/Controls/NativeScript/SideDrawer/getting-started
+      The RadSideDrawer component is designed to be used as a root element to the <Page> and
+      it shouldn't have any other siblings other than the <ActionBar> component.
+  -->
+  <nsDrawer:RadSideDrawer id="sideDrawer" showOverNavigation="true">
+    <!--
+        Use the RadSideDrawer.drawerTransition component to change the open/close animation of the drawer.
+    -->
+    <nsDrawer:RadSideDrawer.drawerTransition>
+      <nsDrawer:SlideInOnTopTransition/>
+    </nsDrawer:RadSideDrawer.drawerTransition>
 
     <!--
-    RadSideDrawer is a UI component part of the Progress NativeScript UI set of components.
-    Learn more about the RadSideDrawer UI component and how it can be customized in this documentation article:
-    http://docs.telerik.com/devtools/nativescript-ui/Controls/NativeScript/SideDrawer/getting-started
-    The RadSideDrawer component is designed to be used as a root element to the <Page> and
-    it shouldn't have any other siblings other than the <ActionBar> component.
-    -->
-    <nsDrawer:RadSideDrawer id="sideDrawer" showOverNavigation="true">
-        <!--
-        Use the RadSideDrawer.drawerTransition component to change the open/close animation of the drawer.
-        -->
-        <nsDrawer:RadSideDrawer.drawerTransition>
-            <nsDrawer:SlideInOnTopTransition/>
-        </nsDrawer:RadSideDrawer.drawerTransition>
-
-        <!--
         Use the RadSideDrawer.drawerContent component to display the content of the app drawer on this page.
         Always wrap content in a layout component.
-        -->
-        <nsDrawer:RadSideDrawer.drawerContent>
-            <StackLayout>
-                <!--
-                Use {N} custom components to reuse UI across your mobile app.
-                The MyDrawer custom component defined in "/shared/my-drawer" holds the contents of the app drawer.
-                Learn more about custom components and how they can be used in this documentation article:
-                http://docs.nativescript.org/ui/basics#custom-components
-                -->
-                <myDrawer:MyDrawer selectedPage="Settings"/>
-            </StackLayout>
-        </nsDrawer:RadSideDrawer.drawerContent>
-
+    -->
+    <nsDrawer:RadSideDrawer.drawerContent>
+      <StackLayout>
         <!--
+            Use {N} custom components to reuse UI across your mobile app.
+            The MyDrawer custom component defined in "/shared/my-drawer" holds the contents of the app drawer.
+            Learn more about custom components and how they can be used in this documentation article:
+            http://docs.nativescript.org/ui/basics#custom-components
+        -->
+        <myDrawer:MyDrawer selectedPage="Settings"/>
+      </StackLayout>
+    </nsDrawer:RadSideDrawer.drawerContent>
+
+    <!--
         Use the RadSideDrawer.mainContent component to display the content of the page when you have an app drawer.
         Always wrap content in a layout component.
-        -->
-        <nsDrawer:RadSideDrawer.mainContent>
-            <ScrollView orientation="vertical">
-            <StackLayout orientation="vertical">
-                <DockLayout stretchLastChild="false">
-                <Label text="Control Mode" class="settings-item" dock="left"/>
-                <SegmentedBar id="control_modes" dock="right" selectedIndexChanged="{{ onControlModeSelected }}"/>
-                </DockLayout>
+    -->
+    <nsDrawer:RadSideDrawer.mainContent>
+      <ScrollView orientation="vertical">
+        <StackLayout orientation="vertical">
+          <DockLayout stretchLastChild="false">
+            <Label text="Control Mode" class="settings-item" dock="left"/>
+            <SegmentedBar id="control_modes" dock="right" selectedIndexChanged="{{ onControlModeSelected }}"/>
+          </DockLayout>
 
-                <DockLayout stretchLastChild="false">
-                <Label text="EZ-ON" class="settings-item" dock="left"/>
-                <Switch checked="{{ ezOn }}" dock="right" />
-                </DockLayout>
+          <DockLayout stretchLastChild="false">
+            <Label text="EZ-ON" class="settings-item" dock="left"/>
+            <Switch checked="{{ ezOn }}" dock="right" />
+          </DockLayout>
 
-                <DockLayout stretchLastChild="false">
-                <Label text="Units" class="settings-item" dock="left"/>
-                <SegmentedBar id="units" dock="right" selectedIndexChanged="{{ onUnitsSelected }}"/>
-                </DockLayout>
+          <DockLayout stretchLastChild="false">
+            <Label text="Units" class="settings-item" dock="left"/>
+            <SegmentedBar id="units" dock="right" selectedIndexChanged="{{ onUnitsSelected }}"/>
+          </DockLayout>
 
-                <Label text="Acceleration" class="settings-item" />
-                <GridLayout rows="auto" columns="*, auto">
-                <Slider verticalAlignment="center" class="settings-slider" value="{{ acceleration }}" row="0" col="0"/>
-                <Label verticalAlignment="center" class="settings-slider-label" style="min-width: 50" text="{{ getAccelerationLabel() }}" row="0" col="1"/>
-                </GridLayout>
+          <Label text="Acceleration" class="settings-item" />
+          <GridLayout rows="auto" columns="*, auto">
+            <Slider verticalAlignment="center" class="settings-slider" value="{{ acceleration }}" row="0" col="0"/>
+            <Label verticalAlignment="center" class="settings-slider-label" style="min-width: 50" text="{{ getAccelerationLabel() }}" row="0" col="1"/>
+          </GridLayout>
 
-                <Label text="Max Speed" class="settings-item" />
-                <GridLayout rows="auto" columns="*, auto">
-                <Slider verticalAlignment="center" class="settings-slider" value="{{ maxSpeed }}" row="0" col="0"/>
-                <Label verticalAlignment="center" class="settings-slider-label" style="min-width: 50" text="{{ getMaxSpeedLabel() }}" row="0" col="1"/>
-                </GridLayout>
+          <Label text="Max Speed" class="settings-item" />
+          <GridLayout rows="auto" columns="*, auto">
+            <Slider verticalAlignment="center" class="settings-slider" value="{{ maxSpeed }}" row="0" col="0"/>
+            <Label verticalAlignment="center" class="settings-slider-label" style="min-width: 50" text="{{ getMaxSpeedLabel() }}" row="0" col="1"/>
+          </GridLayout>
 
-                <Label text="Tap Sensitivity" class="settings-item" />
-                <GridLayout rows="auto" columns="*, auto">
-                <Slider verticalAlignment="center" class="settings-slider" value="{{ tapSensitivity }}" row="0" col="0"/>
-                <Label verticalAlignment="center" class="settings-slider-label" style="min-width: 50" text="{{ getTapSensitivityLabel() }}" row="0" col="1"/>
-                </GridLayout>
+          <Label text="Tap Sensitivity" class="settings-item" />
+          <GridLayout rows="auto" columns="*, auto">
+            <Slider verticalAlignment="center" class="settings-slider" value="{{ tapSensitivity }}" row="0" col="0"/>
+            <Label verticalAlignment="center" class="settings-slider-label" style="min-width: 50" text="{{ getTapSensitivityLabel() }}" row="0" col="1"/>
+          </GridLayout>
 
-                <Label text="Debug Menu:" class="debug-label"/>
+	  <Button text="Check for Firmware Updates" class="button buton-neutral" tap="onOTATap"/>
 
-                <GridLayout columns="*, *" rows="auto, auto, auto, auto, auto" horizontalAlignment="center" class="tab-content">
-                    <iOS>
-                        <Button row="0" colSpan="2" text="is bluetooth enabled?" tap="onBluetoothEnabledTap" class="button button-positive" />
-                    </iOS>
-                    <Android>
-                        <GridLayout id="bluetoothDebugGrid" row="0" colSpan="2" rows="auto, auto, auto" columns="*, *" class="tab-content" horizontalAlignment="center">
-                            <Button row="0" col="0" text="disable" tap="doDisable" class="button button-danger" />
-                            <Button row="0" col="1" text="enable bluetooth" tap="onEnableBluetoothTap" class="button button-positive" />
-                        </GridLayout>
-                    </Android>
-                    <Button row="2" col="0" text="Scan for any peripheral" tap="doStartScanning" class="button button-neutral" />
-                    <Button row="2" col="1" text="Scan for SmartDrives" tap="doScanForSmartDrive" class="button button-neutral" />
-                    <Button row="3" col="0" text="stop scan" tap="doStopScanning" class="button button-danger" />
-                    <Button row="3" col="1" text="clear" tap="doClearPeripherals" class="button button-danger" />
-                </GridLayout>
-                <ActivityIndicator busy="{{ isLoading }}" />
-                <ListView id="peripherals" items="{{ peripherals }}" itemTap="onPeripheralTap" separatorColor="#90c3d4" itemHeight="40">
-                    <ListView.itemTemplate>
-                        <StackLayout orientation="horizontal" class="padded-label">
-                            <StackLayout class="padded-label-stack">
-                            <Image horizontalAlignment="right" width="30" src="~/res/signal-strength.png" />
-                            <Label horizontalAlignment="right" width="30" text="{{ RSSI }}" class="rssi-label" />
-                            </StackLayout>
-                            <StackLayout class="padded-label-stack">
-                            <Label text="{{ name }}" class="title-label" textWrap="true" />
-                            <Label text="{{ UUID }}" class="uuid-label" textWrap="true" />
-                            </StackLayout>
-                        </StackLayout>
-                    </ListView.itemTemplate>
-                </ListView>
-            </StackLayout>
-            </ScrollView>
-        </nsDrawer:RadSideDrawer.mainContent>
-    </nsDrawer:RadSideDrawer>
+          <Label text="Debug Menu:" class="debug-label"/>
+
+          <GridLayout columns="*, *" rows="auto, auto, auto, auto, auto" horizontalAlignment="center" class="tab-content">
+            <iOS>
+              <Button row="0" colSpan="2" text="is bluetooth enabled?" tap="onBluetoothEnabledTap" class="button button-positive" />
+            </iOS>
+            <Android>
+              <GridLayout id="bluetoothDebugGrid" row="0" colSpan="2" rows="auto, auto, auto" columns="*, *" class="tab-content" horizontalAlignment="center">
+                <Button row="0" col="0" text="disable" tap="doDisable" class="button button-danger" />
+                <Button row="0" col="1" text="enable bluetooth" tap="onEnableBluetoothTap" class="button button-positive" />
+              </GridLayout>
+            </Android>
+            <Button row="2" col="0" text="Scan for any peripheral" tap="doStartScanning" class="button button-neutral" />
+            <Button row="2" col="1" text="Scan for SmartDrives" tap="doScanForSmartDrive" class="button button-neutral" />
+            <Button row="3" col="0" text="stop scan" tap="doStopScanning" class="button button-danger" />
+            <Button row="3" col="1" text="clear" tap="doClearPeripherals" class="button button-danger" />
+          </GridLayout>
+          <ActivityIndicator busy="{{ isLoading }}" />
+          <ListView id="peripherals" items="{{ peripherals }}" itemTap="onPeripheralTap" separatorColor="#90c3d4" itemHeight="40">
+            <ListView.itemTemplate>
+              <StackLayout orientation="horizontal" class="padded-label">
+                <StackLayout class="padded-label-stack">
+                  <Image horizontalAlignment="right" width="30" src="~/res/signal-strength.png" />
+                  <Label horizontalAlignment="right" width="30" text="{{ RSSI }}" class="rssi-label" />
+                </StackLayout>
+                <StackLayout class="padded-label-stack">
+                  <Label text="{{ name }}" class="title-label" textWrap="true" />
+                  <Label text="{{ UUID }}" class="uuid-label" textWrap="true" />
+                </StackLayout>
+              </StackLayout>
+            </ListView.itemTemplate>
+          </ListView>
+        </StackLayout>
+      </ScrollView>
+    </nsDrawer:RadSideDrawer.mainContent>
+  </nsDrawer:RadSideDrawer>
 </Page>
