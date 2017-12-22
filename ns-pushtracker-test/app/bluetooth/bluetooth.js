@@ -314,6 +314,25 @@ function sendToPushTracker(data) {
     pushTrackerDataCharacteristic.setValue(data);
 };
 
+function restart() {
+    return new Promise((resolve, reject) => {
+	// disable the bluetooth
+	bluetooth.disable();
+	// wait then re-enable it
+	setTimeout(() => {
+	    bluetooth.enable().then((enabled) => {
+		dialogsModule.alert({
+		    title: "Bluetooth Restarted",
+		    message: `Bluetooth enabled: ${enabled}`,
+		    okButtonText: "Ok"
+		}).then(() => {
+		    resolve();
+		});
+	    });
+	}, 250); // wait 250 ms
+    });
+}
+
 // original
 exports.sendToPushTracker = sendToPushTracker;
 exports.pushTrackerDataCharacteristic = pushTrackerDataCharacteristic;
@@ -326,6 +345,7 @@ exports.stopAdvertising = bluetooth.stopAdvertising;
 exports.disable = bluetooth.disable;
 exports.enable = bluetooth.enable;
 // what we add / wrap
+exports.restart = restart;
 exports.notifyPushTrackers = notifyPushTrackers;
 exports.disconnectPushTrackers = disconnectPushTrackers;
 exports.getConnectedPushTrackers = getConnectedPushTrackers;
