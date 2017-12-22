@@ -56,13 +56,13 @@ HistoricalData.prototype.getDateFormat = function() {
 HistoricalData.prototype.updateAxesFormat = function() {
     switch (this.viewSetting) {
     case "Week":
-	this.dateFormat.set("format", "dd");
+	this.dateFormat.set("format", "MMM dd");
 	this.dateFormat.set("labelFitMode", "");
 	this.dateFormat.set("minimum", (6).days().ago());
 	this.dateFormat.set("maximum", (0).days().ago());
 	break;
     case "Month":
-	this.dateFormat.set("format", "MMM-dd");
+	this.dateFormat.set("format", "MMM dd");
 	this.dateFormat.set("labelFitMode", "Rotate");
 	this.dateFormat.set("minimum", (30).days().ago());
 	this.dateFormat.set("maximum", (0).days().ago());
@@ -127,7 +127,6 @@ HistoricalData.prototype.updateDataSource = function() {
 	for (let i=0; i<numData; i++) {
 	    var date = (i).days().ago();
 	    var di = this.getDailyInfoAtDate(date);
-	    //console.log(JSON.stringify(di, null, 2));
 	    this.dataSource.push(di);
 	}
 	break;

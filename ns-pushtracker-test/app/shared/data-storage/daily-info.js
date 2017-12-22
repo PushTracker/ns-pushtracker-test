@@ -32,14 +32,14 @@ function sameAsDate(di, d) {
     var diDate = getDate(di);
     return diDate.getFullYear() === d.getFullYear() &&
 	diDate.getMonth() === d.getMonth() &&
-	diDate.getDay() === d.getDay();
+	diDate.getDate() === d.getDate();
 };
 
 DailyInfo.prototype.sameDateAs = function(d) {
     var myDate = getDate(this);
     return myDate.getFullYear() === d.getFullYear() &&
 	myDate.getMonth() === d.getMonth() &&
-	myDate.getDay() === d.getDay();
+	myDate.getDate() === d.getDate();
 };
 
 DailyInfo.prototype.sameDailyInfoAs = function(di) {

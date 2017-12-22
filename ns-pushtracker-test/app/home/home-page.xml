@@ -59,7 +59,7 @@
         -->
         <nsDrawer:RadSideDrawer.mainContent>
 	  <StackLayout class="page-content" orientation="vertical">
-	    <chart:RadCartesianChart id="cartesianChart" style="height: 75%; width: 80%">
+	    <chart:RadCartesianChart id="cartesianChart" style="height: 75%; width: 90%">
               <chart:RadCartesianChart.series>
 		<chart:BarSeries legendTitle="Pushes Without" stackMode="stack" items="{{ HistoricalDataSource }}" categoryProperty="Date" valueProperty="pushesWithout"/>
 		<chart:BarSeries legendTitle="Pushes With" stackMode="stack" items="{{ HistoricalDataSource }}" categoryProperty="Date" valueProperty="pushesWith"/>
