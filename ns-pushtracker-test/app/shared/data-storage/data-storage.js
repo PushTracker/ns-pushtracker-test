@@ -1,17 +1,21 @@
 const LS = require("nativescript-localstorage");
 
 const observableModule = require("data/observable");
+const observableArray = require("data/observable-array");
 
 const SettingsViewModel = require("../../settings/settings-view-model");
 const DailyInfo = require("./daily-info");
 
+const Date = require("../date");
+
 // HISTORICAL DATA
 const historicalDataKey = "PushTracker DaiyInfo History";
 function HistoricalData() {
-    this.viewSetting = "Week";
-
     this.data = [];
     this.load();
+    this.viewSetting = "Week";
+    this.dataSource = new observableArray.ObservableArray();
+    this.updateDataSource();
 }
 
 HistoricalData.prototype.save = function() {
@@ -22,9 +26,13 @@ HistoricalData.prototype.load = function() {
     this.data = LS.getItem(historicalDataKey) || [];
 };
 
+HistoricalData.prototype.getDataSource = function () {
+    return this.dataSource;
+};
+
 HistoricalData.prototype.update = function(dailyInfo) {
     const sameDates = this.data.filter((di) => {
-	return dailyInfo.sameDayAs(di);
+	return dailyInfo.sameDailyInfoAs(di);
     });
     if (sameDates.length > 1) {
 	console.log("error: multiple days found with same date!");
@@ -39,23 +47,57 @@ HistoricalData.prototype.update = function(dailyInfo) {
     this.save();
 };
 
-HistoricalData.prototype.getDataSource = function(key) {
-    const dataSource = this.data.map((d) => {
-	return {
-	    Date: DailyInfo.getDate(d).getTime(),
-	    Value: d.data[key]
-	};
-    });
-    dataSource.push({
-	Date: new Date(2017, 10, 23).getTime(),
-	Value: 10
-    });
-    return dataSource;
+HistoricalData.prototype.updateViewSetting = function(newViewSetting) {
+    if (newViewSetting !== undefined && newViewSetting !== null) {
+	this.viewSetting = newViewSetting;
+	this.updateDataSource();
+    }
 };
 
-HistoricalData.prototype.getDataSourceAverage = function(key) {
-    let sum = 0;
-    let ds = this.getDataSource(key);
+HistoricalData.prototype.getDailyInfoAtDate = function(date) {
+    var matching = this.data.filter((d) => {
+	return DailyInfo.sameAsDate(d, date); 
+    });
+    var di = ( matching && matching[0] ) || new DailyInfo.DailyInfo();
+    var retObj = di.data;
+    retObj.Date = date;
+    return retObj;
+};
+
+HistoricalData.prototype.updateDataSource = function() {
+    this.dataSource.splice(0, this.dataSource.length);
+    let numData = 0;
+    switch (this.viewSetting) {
+    case "Week":
+	numData = 7;
+	for (let i=0; i<numData; i++) {
+	    var date = (i).days().ago();
+	    var di = this.getDailyInfoAtDate(date);
+	    this.dataSource.push(di);
+	}
+	break;
+    case "Month":
+	numData = 31;
+	for (let i=0; i<numData; i++) {
+	    var date = (i).days().ago();
+	    var di = this.getDailyInfoAtDate(date);
+	    this.dataSource.push(di);
+	}
+	break;
+    case "Year":
+	numData = 12;
+	for (let i=0; i<numData; i++) {
+	    var date = (i).months().ago();
+	    var di = this.getDailyInfoAtDate(date);
+	    this.dataSource.push(di);
+	}
+	break;
+    default:
+	break;
+    };
+};
+
+HistoricalData.prototype.getTimeDomain = function(ds) {
     let earliest = null;
     let latest = null;
     ds.map((el) => {
@@ -65,14 +107,15 @@ HistoricalData.prototype.getDataSourceAverage = function(key) {
 	if (latest === null || el.Date > latest) {
 	    latest = el.Date;
 	}
-	sum += el.Value;
     });
-    let avg = sum / ds.length;
-    const dataSource = [
-	{ Date: earliest, Value: avg },
-	{ Date: latest, Value: avg },
-    ];
-    return dataSource;
+    return {
+	begin: earliest,
+	end: latest,
+    };
+};
+
+HistoricalData.prototype.addDataInRange = function(key, start, stop) {
+    
 };
 const historicalData = new HistoricalData();
 

@@ -61,12 +61,14 @@
 	  <StackLayout class="page-content" orientation="vertical">
 	    <chart:RadCartesianChart id="cartesianChart" style="height: 75%">
               <chart:RadCartesianChart.series>
-		<chart:BarSeries legendTitle="Pushes Without" stackMode="stack" items="{{ pushesWithoutData }}" categoryProperty="Date" valueProperty="Value"/>
-		<chart:BarSeries legendTitle="Pushes With" stackMode="stack" items="{{ pushesWithData }}" categoryProperty="Date" valueProperty="Value"/>
+		<chart:BarSeries legendTitle="Pushes Without" stackMode="stack" items="{{ HistoricalDataSource }}" categoryProperty="Date" valueProperty="pushesWithout"/>
+		<chart:BarSeries legendTitle="Pushes With" stackMode="stack" items="{{ HistoricalDataSource }}" categoryProperty="Date" valueProperty="pushesWith"/>
+		<!--
 		<chart:LineSeries legendTitle="Worldwide Average" stackMode="stack" items="{{ worldWideAverage }}" categoryProperty="Date" valueProperty="Value"/>
+		-->
               </chart:RadCartesianChart.series>
               <chart:RadCartesianChart.horizontalAxis>
-		<chart:DateTimeContinuousAxis dateFormat="MMM-dd" labelFitMode="Rotate"/>
+		<chart:DateTimeContinuousAxis dateFormat=" " labelFitMode="Rotate"/>
               </chart:RadCartesianChart.horizontalAxis>
               <chart:RadCartesianChart.verticalAxis>
 		<chart:LinearAxis/>
@@ -75,7 +77,7 @@
 		<chart:RadLegendView position="Top" enableSelection="false" />
 	      </chart:RadCartesianChart.legend>
 	    </chart:RadCartesianChart>
-	    <SegmentedBar>
+	    <SegmentedBar selectedIndexChanged="{{ onDataRangeChanged }}">
 	      <SegmentedBar.items>
 		<SegmentedBarItem title="Year"/>
 		<SegmentedBarItem title="Month"/>

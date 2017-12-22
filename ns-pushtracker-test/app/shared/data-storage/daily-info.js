@@ -28,7 +28,21 @@ function getDate(di) {
     return date;
 };
 
-DailyInfo.prototype.sameDayAs = function(di) {
+function sameAsDate(di, d) {
+    var diDate = getDate(di);
+    return diDate.getFullYear() === d.getFullYear() &&
+	diDate.getMonth() === d.getMonth() &&
+	diDate.getDay() === d.getDay();
+};
+
+DailyInfo.prototype.sameDateAs = function(d) {
+    var myDate = getDate(this);
+    return myDate.getFullYear() === d.getFullYear() &&
+	myDate.getMonth() === d.getMonth() &&
+	myDate.getDay() === d.getDay();
+};
+
+DailyInfo.prototype.sameDailyInfoAs = function(di) {
     return this.data.year === di.data.year &&
 	this.data.month === di.data.month &&
 	this.data.day === di.data.day;
@@ -62,3 +76,4 @@ module.exports.DailyInfo = function(bytes) {
 };
 
 module.exports.getDate = getDate;
+module.exports.sameAsDate = sameAsDate;
