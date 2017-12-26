@@ -1,0 +1,19 @@
+.action-item {
+    color: white;
+    font-size: 18;
+    text-transform: none;
+}
+
+.account-item {
+    vertical-align: center;
+    text-overflow: none;
+    text-align: right;
+    word-wrap: normal;
+    color: black;
+    font-weight: bold;
+    margin: 15;
+}
+
+.account-text-entry {
+    text-align: right;
+}

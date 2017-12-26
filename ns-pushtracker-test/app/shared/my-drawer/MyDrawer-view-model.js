@@ -1,5 +1,7 @@
 const observableModule = require("data/observable");
 
+const CurrentUser = require("../../account/account-view-model");
+
 /* ***********************************************************
  * Keep data that is displayed in your app drawer in the MyDrawer custom component view model.
  *************************************************************/
@@ -10,11 +12,7 @@ function MyDrawerViewModel(selectedPage) {
          *************************************************************/
         selectedPage: selectedPage,
 
-	user: {
-	    name: "finger563",
-	    email: "william@max-mobility.com",
-	    icon: ""
-	}
+	user: CurrentUser.user
     });
 
     return viewModel;

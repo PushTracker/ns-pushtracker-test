@@ -221,7 +221,72 @@ Settings.prototype.load = function() {
 };
 const settings = new Settings();
 
+// USER Information
+const userKey = "UserAccount";
+function AccountViewModel() {
+    const viewModel = observableModule.fromObject({
+	name: "William Emfinger",
+	account: "finger563",
+	email: "william@max-mobility.com",
+	password: "",
+	token: "",
+
+	toObject: function() {
+	    var obj = {
+		name: this.name,
+		account: this.account,
+		email: this.email,
+		token: this.token
+	    };
+	    return obj;
+	},
+
+	fromObject: function(obj) {
+	    this.name = obj.name;
+	    this.account = obj.account;
+	    this.email = obj.email;
+	    this.token = obj.token;
+	}
+    });
+
+    return viewModel;
+}
+function CurrentUser() {
+    this.user = new AccountViewModel();
+    this.user.addEventListener(observableModule.Observable.propertyChangeEvent, (propChangeData) => {
+	this.save();
+    });
+    this.load();
+}
+
+CurrentUser.prototype.save = function() {
+    try {
+	LS.setItem(userKey, this.user.toObject());
+    }
+    catch (ex) {
+	console.log(ex);
+    }
+};
+
+CurrentUser.prototype.load = function() {
+    try {
+	this.user.fromObject(LS.getItem(userKey) || {
+	    name: "William Emfinger",
+	    account: "finger563",
+	    email: "william@max-mobility.com",
+	    password: "",
+	    token: ""
+	});
+    }
+    catch (ex) {
+	console.log(ex);
+    }
+};
+const currentUser = new CurrentUser();
+
+
 // Module exports
 exports.HistoricalData = historicalData;
+exports.CurrentUser = currentUser;
 exports.Settings = settings;
 

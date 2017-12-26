@@ -1,11 +1,5 @@
 const observableModule = require("data/observable");
 
-function AccountViewModel() {
-    const viewModel = observableModule.fromObject({
+const DataStorage = require("../shared/data-storage/data-storage");
 
-    });
-
-    return viewModel;
-}
-
-module.exports = AccountViewModel;
+module.exports = DataStorage.CurrentUser;

@@ -1,6 +1,6 @@
 const frameModule = require("ui/frame");
 
-const AccountViewModel = require("./account-view-model");
+const CurrentUser = require("./account-view-model");
 
 /* ***********************************************************
 * Use the "onNavigatingTo" handler to initialize the page binding context.
@@ -16,7 +16,7 @@ function onNavigatingTo(args) {
     }
 
     const page = args.object;
-    page.bindingContext = new AccountViewModel();
+    page.bindingContext = CurrentUser.user;
 }
 
 /* ***********************************************************
