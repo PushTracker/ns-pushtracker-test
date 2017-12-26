@@ -294,23 +294,28 @@ function onStartAdvertisementTap() {
                 return;
             }
             else {
-                bluetooth.startAdvertising({
-                    UUID: "9358ac8f-6343-4a31-b4e0-4b13a2b45d86",
-                    settings: {
-                        connectable: true
-                    },
-                    data: {
-			includeDeviceName: true
-		    }
-                })
-                    .then(() => {
-			console.log("Advertise started!");
-			Toast.makeText("Advertising started").show();
+		const hasServices = bluetooth.hasServices();
+		if (!hasServices) {
+		    bluetooth.initialize();
+		}
+		else {
+                    bluetooth.startAdvertising({
+			UUID: "9358ac8f-6343-4a31-b4e0-4b13a2b45d86",
+			settings: {
+                            connectable: true
+			},
+			data: {
+			    includeDeviceName: true
+			}
                     })
-                    .catch((err) => {
-			console.log("Couldn't start advertising: " + err);
-			Toast.makeText("Couldn't start advertising: " + err).show();
-                    });
+			.then(() => {
+			    console.log("Advertise started!");
+			})
+			.catch((err) => {
+			    console.log("Couldn't start advertising: " + err);
+			    Toast.makeText("Couldn't start advertising: " + err).show();
+			});
+		}
             }
         })
         .catch((err) => {
