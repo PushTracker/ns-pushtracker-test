@@ -6,8 +6,8 @@ Feel free to customize layouts and components to change how your app drawer look
     xmlns:myDrawer="shared/my-drawer">
     <StackLayout class="sidedrawer-header">
         <Label class="sidedrawer-header-image fa" text="&#xf2bd;" />
-        <Label class="sidedrawer-header-brand" text="User Name" />
-        <Label class="footnote" text="username@mail.com" />
+        <Label class="sidedrawer-header-brand" text="{{ user.name }}" />
+        <Label class="footnote" text="{{ user.email }}" />
     </StackLayout>
 
     <ScrollView row="1">
@@ -48,6 +48,12 @@ Feel free to customize layouts and components to change how your app drawer look
                 route="settings/settings-page" tap="onNavigationItemTap">
                 <Label row="0" col="0" text="&#xf013;" class="fa" />
                 <Label row="0" col="1" text="Settings" class="p-r-10" />
+            </GridLayout>
+
+            <GridLayout columns="auto, *" class="{{ 'sidedrawer-list-item' + (selectedPage === 'Account' ? ' selected': '') }}"
+                route="account/account-page" tap="onNavigationItemTap">
+                <Label row="0" col="0" text="&#xf2be;" class="fa" />
+                <Label row="0" col="1" text="Account" class="p-r-10" />
             </GridLayout>
         </StackLayout>
     </ScrollView>

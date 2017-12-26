@@ -8,7 +8,13 @@ function MyDrawerViewModel(selectedPage) {
         /* ***********************************************************
          * Use the MyDrawer view model to initialize the properties data values.
          *************************************************************/
-        selectedPage: selectedPage
+        selectedPage: selectedPage,
+
+	user: {
+	    name: "finger563",
+	    email: "william@max-mobility.com",
+	    icon: ""
+	}
     });
 
     return viewModel;
