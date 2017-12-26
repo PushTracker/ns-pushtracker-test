@@ -120,11 +120,20 @@ function initialize() {
 	    onCharacteristicWrite: onCharacteristicWrite,
 	    onServerConnectionStateChange: onDeviceConnectionStateChanged
         });
-	
-        bluetooth.isPeripheralModeSupported().then((supported) => {
-	    return restart().then(() => { return supported; });
-	})
-	    .then((supported) => {
+
+	bluetooth.isBluetoothEnabled()
+	    .then((enabled) => {
+		if (!enabled) {
+		    return bluetooth.enable();
+		}
+		else {
+		    return new Promise((resolve, reject) => { resolve(enabled); });
+		}
+	    }).then((enabled) => {
+		return bluetooth.isPeripheralModeSupported();
+	    }).then((supported) => {
+		return restart().then(() => { return supported; });
+	    }).then((supported) => {
 		if (supported) {
                     bluetooth.startGattServer();
 		    
