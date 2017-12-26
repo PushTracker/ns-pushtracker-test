@@ -66,15 +66,15 @@
     <nsDrawer:RadSideDrawer.mainContent>
       <GridLayout rows="auto, auto, auto, auto, auto, auto" class="page-content">
         <Label colSpan="2" class="page-icon fa" text="&#xf2be;"></Label>
-	<GridLayout row="1" colSpan="2" columns="auto, *">
+	<GridLayout row="1" colSpan="2" columns="150, *">
 	  <Label text="Name" dock="left" class="account-item"/>
 	  <TextField col="1" text="{{ name }}" class="account-text-entry" hint="John Smith" dock="right"/>
 	</GridLayout>
-	<GridLayout row="2" colSpan="2" columns="auto, *">
+	<GridLayout row="2" colSpan="2" columns="150, *">
 	  <Label text="Email" dock="left" class="account-item"/>
 	  <TextField col="1" text="{{ email }}" class="account-text-entry" hint="example@the.net.com" dock="right"/>
 	</GridLayout>
-	<GridLayout row="3" colSpan="2" columns="auto, *">
+	<GridLayout row="3" colSpan="2" columns="150, *">
 	  <Label text="Account" dock="left" class="account-item"/>
 	  <TextField col="1" text="{{ account }}" class="account-text-entry" hint="yourAccountName" dock="right"/>
 	</GridLayout>

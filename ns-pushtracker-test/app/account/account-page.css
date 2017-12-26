@@ -7,7 +7,7 @@
 .account-item {
     vertical-align: center;
     text-overflow: none;
-    text-align: right;
+    text-align: left;
     word-wrap: normal;
     color: black;
     font-weight: bold;
@@ -16,4 +16,5 @@
 
 .account-text-entry {
     text-align: right;
+    margin: 15;
 }
