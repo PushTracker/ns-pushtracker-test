@@ -2,6 +2,8 @@ const frameModule = require("ui/frame");
 
 const CurrentUser = require("./account-view-model");
 
+const dialogsModule = require("ui/dialogs");
+
 /* ***********************************************************
 * Use the "onNavigatingTo" handler to initialize the page binding context.
 *************************************************************/
@@ -29,5 +31,35 @@ function onDrawerButtonTap(args) {
     sideDrawer.showDrawer();
 }
 
+function onSaveAccountTap() {
+    dialogsModule.confirm({
+        title: "Update User Account?",
+        message: "Send these settings to the Server?",
+        okButtonText: "Yes",
+        cancelButtonText: "No"
+    });
+}
+
+function onResetAccountTap() {
+    dialogsModule.confirm({
+        title: "Reset Account?",
+        message: "Are you sure you want to reset your account (remove all your data / settings)?",
+        okButtonText: "Yes",
+        cancelButtonText: "No"
+    });
+}
+
+function onChangePasswordTap() {
+    dialogsModule.confirm({
+        title: "Change Password?",
+        message: "Are you sure you want to change your password?",
+        okButtonText: "Yes",
+        cancelButtonText: "No"
+    });
+}
+
 exports.onNavigatingTo = onNavigatingTo;
 exports.onDrawerButtonTap = onDrawerButtonTap;
+exports.onSaveAccountTap = onSaveAccountTap;
+exports.onResetAccountTap = onResetAccountTap;
+exports.onChangePasswordTap = onChangePasswordTap;

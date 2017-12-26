@@ -64,7 +64,7 @@
         Always wrap content in a layout component.
     -->
     <nsDrawer:RadSideDrawer.mainContent>
-      <GridLayout rows="auto, auto, auto, auto" class="page-content">
+      <GridLayout rows="auto, auto, auto, auto, auto, auto" class="page-content">
         <Label colSpan="2" class="page-icon fa" text="&#xf2be;"></Label>
 	<GridLayout row="1" colSpan="2" columns="auto, *">
 	  <Label text="Name" dock="left" class="account-item"/>
@@ -78,6 +78,8 @@
 	  <Label text="Account" dock="left" class="account-item"/>
 	  <TextField col="1" text="{{ account }}" class="account-text-entry" hint="yourAccountName" dock="right"/>
 	</GridLayout>
+	<Button row="4" colSpan="2" text="Change Password" tap="onChangePasswordTap"/>
+	<Button row="5" colSpan="2" text="Reset Account" tap="onResetAccountTap"/>
       </GridLayout>
     </nsDrawer:RadSideDrawer.mainContent>
   </nsDrawer:RadSideDrawer>
