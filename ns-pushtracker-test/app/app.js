@@ -2,8 +2,22 @@ require("./bundle-config");
 const application = require("application");
 
 const bluetooth = require("./bluetooth/bluetooth");
+bluetooth.initialize();
 
-bluetooth.addServices();
+const firebase = require("nativescript-plugin-firebase");
+
+firebase.init({
+    // pass in properties for the database, authentication, and messaging
+    // see their docs
+    persist: true
+}).then(
+    function (instance) {
+	console.log("firebase.init done");
+    },
+    function (error) {
+	console.log("firebase.init error: " + error);
+    }
+);
 
 application.start({ moduleName: "home/home-page" });
 

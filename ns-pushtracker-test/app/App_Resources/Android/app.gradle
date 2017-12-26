@@ -6,9 +6,10 @@
 //}
 
 android {  
-  defaultConfig {  
+  defaultConfig {
+    multiDexEnabled true
     generatedDensities = []
-    applicationId = "org.nativescript.nspushtrackertest" 
+    applicationId = "org.nativescript.PushTracker"
     
     //override supported platforms
     // ndk {
@@ -17,7 +18,14 @@ android {
  		// }
   
   }  
+
+  project.ext {
+    // Uncomment below to change Google Play Services Version
+    googlePlayServicesVersion = "11.4.2"
+  }
+
   aaptOptions {  
     additionalParameters "--no-version-vectors"  
   }  
 } 
+
