@@ -120,7 +120,7 @@
 		      labelFitMode="{{ getDateFormat.labelFitMode }}"/>
 		</chart:RadCartesianChart.horizontalAxis>
 		<chart:RadCartesianChart.verticalAxis>
-		  <chart:LinearAxis minimum="0.0" maximum="20.0"/>
+		  <chart:LinearAxis/>
 		</chart:RadCartesianChart.verticalAxis>
 		<chart:RadCartesianChart.legend>
 		  <chart:RadLegendView position="Top" enableSelection="true" />

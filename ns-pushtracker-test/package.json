@@ -6,7 +6,7 @@
   "nativescript": {
     "id": "org.nativescript.nspushtrackertest",
     "tns-android": {
-      "version": "3.4.0"
+      "version": "3.3.1"
     }
   },
   "scripts": {
@@ -16,16 +16,16 @@
     "buffer": "^5.0.8",
     "nativescript-accelerometer": "^2.0.1",
     "nativescript-appversion": "^1.4.1",
-    "nativescript-audio": "^4.0.3",
-    "nativescript-bluetooth": "https://github.com/finger563/nativescript-bluetooth",
+    "nativescript-audio": "^4.3.1",
+    "nativescript-bluetooth": "git+https://github.com/finger563/nativescript-bluetooth.git",
     "nativescript-feedback": "^1.1.0",
-    "nativescript-fingerprint-auth": "^5.0.0",
+    "nativescript-fingerprint-auth": "^5.1.0",
     "nativescript-floatingactionbutton": "^4.1.3",
-    "nativescript-geolocation": "^4.2.1",
+    "nativescript-geolocation": "^4.2.2",
     "nativescript-local-notifications": "^2.0.1",
     "nativescript-localstorage": "^1.1.5",
     "nativescript-mapbox": "^3.1.3",
-    "nativescript-pro-ui": "^3.2.0",
+    "nativescript-pro-ui": "^3.3.0",
     "nativescript-secure-storage": "^2.2.1",
     "nativescript-theme-core": "1.0.4",
     "nativescript-toast": "^1.4.6",
@@ -40,6 +40,6 @@
     "lazy": "1.0.11",
     "nativescript-dev-sass": "1.3.2",
     "node-sass": "4.5.3",
-    "tns-platform-declarations": "^3.3.0"
+    "tns-platform-declarations": "^3.4.0"
   }
 }

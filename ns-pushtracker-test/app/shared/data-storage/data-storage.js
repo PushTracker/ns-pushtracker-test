@@ -93,6 +93,29 @@ HistoricalData.prototype.updateViewSetting = function(newViewSetting) {
     }
 };
 
+HistoricalData.prototype.convertData = function(obj) {
+    const convert = {
+	"coastWith": 100.0,
+	"coastWithout": 100.0,
+	"distance": 10.0,
+	"speed": 10.0
+    };
+    Object.keys(convert).map((k) => {
+	if (obj[k]) {
+	    obj[k] = obj[k] / convert[k];
+	}
+    });
+};
+
+HistoricalData.prototype.removeZeroData = function(obj) {
+    Object.keys(obj).map((k) => {
+	if (obj[k] === 0 || obj[k] === 0.0) {
+	    delete obj[k];
+	    obj[k] = null;
+	}
+    });
+};
+
 HistoricalData.prototype.getDailyInfoForMonth = function(date) {
     var matching = this.data.filter((di) => {
 	var d = DailyInfo.getDate(di);
@@ -102,8 +125,10 @@ HistoricalData.prototype.getDailyInfoForMonth = function(date) {
     matching.map((di) => {
 	dailyInfo.add(di);
     });
-    var retObj = dailyInfo.data;
+    var retObj = Object.assign({}, dailyInfo.data);
     retObj.Date = date;
+    this.removeZeroData(retObj);
+    this.convertData(retObj);
     return retObj;
 };
 
@@ -112,8 +137,10 @@ HistoricalData.prototype.getDailyInfoAtDate = function(date) {
 	return DailyInfo.sameAsDate(d, date); 
     });
     var di = ( matching && matching[0] ) || new DailyInfo.DailyInfo();
-    var retObj = di.data;
+    var retObj = Object.assign({}, di.data);
     retObj.Date = date;
+    this.removeZeroData(retObj);
+    this.convertData(retObj);
     return retObj;
 };
 

@@ -11,6 +11,7 @@ const Packet = require("../packet/packet");
 const Binding = require("../packet/packet_bindings");
 
 const smartDriveServiceUUID = "0cd51666-e7cb-469b-8e4d-2742f1ba7723";
+const pushTrackerServiceUUID = "1d14d6ee-fd63-4fa1-bfa4-8f47b42119f0";
 
 const peripherals = new observableArray.ObservableArray();
 
@@ -51,17 +52,25 @@ function clearPeripherals() {
 
 function onDeviceBondChange(device, bondStatus) {
     switch (bondStatus) {
-        case android.bluetooth.BluetoothDevice.BOND_BONDING:
-            break;
-        case android.bluetooth.BluetoothDevice.BOND_BONDED:
-            bluetooth.removeBond(device);
-            Toast.makeText(`Paired with ${device}`).show();
-            break;
-        case android.bluetooth.BluetoothDevice.BOND_NONE:
-            break;
-        default:
-            break;
+    case android.bluetooth.BluetoothDevice.BOND_BONDING:
+        break;
+    case android.bluetooth.BluetoothDevice.BOND_BONDED:
+        Toast.makeText(`Paired with ${device.getName()}::${device}`).show();
+        bluetooth.removeBond(device);
+        break;
+    case android.bluetooth.BluetoothDevice.BOND_NONE:
+        break;
+    default:
+        break;
     }
+}
+
+function onDeviceNameChange(device, name) {
+    console.log(`${device} got new name: ${name}`);
+}
+
+function onDeviceUUIDChange(device, uuid) {
+    console.log(`${device} got new uuid: ${uuid}`);
 }
 
 function onCharacteristicWrite(device, requestId, characteristic, preparedWrite, responseNeeded, offset, value) {
@@ -80,19 +89,23 @@ function onCharacteristicWrite(device, requestId, characteristic, preparedWrite,
 
 function onDeviceConnectionStateChanged(device, status, newState) {
     switch (newState) {
-        case android.bluetooth.BluetoothProfile.STATE_CONNECTED:
-            Toast.makeText(`${device} connected`).show();
-            break;
-        case android.bluetooth.BluetoothProfile.STATE_CONNECTING:
-            break;
-        case android.bluetooth.BluetoothProfile.STATE_DISCONNECTED:
-            Toast.makeText(`${device} disconnected`).show();
-            break;
-        case android.bluetooth.BluetoothProfile.STATE_DISCONNECTING:
-            break;
-        default:
-            break;
+    case android.bluetooth.BluetoothProfile.STATE_CONNECTED:
+        Toast.makeText(`${device.getName()}::${device} connected`).show();
+        break;
+    case android.bluetooth.BluetoothProfile.STATE_CONNECTING:
+        break;
+    case android.bluetooth.BluetoothProfile.STATE_DISCONNECTED:
+        Toast.makeText(`${device.getName()}::${device} disconnected`).show();
+        break;
+    case android.bluetooth.BluetoothProfile.STATE_DISCONNECTING:
+        break;
+    default:
+        break;
     }
+}
+
+function onDeviceACLDisconnected(device) {
+    console.log(`${device} acl disconnected!`);
 }
 
 function deleteServices() {
@@ -110,86 +123,89 @@ function addServices() {
 	    return restart().then(() => { return supported; });
 	})
 	    .then((supported) => {
-            if (supported) {
-                bluetooth.startGattServer();
-                deleteServices();
+		if (supported) {
+                    bluetooth.startGattServer();
+                    deleteServices();
 
-                bluetooth.setGattServerCallbacks({
-                    onBondStatusChange: onDeviceBondChange,
-                    onCharacteristicWrite: onCharacteristicWrite,
-                    onServerConnectionStateChange: onDeviceConnectionStateChanged
-                });
-
-                console.log("making service");
-                const appService = bluetooth.makeService({
-                    UUID: "9358ac8f-6343-4a31-b4e0-4b13a2b45d86",
-                    serviceType: android.bluetooth.BluetoothGattService.SERVICE_TYPE_PRIMARY
-                });
-
-                const descriptorUUIDs = [
-                    "2900",
-                    "2902"
-                ];
-                const charUUIDs = [
-                    "58daaa15-f2b2-4cd9-b827-5807b267dae1",
-                    "68208ebf-f655-4a2d-98f4-20d7d860c471",
-                    "9272e309-cd33-4d83-a959-b54cc7a54d1f",
-                    "8489625f-6c73-4fc0-8bcc-735bb173a920",
-                    "5177fda8-1003-4254-aeb9-7f9edb3cc9cf"
-                ];
-                const ptDataChar = charUUIDs[1];
-                charUUIDs.map((cuuid) => {
-                    console.log("Making characteristic: "+cuuid);
-                    const c = bluetooth.makeCharacteristic({
-                        UUID: cuuid,
-                        gattProperty: android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ | 
-                            android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE | 
-                            android.bluetooth.BluetoothGattCharacteristic.PROPERTY_NOTIFY,
-                        gattPermissions: android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE | 
-                            android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ
+                    bluetooth.setGattServerCallbacks({
+			onBondStatusChange: onDeviceBondChange,
+			onDeviceNameChange: onDeviceNameChange,
+			onDeviceUUIDChange: onDeviceUUIDChange,
+			onDeviceACLDisconnected: onDeviceACLDisconnected,
+			onCharacteristicWrite: onCharacteristicWrite,
+			onServerConnectionStateChange: onDeviceConnectionStateChanged
                     });
-                    console.log("making descriptors");
-                    const descriptors = descriptorUUIDs.map((duuid) => {
-                        const d = bluetooth.makeDescriptor({
-                            UUID: duuid,
-                            permissions: android.bluetooth.BluetoothGattDescriptor.PERMISSION_READ | 
-                                android.bluetooth.BluetoothGattDescriptor.PERMISSION_WRITE
-                        });
-                        d.setValue(new Array([0x00, 0x00]));
-                        console.log("Making descriptor: "+duuid);
-                        return d;
-                    });
-                    descriptors.map((d) => {
-                        c.addDescriptor(d);
-                    });
-                    c.setValue(0, android.bluetooth.BluetoothGattCharacteristic.FORMAT_UINT8, 0);
-                    c.setWriteType(android.bluetooth.BluetoothGattCharacteristic.WRTIE_TYPE_DEFAULT);
-                    if (cuuid === ptDataChar) {
-                        pushTrackerDataCharacteristic = c;
-                    }
-                    appService.addCharacteristic(c);
-                });
 
-                bluetooth.startAdvertising({
-                    UUID: "9358ac8f-6343-4a31-b4e0-4b13a2b45d86",
-                    settings: {
-                        connectable: true
-                    },
-                    data: {
-			includeDeviceName: true
-		    }
-                })
-                .then(() => {
-                    bluetooth.addService(appService);
-                    console.log("Advertise started!");
-                    Toast.makeText("Advertising started").show();
-                })
-                .catch((err) => {
-                    console.log("Couldn't start advertising: " + err);
-                    Toast.makeText("Couldn't start advertising: " + err).show();
-                });
-            }
-        });
+                    console.log("making service");
+                    const appService = bluetooth.makeService({
+			UUID: "9358ac8f-6343-4a31-b4e0-4b13a2b45d86",
+			serviceType: android.bluetooth.BluetoothGattService.SERVICE_TYPE_PRIMARY
+                    });
+
+                    const descriptorUUIDs = [
+			"2900",
+			"2902"
+                    ];
+                    const charUUIDs = [
+			"58daaa15-f2b2-4cd9-b827-5807b267dae1",
+			"68208ebf-f655-4a2d-98f4-20d7d860c471",
+			"9272e309-cd33-4d83-a959-b54cc7a54d1f",
+			"8489625f-6c73-4fc0-8bcc-735bb173a920",
+			"5177fda8-1003-4254-aeb9-7f9edb3cc9cf"
+                    ];
+                    const ptDataChar = charUUIDs[1];
+                    charUUIDs.map((cuuid) => {
+			console.log("Making characteristic: "+cuuid);
+			const c = bluetooth.makeCharacteristic({
+                            UUID: cuuid,
+                            gattProperty: android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ | 
+				android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE | 
+				android.bluetooth.BluetoothGattCharacteristic.PROPERTY_NOTIFY,
+                            gattPermissions: android.bluetooth.BluetoothGattCharacteristic.PERMISSION_WRITE | 
+				android.bluetooth.BluetoothGattCharacteristic.PERMISSION_READ
+			});
+			console.log("making descriptors");
+			const descriptors = descriptorUUIDs.map((duuid) => {
+                            const d = bluetooth.makeDescriptor({
+				UUID: duuid,
+				permissions: android.bluetooth.BluetoothGattDescriptor.PERMISSION_READ | 
+                                    android.bluetooth.BluetoothGattDescriptor.PERMISSION_WRITE
+                            });
+                            d.setValue(new Array([0x00, 0x00]));
+                            console.log("Making descriptor: "+duuid);
+                            return d;
+			});
+			descriptors.map((d) => {
+                            c.addDescriptor(d);
+			});
+			c.setValue(0, android.bluetooth.BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+			c.setWriteType(android.bluetooth.BluetoothGattCharacteristic.WRTIE_TYPE_DEFAULT);
+			if (cuuid === ptDataChar) {
+                            pushTrackerDataCharacteristic = c;
+			}
+			appService.addCharacteristic(c);
+                    });
+
+                    bluetooth.startAdvertising({
+			UUID: "9358ac8f-6343-4a31-b4e0-4b13a2b45d86",
+			settings: {
+                            connectable: true
+			},
+			data: {
+			    includeDeviceName: true
+			}
+                    })
+			.then(() => {
+			    bluetooth.addService(appService);
+			    console.log("Advertise started!");
+			    //Toast.makeText("Advertising started").show();
+			})
+			.catch((err) => {
+			    console.log("Couldn't start advertising: " + err);
+			    Toast.makeText("Couldn't start advertising: " + err).show();
+			});
+		}
+            });
     }
     catch (ex) {
         console.log(ex);
@@ -221,12 +237,12 @@ function selectDialog(options) {
             cancelButtonText: options.cancelButtonText || "Cancel",
             actions: options.actions || []
         })
-        .then((result) => {
-            resolve(result !== "Cancel" ? result : null);
-        })
-        .catch((err) => {
-            reject(err);
-        });
+            .then((result) => {
+		resolve(result !== "Cancel" ? result : null);
+            })
+            .catch((err) => {
+		reject(err);
+            });
     });
 }
 
@@ -269,7 +285,20 @@ function selectPushTrackers() {
     }
 }
 
+function isSmartDrive() {
+}
+
 function getConnectedSmartDrives() {
+    return dev.getName() === "SmartDrive DU" ||
+	dev.getUuids().indexOf(smartDriveServiceUUID) > -1;
+}
+
+function isPushTracker(dev) {
+    return true;
+    /*
+    return dev.getName() === "PushTracker" ||
+	dev.getUuids().indexOf(pushTrackerServiceUUID) > -1;
+    */
 }
 
 function getConnectedPushTrackers() {
@@ -281,7 +310,7 @@ function getConnectedPushTrackers() {
         }
         for (let i = 0; i < pts.size(); i++) {
             const pt = pts.get(i);
-	    if (pt.getName() === "PushTracker") {
+	    if (isPushTracker(pt)) {
                 pushTrackers.push(pt);
             }
         }
@@ -322,13 +351,7 @@ function restart() {
 	// wait then re-enable it
 	setTimeout(() => {
 	    bluetooth.enable().then((enabled) => {
-		dialogsModule.alert({
-		    title: "Bluetooth Restarted",
-		    message: `Bluetooth enabled: ${enabled}`,
-		    okButtonText: "Ok"
-		}).then(() => {
-		    resolve();
-		});
+		resolve();
 	    });
 	}, 250); // wait 250 ms
     });

@@ -60,3 +60,4 @@ typings/
 platforms/
 hooks/
 *~
+package-lock.json
