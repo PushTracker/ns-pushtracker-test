@@ -57,7 +57,7 @@ function onDeviceBondChange(device, bondStatus) {
         break;
     case android.bluetooth.BluetoothDevice.BOND_BONDED:
         bluetooth.removeBond(device);
-        Toast.makeText(`Paired with ${device.getName()}::${device}`).show();
+        //Toast.makeText(`Paired with ${device.getName()}::${device}`).show();
         break;
     case android.bluetooth.BluetoothDevice.BOND_NONE:
         break;
@@ -91,12 +91,12 @@ function onCharacteristicWrite(device, requestId, characteristic, preparedWrite,
 function onDeviceConnectionStateChanged(device, status, newState) {
     switch (newState) {
     case android.bluetooth.BluetoothProfile.STATE_CONNECTED:
-        Toast.makeText(`${device.getName()}::${device} connected`).show();
+        //Toast.makeText(`${device.getName()}::${device} connected`).show();
         break;
     case android.bluetooth.BluetoothProfile.STATE_CONNECTING:
         break;
     case android.bluetooth.BluetoothProfile.STATE_DISCONNECTED:
-        Toast.makeText(`${device.getName()}::${device} disconnected`).show();
+        //Toast.makeText(`${device.getName()}::${device} disconnected`).show();
         break;
     case android.bluetooth.BluetoothProfile.STATE_DISCONNECTING:
         break;
@@ -111,6 +111,7 @@ function onDeviceACLDisconnected(device) {
 
 function initialize() {
     try {
+	bluetooth.stopGattServer();
         bluetooth.setGattServerCallbacks({
 	    onBondStatusChange: onDeviceBondChange,
 	    onDeviceNameChange: onDeviceNameChange,
