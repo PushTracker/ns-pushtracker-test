@@ -64,6 +64,7 @@
         Always wrap content in a layout component.
     -->
     <nsDrawer:RadSideDrawer.mainContent>
+      <ScrollView>
       <GridLayout rows="auto, auto, auto, auto, auto, auto" class="page-content">
         <Label colSpan="2" class="page-icon fa" text="&#xf2be;"></Label>
 	<GridLayout row="1" colSpan="2" columns="150, *">
@@ -81,6 +82,7 @@
 	<Button row="4" colSpan="2" text="Change Password" tap="onChangePasswordTap"/>
 	<Button row="5" colSpan="2" text="Reset Account" tap="onResetAccountTap"/>
       </GridLayout>
+      </ScrollView>
     </nsDrawer:RadSideDrawer.mainContent>
   </nsDrawer:RadSideDrawer>
 </Page>

@@ -64,18 +64,27 @@ HistoricalData.prototype.swapDataSource = function() {
 HistoricalData.prototype.updateAxesFormat = function() {
     switch (this.viewSetting) {
     case "Week":
-	this.dateFormat.set("format", "MMM dd");
+	this.dateFormat.set("plotMode", "BetweenTicks");
+	this.dateFormat.set("dateTimeComponent", "Day");
+	this.dateFormat.set("majorStep", "Day");
+	this.dateFormat.set("format", "MMM d");
 	this.dateFormat.set("labelFitMode", "");
 	this.dateFormat.set("minimum", (6).days().ago());
 	this.dateFormat.set("maximum", (0).days().ago());
 	break;
     case "Month":
-	this.dateFormat.set("format", "MMM dd");
+	this.dateFormat.set("plotMode", "BetweenTicks");
+	this.dateFormat.set("dateTimeComponent", "Day");
+	this.dateFormat.set("majorStep", "Day");
+	this.dateFormat.set("format", "MMM d");
 	this.dateFormat.set("labelFitMode", "Rotate");
 	this.dateFormat.set("minimum", (30).days().ago());
 	this.dateFormat.set("maximum", (0).days().ago());
 	break;
     case "Year":
+	this.dateFormat.set("plotMode", "BetweenTicks");
+	this.dateFormat.set("dateTimeComponent", "Month");
+	this.dateFormat.set("majorStep", "Month");
 	this.dateFormat.set("format","MMM");
 	this.dateFormat.set("labelFitMode", "");
 	this.dateFormat.set("minimum", (11).months().ago());
@@ -110,7 +119,6 @@ HistoricalData.prototype.convertData = function(obj) {
 HistoricalData.prototype.removeZeroData = function(obj) {
     Object.keys(obj).map((k) => {
 	if (obj[k] === 0 || obj[k] === 0.0) {
-	    delete obj[k];
 	    obj[k] = null;
 	}
     });
@@ -155,7 +163,7 @@ HistoricalData.prototype.updateDataSources = function() {
 	switch (vs) {
 	case "Week":
 	    numData = 7;
-	    for (let i=0; i<numData; i++) {
+	    for (let i = (numData - 1); i >= 0; i--) {
 		var date = (i).days().ago();
 		var di = this.getDailyInfoAtDate(date);
 		this.dataSources[vs].push(di);
@@ -163,7 +171,7 @@ HistoricalData.prototype.updateDataSources = function() {
 	    break;
 	case "Month":
 	    numData = 31;
-	    for (let i=0; i<numData; i++) {
+	    for (let i = (numData - 1); i >= 0; i--) {
 		var date = (i).days().ago();
 		var di = this.getDailyInfoAtDate(date);
 		this.dataSources[vs].push(di);
@@ -171,7 +179,7 @@ HistoricalData.prototype.updateDataSources = function() {
 	    break;
 	case "Year":
 	    numData = 12;
-	    for (let i=0; i<numData; i++) {
+	    for (let i = (numData - 1); i >= 0; i--) {
 		var date = (i).months().ago();
 		var di = this.getDailyInfoForMonth(date);
 		this.dataSources[vs].push(di);
