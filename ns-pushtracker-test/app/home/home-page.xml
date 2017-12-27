@@ -4,6 +4,7 @@
     xmlns:nsDrawer="nativescript-pro-ui/sidedrawer"
     xmlns:myDrawer="shared/my-drawer"
     xmlns:chart="nativescript-pro-ui/chart"
+    xmlns:ns="nativescript-carousel"
     xmlns="http://www.nativescript.org/tns.xsd">
 
     <ActionBar class="action-bar">
@@ -58,80 +59,81 @@
         Always wrap content in a layout component.
         -->
         <nsDrawer:RadSideDrawer.mainContent>
-	  <ScrollView>
-	  <GridLayout class="page-content" rows="*, *, *, auto" columns="*">
-	    <StackLayout row="0" orientation="vertical">
-	      <Label text="Pushes" class="daily-info-label"/>
-	      <chart:RadCartesianChart class="dashboard-chart">
-		<chart:RadCartesianChart.series>
-		  <chart:BarSeries legendTitle="Pushes With" stackMode="stack" items="{{ HistoricalDataSource }}" categoryProperty="Date" valueProperty="pushesWith"/>
-		  <chart:BarSeries legendTitle="Pushes Without" stackMode="stack" items="{{ HistoricalDataSource }}" categoryProperty="Date" valueProperty="pushesWithout"/>
-		</chart:RadCartesianChart.series>
-		<chart:RadCartesianChart.horizontalAxis>
-		  <chart:DateTimeContinuousAxis
-		      allowZoom="true"
-		      allowPan="true"
-		      plotMode="{{ getDateFormat.plotMode }}"
-		      majorStep="{{ getDateFormat.majorStep }}"
-		      dateFormat="{{ getDateFormat.format }}"
-		      labelFitMode="{{ getDateFormat.labelFitMode }}"/>
-		</chart:RadCartesianChart.horizontalAxis>
-		<chart:RadCartesianChart.verticalAxis>
-		  <chart:LinearAxis/>
-		</chart:RadCartesianChart.verticalAxis>
-		<chart:RadCartesianChart.legend>
-		  <chart:RadLegendView position="Top" enableSelection="true" />
-		</chart:RadCartesianChart.legend>
-	      </chart:RadCartesianChart>
-	    </StackLayout>
-	    <StackLayout row="1" orientation="vertical">
-	      <Label text="Coast" class="daily-info-label"/>
-	      <chart:RadCartesianChart class="dashboard-chart">
-		<chart:RadCartesianChart.series>
-		  <chart:BarSeries legendTitle="Coast With" items="{{ HistoricalDataSource }}" categoryProperty="Date" valueProperty="coastWith"/>
-		  <chart:BarSeries legendTitle="Coast Without" items="{{ HistoricalDataSource }}" categoryProperty="Date" valueProperty="coastWithout"/>
-		</chart:RadCartesianChart.series>
-		<chart:RadCartesianChart.horizontalAxis>
-		  <chart:DateTimeContinuousAxis
-		      allowZoom="true"
-		      allowPan="true"
-		      plotMode="{{ getDateFormat.plotMode }}"
-		      majorStep="{{ getDateFormat.majorStep }}"
-		      dateFormat="{{ getDateFormat.format }}"
-		      labelFitMode="{{ getDateFormat.labelFitMode }}"/>
-		</chart:RadCartesianChart.horizontalAxis>
-		<chart:RadCartesianChart.verticalAxis>
-		  <chart:LinearAxis/>
-		</chart:RadCartesianChart.verticalAxis>
-		<chart:RadCartesianChart.legend>
-		  <chart:RadLegendView position="Top" enableSelection="true" />
-		</chart:RadCartesianChart.legend>
-	      </chart:RadCartesianChart>
-	    </StackLayout>
-	    <StackLayout row="2" orientation="vertical">
-	      <Label text="Distance" class="daily-info-label"/>
-	      <chart:RadCartesianChart class="dashboard-chart">
-		<chart:RadCartesianChart.series>
-		  <chart:BarSeries legendTitle="Distance" items="{{ HistoricalDataSource }}" categoryProperty="Date" valueProperty="distance"/>
-		</chart:RadCartesianChart.series>
-		<chart:RadCartesianChart.horizontalAxis>
-		  <chart:DateTimeContinuousAxis
-		      allowZoom="true"
-		      allowPan="true"
-		      plotMode="{{ getDateFormat.plotMode }}"
-		      majorStep="{{ getDateFormat.majorStep }}"
-		      dateFormat="{{ getDateFormat.format }}"
-		      labelFitMode="{{ getDateFormat.labelFitMode }}"/>
-		</chart:RadCartesianChart.horizontalAxis>
-		<chart:RadCartesianChart.verticalAxis>
-		  <chart:LinearAxis/>
-		</chart:RadCartesianChart.verticalAxis>
-		<chart:RadCartesianChart.legend>
-		  <chart:RadLegendView position="Top" enableSelection="true" />
-		</chart:RadCartesianChart.legend>
-	      </chart:RadCartesianChart>
-	    </StackLayout>
-	    <SegmentedBar row="3" selectedIndex="2" selectedIndexChanged="{{ onDataRangeChanged }}">
+	  <GridLayout class="page-content" rows="*, auto" columns="*">
+	    <ns:Carousel row="0">
+	      <ns:CarouselItem>
+		<Label text="Pushes" class="daily-info-label"/>
+		<chart:RadCartesianChart class="dashboard-chart">
+		  <chart:RadCartesianChart.series>
+		    <chart:BarSeries legendTitle="Pushes With" stackMode="stack" items="{{ HistoricalDataSource }}" categoryProperty="Date" valueProperty="pushesWith"/>
+		    <chart:BarSeries legendTitle="Pushes Without" stackMode="stack" items="{{ HistoricalDataSource }}" categoryProperty="Date" valueProperty="pushesWithout"/>
+		  </chart:RadCartesianChart.series>
+		  <chart:RadCartesianChart.horizontalAxis>
+		    <chart:DateTimeContinuousAxis
+			allowZoom="true"
+			allowPan="true"
+			plotMode="{{ getDateFormat.plotMode }}"
+			majorStep="{{ getDateFormat.majorStep }}"
+			dateFormat="{{ getDateFormat.format }}"
+			labelFitMode="{{ getDateFormat.labelFitMode }}"/>
+		  </chart:RadCartesianChart.horizontalAxis>
+		  <chart:RadCartesianChart.verticalAxis>
+		    <chart:LinearAxis/>
+		  </chart:RadCartesianChart.verticalAxis>
+		  <chart:RadCartesianChart.legend>
+		    <chart:RadLegendView position="Top" enableSelection="true" />
+		  </chart:RadCartesianChart.legend>
+		</chart:RadCartesianChart>
+	      </ns:CarouselItem>
+	      <ns:CarouselItem>
+		<Label text="Coast" class="daily-info-label"/>
+		<chart:RadCartesianChart class="dashboard-chart">
+		  <chart:RadCartesianChart.series>
+		    <chart:BarSeries legendTitle="Coast With" items="{{ HistoricalDataSource }}" categoryProperty="Date" valueProperty="coastWith"/>
+		    <chart:BarSeries legendTitle="Coast Without" items="{{ HistoricalDataSource }}" categoryProperty="Date" valueProperty="coastWithout"/>
+		  </chart:RadCartesianChart.series>
+		  <chart:RadCartesianChart.horizontalAxis>
+		    <chart:DateTimeContinuousAxis
+			allowZoom="true"
+			allowPan="true"
+			plotMode="{{ getDateFormat.plotMode }}"
+			majorStep="{{ getDateFormat.majorStep }}"
+			dateFormat="{{ getDateFormat.format }}"
+			labelFitMode="{{ getDateFormat.labelFitMode }}"/>
+		  </chart:RadCartesianChart.horizontalAxis>
+		  <chart:RadCartesianChart.verticalAxis>
+		    <chart:LinearAxis/>
+		  </chart:RadCartesianChart.verticalAxis>
+		  <chart:RadCartesianChart.legend>
+		    <chart:RadLegendView position="Top" enableSelection="true" />
+		  </chart:RadCartesianChart.legend>
+		</chart:RadCartesianChart>
+	      </ns:CarouselItem>
+	      <ns:CarouselItem>
+		<Label text="Distance" class="daily-info-label"/>
+		<chart:RadCartesianChart class="dashboard-chart">
+		  <chart:RadCartesianChart.series>
+		    <chart:BarSeries legendTitle="Distance" items="{{ HistoricalDataSource }}" categoryProperty="Date" valueProperty="distance"/>
+		  </chart:RadCartesianChart.series>
+		  <chart:RadCartesianChart.horizontalAxis>
+		    <chart:DateTimeContinuousAxis
+			allowZoom="true"
+			allowPan="true"
+			plotMode="{{ getDateFormat.plotMode }}"
+			majorStep="{{ getDateFormat.majorStep }}"
+			dateFormat="{{ getDateFormat.format }}"
+			labelFitMode="{{ getDateFormat.labelFitMode }}"/>
+		  </chart:RadCartesianChart.horizontalAxis>
+		  <chart:RadCartesianChart.verticalAxis>
+		    <chart:LinearAxis/>
+		  </chart:RadCartesianChart.verticalAxis>
+		  <chart:RadCartesianChart.legend>
+		    <chart:RadLegendView position="Top" enableSelection="true" />
+		  </chart:RadCartesianChart.legend>
+		</chart:RadCartesianChart>
+	      </ns:CarouselItem>
+	    </ns:Carousel>
+	    <SegmentedBar row="1" selectedIndex="2" selectedIndexChanged="{{ onDataRangeChanged }}">
 	      <SegmentedBar.items>
 		<SegmentedBarItem title="Year"/>
 		<SegmentedBarItem title="Month"/>
@@ -139,7 +141,6 @@
 	      </SegmentedBar.items>
 	    </SegmentedBar>
 	  </GridLayout>
-	  </ScrollView>
         </nsDrawer:RadSideDrawer.mainContent>
     </nsDrawer:RadSideDrawer>
 
