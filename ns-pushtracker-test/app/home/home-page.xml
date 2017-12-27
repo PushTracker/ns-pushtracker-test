@@ -59,7 +59,7 @@
         Always wrap content in a layout component.
     -->
     <nsDrawer:RadSideDrawer.mainContent>
-      <GridLayout class="page-content" rows="*, auto, auto" columns="*">
+      <GridLayout class="page-content" rows="*, auto" columns="*">
 	<ns:Carousel row="0" indicatorOffset="0,75" indicatorColor="#66ccff" indicatorColorUnselected="#cceeff">
 	  <ns:CarouselItem>
 	    <Label text="Pushes" class="daily-info-label"/>
@@ -133,8 +133,7 @@
 	    </chart:RadCartesianChart>
 	  </ns:CarouselItem>
 	</ns:Carousel>
-	<Label row="1" text = "    "/>
-	<SegmentedBar row="2" selectedIndex="2" selectedIndexChanged="{{ onDataRangeChanged }}">
+	<SegmentedBar row="1" selectedIndex="2" selectedIndexChanged="{{ onDataRangeChanged }}">
 	  <SegmentedBar.items>
 	    <SegmentedBarItem title="Year"/>
 	    <SegmentedBarItem title="Month"/>
