@@ -20,6 +20,7 @@
     "nativescript-audio": "^4.3.1",
     "nativescript-bluetooth": "git+https://github.com/finger563/nativescript-bluetooth.git",
     "nativescript-drop-down": "^3.2.0",
+    "nativescript-fancyalert": "^1.1.2",
     "nativescript-feedback": "^1.1.0",
     "nativescript-fingerprint-auth": "^5.1.0",
     "nativescript-floatingactionbutton": "^4.1.3",

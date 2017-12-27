@@ -6,6 +6,7 @@ const bluetooth = require("nativescript-bluetooth");
 const Toast = require("nativescript-toast");
 
 const SnackBarModule = require("nativescript-snackbar");
+const FeedbackModule = require("nativescript-feedback");
 
 const DataStorage = require("../shared/data-storage/data-storage");
 const DailyInfo = require("../shared/data-storage/daily-info");
@@ -21,6 +22,7 @@ let pushTrackerDataCharacteristic = null;
 let appService = null;
 
 let snackbar = new SnackBarModule.SnackBar();
+let feedback = new FeedbackModule.Feedback();
 
 function notify(text) {
     snackbar.simple(text);
@@ -65,7 +67,11 @@ function onDeviceBondChange(device, bondStatus) {
         break;
     case android.bluetooth.BluetoothDevice.BOND_BONDED:
         bluetooth.removeBond(device);
-	notify(`Paired with ${device.getName()}::${device}`);
+	feedback.success({
+	    title: "Successfully Paired",
+	    message: `PushTracker ${device} now paired`
+	});
+	//notify(`Paired with ${device.getName()}::${device}`);
         //Toast.makeText(`Paired with ${device.getName()}::${device}`).show();
         break;
     case android.bluetooth.BluetoothDevice.BOND_NONE:
