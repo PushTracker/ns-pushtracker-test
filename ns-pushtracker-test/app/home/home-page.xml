@@ -60,7 +60,7 @@
     -->
     <nsDrawer:RadSideDrawer.mainContent>
       <GridLayout class="page-content" rows="*, auto, auto" columns="*">
-	<ns:Carousel row="0" indicatorOffset="0,100" indicatorColor="#66ccff" indicatorColorUnselected="#cceeff">
+	<ns:Carousel row="0" indicatorOffset="0,75" indicatorColor="#66ccff" indicatorColorUnselected="#cceeff">
 	  <ns:CarouselItem>
 	    <Label text="Pushes" class="daily-info-label"/>
 	    <chart:RadCartesianChart class="dashboard-chart">
