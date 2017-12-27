@@ -4,6 +4,12 @@
     text-transform: none;
 }
 
+.account-icon {
+    font-size: 100;
+    text-align: center;
+    margin: 10;
+}
+
 .account-item {
     vertical-align: center;
     text-overflow: none;

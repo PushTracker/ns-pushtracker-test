@@ -65,8 +65,8 @@
     -->
     <nsDrawer:RadSideDrawer.mainContent>
       <ScrollView>
-      <GridLayout rows="auto, auto, auto, auto, auto, auto" class="page-content">
-        <Label colSpan="2" class="page-icon fa" text="&#xf2be;"></Label>
+      <GridLayout rows="auto, auto, auto, auto, auto, auto" columns="*, *" class="page-content">
+        <Label row="0" colSpan="2" class="account-icon fa" text="&#xf2be;"></Label>
 	<GridLayout row="1" colSpan="2" columns="150, *">
 	  <Label text="Name" dock="left" class="account-item"/>
 	  <TextField col="1" text="{{ name }}" class="account-text-entry" hint="John Smith" dock="right"/>
