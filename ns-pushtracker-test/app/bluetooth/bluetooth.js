@@ -5,6 +5,8 @@ const observableArray = require("data/observable-array");
 const bluetooth = require("nativescript-bluetooth");
 const Toast = require("nativescript-toast");
 
+const SnackBarModule = require("nativescript-snackbar");
+
 const DataStorage = require("../shared/data-storage/data-storage");
 const DailyInfo = require("../shared/data-storage/daily-info");
 const Packet = require("../packet/packet");
@@ -17,6 +19,12 @@ const peripherals = new observableArray.ObservableArray();
 
 let pushTrackerDataCharacteristic = null;
 let appService = null;
+
+let snackbar = new SnackBarModule.SnackBar();
+
+function notify(text) {
+    snackbar.simple(text);
+}
 
 function scan(uuids, onDiscoveredCallback) {
     peripherals.splice(0, peripherals.length);
@@ -57,6 +65,7 @@ function onDeviceBondChange(device, bondStatus) {
         break;
     case android.bluetooth.BluetoothDevice.BOND_BONDED:
         bluetooth.removeBond(device);
+	notify(`Paired with ${device.getName()}::${device}`);
         //Toast.makeText(`Paired with ${device.getName()}::${device}`).show();
         break;
     case android.bluetooth.BluetoothDevice.BOND_NONE:
@@ -78,6 +87,7 @@ function onCharacteristicWrite(device, requestId, characteristic, preparedWrite,
     const data = new Uint8Array(value);
     const p = new Packet.Packet(data);
     if (p.Type() === "Data" && p.SubType() === "DailyInfo") {
+	notify(`${device.getName()}::${device} sent DailyInfo`);
         const di = DailyInfo.DailyInfo();
         di.fromPacket(p);
         console.log(JSON.stringify(di.data));
@@ -91,11 +101,13 @@ function onCharacteristicWrite(device, requestId, characteristic, preparedWrite,
 function onDeviceConnectionStateChanged(device, status, newState) {
     switch (newState) {
     case android.bluetooth.BluetoothProfile.STATE_CONNECTED:
+	notify(`${device.getName()}::${device} connected`);
         //Toast.makeText(`${device.getName()}::${device} connected`).show();
         break;
     case android.bluetooth.BluetoothProfile.STATE_CONNECTING:
         break;
     case android.bluetooth.BluetoothProfile.STATE_DISCONNECTED:
+	notify(`${device.getName()}::${device} disconnected`);
         //Toast.makeText(`${device.getName()}::${device} disconnected`).show();
         break;
     case android.bluetooth.BluetoothProfile.STATE_DISCONNECTING:
