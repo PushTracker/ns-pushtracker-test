@@ -93,15 +93,30 @@ function onCharacteristicWrite(device, requestId, characteristic, preparedWrite,
     const data = new Uint8Array(value);
     const p = new Packet.Packet(data);
     if (p.Type() === "Data" && p.SubType() === "DailyInfo") {
-	notify(`${device.getName()}::${device} sent DailyInfo`);
         const di = DailyInfo.DailyInfo();
         di.fromPacket(p);
         console.log(JSON.stringify(di.data));
 	DataStorage.HistoricalData.update(di);
+
+	let options = {
+	    actionText: "View",
+	    snackText: `${device.getName()}::${device} sent DailyInfo`,
+	    hideDelay: 1000
+	};
+	snackbar.action(options).then((args) => {
+	    if (args.command === "Action") {
+		dialogsModule.alert({
+		    title: `${device} Daily Info`,
+		    message: JSON.stringify(di.data, null, 2),
+		    okButtonText: "Ok"
+		});
+	    }
+	});
     }
     else {
         console.log(`${p.Type()}::${p.SubType()} ${p.toString()}`);
     }
+    p.destroy();
 }
 
 function onDeviceConnectionStateChanged(device, status, newState) {
