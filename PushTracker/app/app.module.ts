@@ -6,7 +6,6 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 
 import { TNSFontIconModule } from "nativescript-ngx-fonticon";
-TNSFontIconService.debug = true;
 
 @NgModule({
     bootstrap: [

@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { TNSFontIconService } from "nativescript-ngx-fonticon";
 
 /* ***********************************************************
 * Keep data that is displayed in your app drawer in the MyDrawer component class.
@@ -12,9 +11,6 @@ import { TNSFontIconService } from "nativescript-ngx-fonticon";
     styleUrls: ["./my-drawer.component.css"]
 })
 export class MyDrawerComponent implements OnInit {
-    constructor(private fonticon: TNSFontIconService) {
-    }
-
     /* ***********************************************************
     * The "selectedPage" is a component input property.
     * It is used to pass the current page title from the containing page component.
