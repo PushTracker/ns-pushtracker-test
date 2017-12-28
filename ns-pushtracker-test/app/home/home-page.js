@@ -17,6 +17,7 @@ function onNavigatingTo(args) {
 
     const page = args.object;
     page.bindingContext = new HomeViewModel();
+    page.bindingContext.update();
 }
 
 /* ***********************************************************

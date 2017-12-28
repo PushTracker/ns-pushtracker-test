@@ -70,8 +70,6 @@
 	      </chart:RadCartesianChart.series>
 	      <chart:RadCartesianChart.horizontalAxis>
 		<chart:DateTimeContinuousAxis
-		    allowZoom="false"
-		    allowPan="false"
 		    plotMode="{{ getDateFormat.plotMode }}"
 		    majorStep="{{ getDateFormat.majorStep }}"
 		    dateFormat="{{ getDateFormat.format }}"
@@ -81,7 +79,7 @@
 		<chart:LinearAxis/>
 	      </chart:RadCartesianChart.verticalAxis>
 	      <chart:RadCartesianChart.legend>
-		<chart:RadLegendView position="Top" enableSelection="true" />
+		<chart:RadLegendView position="Top" />
 	      </chart:RadCartesianChart.legend>
 	    </chart:RadCartesianChart>
 	  </ns:CarouselItem>
@@ -94,8 +92,6 @@
 	      </chart:RadCartesianChart.series>
 	      <chart:RadCartesianChart.horizontalAxis>
 		<chart:DateTimeContinuousAxis
-		    allowZoom="false"
-		    allowPan="false"
 		    plotMode="{{ getDateFormat.plotMode }}"
 		    majorStep="{{ getDateFormat.majorStep }}"
 		    dateFormat="{{ getDateFormat.format }}"
@@ -105,7 +101,7 @@
 		<chart:LinearAxis/>
 	      </chart:RadCartesianChart.verticalAxis>
 	      <chart:RadCartesianChart.legend>
-		<chart:RadLegendView position="Top" enableSelection="true" />
+		<chart:RadLegendView position="Top" />
 	      </chart:RadCartesianChart.legend>
 	    </chart:RadCartesianChart>
 	  </ns:CarouselItem>
@@ -113,12 +109,10 @@
 	    <Label text="Distance" class="daily-info-label"/>
 	    <chart:RadCartesianChart class="dashboard-chart">
 	      <chart:RadCartesianChart.series>
-		<chart:BarSeries legendTitle="Distance" items="{{ HistoricalDataSource }}" categoryProperty="Date" valueProperty="distance"/>
+		<chart:BarSeries items="{{ HistoricalDataSource }}" categoryProperty="Date" valueProperty="distance"/>
 	      </chart:RadCartesianChart.series>
 	      <chart:RadCartesianChart.horizontalAxis>
 		<chart:DateTimeContinuousAxis
-		    allowZoom="false"
-		    allowPan="false"
 		    plotMode="{{ getDateFormat.plotMode }}"
 		    majorStep="{{ getDateFormat.majorStep }}"
 		    dateFormat="{{ getDateFormat.format }}"
@@ -128,7 +122,6 @@
 		<chart:LinearAxis/>
 	      </chart:RadCartesianChart.verticalAxis>
 	      <chart:RadCartesianChart.legend>
-		<chart:RadLegendView position="Top" enableSelection="true" />
 	      </chart:RadCartesianChart.legend>
 	    </chart:RadCartesianChart>
 	  </ns:CarouselItem>

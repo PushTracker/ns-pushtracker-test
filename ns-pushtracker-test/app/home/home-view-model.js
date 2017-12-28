@@ -7,6 +7,8 @@ function HomeViewModel() {
 	HistoricalDataSource: DataStorage.HistoricalData.getDataSource(),
 
 	getDateFormat: DataStorage.HistoricalData.getDateFormat(),
+
+	update: DataStorage.HistoricalData.updateDataSources.bind(DataStorage.HistoricalData),
 	
         onDataRangeChanged: function(propertyChangeData) {
             var index = propertyChangeData.newIndex;
