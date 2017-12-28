@@ -65,3 +65,4 @@ PushTracker/*.js
 PatientInfo/*.js
 PushTracker/**/*.js
 PatientInfo/**/*.js
+PushTracker/**/*.css
