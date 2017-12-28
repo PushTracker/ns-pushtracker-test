@@ -47,14 +47,13 @@
 		     items="{{ HistoricalDataSource }}"
 		     categoryProperty="Date"
 		     valueProperty="pushesWithout"></BarSeries>
-	  <DateTimeContinuousAxis tkCartesianHorizontalAxis
-				  <!--
+	  <DateTimeContinuousAxis tkCartesianHorizontalAxis></DateTimeContinuousAxis>
+	  <!--
             plotMode="{{ getDateFormat.plotMode }}"
             majorStep="{{ getDateFormat.majorStep }}"
             dateFormat="{{ getDateFormat.format }}"
-            labelFitMode="{{ getDateFormat.labelFitMode }}"
-				    -->
-	    ></DateTimeContinuousAxis>
+            labelFitMode="{{ getDateFormat.labelFitMode }}"></DateTimeContinuousAxis>
+	    -->
 	  <LinearAxis tkCartesianVerticalAxis></LinearAxis>
 	  <RadLegendView tkCartesianLegend position="Top"></RadLegendView>
         </RadCartesianChart>
@@ -72,14 +71,13 @@
 		     items="{{ HistoricalDataSource }}"
 		     categoryProperty="Date"
 		     valueProperty="coastWithout"></BarSeries>
-	  <DateTimeContinuousAxis tkCartesianHorizontalAxis
-				  <!--
+	  <DateTimeContinuousAxis tkCartesianHorizontalAxis></DateTimeContinuousAxis>
+	  <!--
             plotMode="{{ getDateFormat.plotMode }}"
             majorStep="{{ getDateFormat.majorStep }}"
             dateFormat="{{ getDateFormat.format }}"
-            labelFitMode="{{ getDateFormat.labelFitMode }}"
-				    -->
-	    ></DateTimeContinuousAxis>
+            labelFitMode="{{ getDateFormat.labelFitMode }}"></DateTimeContinuousAxis>
+	    -->
 	  <LinearAxis tkCartesianVerticalAxis></LinearAxis>
 	  <RadLegendView tkCartesianLegend position="Top"></RadLegendView>
         </RadCartesianChart>
@@ -92,25 +90,23 @@
 		     items="{{ HistoricalDataSource }}"
 		     categoryProperty="Date"
 		     valueProperty="distance"></BarSeries>
-	  <DateTimeContinuousAxis tkCartesianHorizontalAxis
-				  <!--
+	  <DateTimeContinuousAxis tkCartesianHorizontalAxis></DateTimeContinuousAxis>
+	  <!--
             plotMode="{{ getDateFormat.plotMode }}"
             majorStep="{{ getDateFormat.majorStep }}"
             dateFormat="{{ getDateFormat.format }}"
-            labelFitMode="{{ getDateFormat.labelFitMode }}"
-				    -->
-	    ></DateTimeContinuousAxis>
+            labelFitMode="{{ getDateFormat.labelFitMode }}"></DateTimeContinuousAxis>
+	    -->
 	  <LinearAxis tkCartesianVerticalAxis></LinearAxis>
 	  <RadLegendView tkCartesianLegend position="Top"></RadLegendView>
         </RadCartesianChart>
       </CarouselItem>
     </Carousel>
-    <SegmentedBar row="1" selectedIndex="2" selectedIndexChanged="{{ onDataRangeChanged }}">
-      <SegmentedBar.items>
-        <SegmentedBarItem title="Year"></SegmentedBarItem>
-        <SegmentedBarItem title="Month"></SegmentedBarItem>
-        <SegmentedBarItem title="Week"></SegmentedBarItem>
-      </SegmentedBar.items>
+    <SegmentedBar
+      row="1"
+      selectedIndex="2"
+      [items]="timeSelections"
+      (selectedIndexChange)="onSelectedIndexChange($event)">
     </SegmentedBar>
   </GridLayout>
 </RadSideDrawer>

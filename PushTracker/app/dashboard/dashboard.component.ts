@@ -1,11 +1,13 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from "@angular/core";
+import { SegmentedBar, SegmentedBarItem } from "ui/segmented-bar";
 import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-pro-ui/sidedrawer";
 import { RadSideDrawerComponent } from "nativescript-pro-ui/sidedrawer/angular";
 
 @Component({
     selector: "Dashboard",
     moduleId: module.id,
-    templateUrl: "./dashboard.component.html"
+    templateUrl: "./dashboard.component.html",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent implements OnInit {
     /* ***********************************************************
@@ -15,6 +17,25 @@ export class DashboardComponent implements OnInit {
     @ViewChild("drawer") drawerComponent: RadSideDrawerComponent;
 
     private _sideDrawerTransition: DrawerTransitionBase;
+
+    public times: Array<string> = ["Year", "Month", "Week"];
+    public timeSelections: Array<SegmentedBarItem>;
+    public selectedTime: string = this.times[2];
+
+    constructor() {
+	this.timeSelections = [];
+	this.times.map((t) => {
+	    const item = new SegmentedBarItem();
+	    item.title = t;
+	    this.timeSelections.push(item);
+	});
+    }
+
+    public onSelectedIndexChange(args) {
+	let segmentedBar = <SegmentedBar>args.object;
+	this.selectedTime = this.times[segmentedBar.selectedIndex];
+	console.log(this.selectedTime);
+    }
 
     /* ***********************************************************
     * Use the sideDrawerTransition property to change the open/close animation of the drawer.
