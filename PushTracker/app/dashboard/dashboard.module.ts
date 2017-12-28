@@ -5,9 +5,12 @@ import { SharedModule } from "../shared/shared.module";
 import { DashboardRoutingModule } from "./dashboard-routing.module";
 import { DashboardComponent } from "./dashboard.component";
 
+import { NativeScriptUIChartModule } from "nativescript-pro-ui/chart/angular";
+
 @NgModule({
     imports: [
         NativeScriptCommonModule,
+        NativeScriptUIChartModule,
         DashboardRoutingModule,
         SharedModule
     ],

@@ -30,8 +30,87 @@
   <!--
       Use the tkMainContent directive to display the content of the page when you have an app drawer.
     -->
-  <GridLayout class="page page-content" tkMainContent>
-    <Label class="page-icon fa" text="&#xf015;"></Label>
-    <Label class="page-placeholder" text="<!-- Page content goes here -->"></Label>
+  <GridLayout class="page page-content" rows="*, auto" columns="*" tkMainContent>      
+    <Carousel row="0" indicatorColor="#66ccff" indicatorColorUnselected="#cceeff">
+      <CarouselItem>
+        <Label text="Pushes" class="daily-info-label"></Label>
+        <RadCartesianChart class="dashboard-chart">
+	  <BarSeries tkCartesianSeries
+		     legendTitle="Pushes With"
+		     stackMode="stack"
+		     items="{{ HistoricalDataSource }}"
+		     categoryProperty="Date"
+		     valueProperty="pushesWith"></BarSeries>
+	  <BarSeries tkCartesianSeries
+		     legendTitle="Pushes Without"
+		     stackMode="stack"
+		     items="{{ HistoricalDataSource }}"
+		     categoryProperty="Date"
+		     valueProperty="pushesWithout"></BarSeries>
+	  <DateTimeContinuousAxis tkCartesianHorizontalAxis
+				  <!--
+            plotMode="{{ getDateFormat.plotMode }}"
+            majorStep="{{ getDateFormat.majorStep }}"
+            dateFormat="{{ getDateFormat.format }}"
+            labelFitMode="{{ getDateFormat.labelFitMode }}"
+				    -->
+	    ></DateTimeContinuousAxis>
+	  <LinearAxis tkCartesianVerticalAxis></LinearAxis>
+	  <RadLegendView tkCartesianLegend position="Top"></RadLegendView>
+        </RadCartesianChart>
+      </CarouselItem>
+      <CarouselItem>
+        <Label text="Coast" class="daily-info-label"></Label>
+        <RadCartesianChart class="dashboard-chart">
+	  <BarSeries tkCartesianSeries
+		     legendTitle="Coast With"
+		     items="{{ HistoricalDataSource }}"
+		     categoryProperty="Date"
+		     valueProperty="coastWith"></BarSeries>
+	  <BarSeries tkCartesianSeries
+		     legendTitle="Coast Without"
+		     items="{{ HistoricalDataSource }}"
+		     categoryProperty="Date"
+		     valueProperty="coastWithout"></BarSeries>
+	  <DateTimeContinuousAxis tkCartesianHorizontalAxis
+				  <!--
+            plotMode="{{ getDateFormat.plotMode }}"
+            majorStep="{{ getDateFormat.majorStep }}"
+            dateFormat="{{ getDateFormat.format }}"
+            labelFitMode="{{ getDateFormat.labelFitMode }}"
+				    -->
+	    ></DateTimeContinuousAxis>
+	  <LinearAxis tkCartesianVerticalAxis></LinearAxis>
+	  <RadLegendView tkCartesianLegend position="Top"></RadLegendView>
+        </RadCartesianChart>
+      </CarouselItem>
+      <CarouselItem>
+        <Label text="Distance" class="daily-info-label"></Label>
+        <RadCartesianChart class="dashboard-chart">
+	  <BarSeries tkCartesianSeries
+		     legendTitle="Distance"
+		     items="{{ HistoricalDataSource }}"
+		     categoryProperty="Date"
+		     valueProperty="distance"></BarSeries>
+	  <DateTimeContinuousAxis tkCartesianHorizontalAxis
+				  <!--
+            plotMode="{{ getDateFormat.plotMode }}"
+            majorStep="{{ getDateFormat.majorStep }}"
+            dateFormat="{{ getDateFormat.format }}"
+            labelFitMode="{{ getDateFormat.labelFitMode }}"
+				    -->
+	    ></DateTimeContinuousAxis>
+	  <LinearAxis tkCartesianVerticalAxis></LinearAxis>
+	  <RadLegendView tkCartesianLegend position="Top"></RadLegendView>
+        </RadCartesianChart>
+      </CarouselItem>
+    </Carousel>
+    <SegmentedBar row="1" selectedIndex="2" selectedIndexChanged="{{ onDataRangeChanged }}">
+      <SegmentedBar.items>
+        <SegmentedBarItem title="Year"></SegmentedBarItem>
+        <SegmentedBarItem title="Month"></SegmentedBarItem>
+        <SegmentedBarItem title="Week"></SegmentedBarItem>
+      </SegmentedBar.items>
+    </SegmentedBar>
   </GridLayout>
 </RadSideDrawer>
