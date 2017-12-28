@@ -61,3 +61,7 @@ platforms/
 hooks/
 *~
 package-lock.json
+PushTracker/*.js
+PatientInfo/*.js
+PushTracker/**/*.js
+PatientInfo/**/*.js
