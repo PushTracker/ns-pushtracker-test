@@ -17,7 +17,8 @@
                 "./node_modules/tns-core-modules/*",
                 "./node_modules/*"
             ]
-        }
+        },
+	"types": ["@types/datejs"]
     },
     "exclude": [
         "app/shared/date.js",

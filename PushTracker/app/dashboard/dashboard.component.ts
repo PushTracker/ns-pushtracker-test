@@ -1,3 +1,4 @@
+/// <reference types="@types/datejs" />
 import { ChangeDetectionStrategy, Component, ElementRef, Injectable, OnInit, ViewChild } from "@angular/core";
 import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-pro-ui/sidedrawer";
 import { SegmentedBar, SegmentedBarItem } from "ui/segmented-bar";
@@ -7,7 +8,7 @@ import { RadSideDrawerComponent } from "nativescript-pro-ui/sidedrawer/angular";
 
 import { HistoricalDataComponent } from "../shared/historical-data/historical-data.component";
 
-//require("../shared/date");
+require("../shared/date");
 
 @Component({
     selector: "Dashboard",
