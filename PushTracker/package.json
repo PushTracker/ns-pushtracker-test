@@ -21,6 +21,7 @@
     "@angular/http": "4.4.6",
     "@angular/platform-browser": "4.4.6",
     "@angular/router": "4.4.6",
+    "@types/datejs": "0.0.30",
     "buffer": "^5.0.8",
     "nativescript-accelerometer": "^2.0.1",
     "nativescript-angular": "4.4.1",

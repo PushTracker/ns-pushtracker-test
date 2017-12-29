@@ -42,6 +42,7 @@
 	  <BarSeries seriesName="Pushes With"
 		     selectionMode="DataPoint"
 		     legendTitle="Pushes With"
+		     legendLabel="Series Type"
 		     stackMode="stack"
 		     tkCartesianSeries [items]="HistoricalData.dataSource"
 		     categoryProperty="date"
@@ -49,6 +50,7 @@
 	  <BarSeries seriesName="Pushes Without"
 		     selectionMode="DataPoint"
 		     legendTitle="Pushes Without"
+		     legendLabel="Series Type"
 		     stackMode="stack"
 		     tkCartesianSeries [items]="HistoricalData.dataSource"
 		     categoryProperty="date"
@@ -59,7 +61,11 @@
 	  <Trackball></Trackball>
 	  <LinearAxis tkCartesianVerticalAxis
 		      android:labelFormat="%.0f"></LinearAxis>
-	  <RadLegendView tkCartesianLegend position="Top"></RadLegendView>
+	  <RadLegendView tkCartesianLegend
+			 height="75"
+			 enableSelection="true"
+			 position="Top"
+			 title="Series Type"></RadLegendView>
         </RadCartesianChart>
       </CarouselItem>
       <CarouselItem>
@@ -72,6 +78,7 @@
 	  <BarSeries seriesName="Coast With"
 		     selectionMode="DataPoint"
 		     legendTitle="Coast With"
+		     legendLabel="Series Type"
 		     tkCartesianSeries [items]="HistoricalData.dataSource"
 		     categoryProperty="date"
 		     valueProperty="coastWith"></BarSeries>
@@ -79,6 +86,7 @@
 		     seriesName="Coast Without"
 		     selectionMode="DataPoint"
 		     legendTitle="Coast Without"
+		     legendLabel="Series Type"
 		     tkCartesianSeries [items]="HistoricalData.dataSource"
 		     categoryProperty="date"
 		     valueProperty="coastWithout"></BarSeries>
@@ -86,7 +94,11 @@
 				  tkCartesianHorizontalAxis
 				  plotMode="BetweenTicks"></DateTimeContinuousAxis>
 	  <LinearAxis tkCartesianVerticalAxis></LinearAxis>
-	  <RadLegendView tkCartesianLegend position="Top"></RadLegendView>
+	  <RadLegendView tkCartesianLegend
+			 height="75"
+			 enableSelection="true"
+			 title="Series Type"
+			 position="Top"></RadLegendView>
         </RadCartesianChart>
       </CarouselItem>
       <CarouselItem>
@@ -99,13 +111,26 @@
 	  <BarSeries seriesName="Distance"
 		     selectionMode="DataPoint"
 		     legendTitle="Distance"
+		     legendLabel="Series Type"
 		     tkCartesianSeries [items]="HistoricalData.dataSource"
 		     categoryProperty="date"
 		     valueProperty="distance"></BarSeries>
+	  <BarSeries seriesName="Speed"
+		     selectionMode="DataPoint"
+		     legendTitle="Speed"
+		     legendLabel="Series Type"
+		     tkCartesianSeries [items]="HistoricalData.dataSource"
+		     categoryProperty="date"
+		     valueProperty="speed"></BarSeries>
 	  <DateTimeContinuousAxis #drivingXAxis
 				  tkCartesianHorizontalAxis
 				  plotMode="BetweenTicks"></DateTimeContinuousAxis>
 	  <LinearAxis tkCartesianVerticalAxis></LinearAxis>
+	  <RadLegendView tkCartesianLegend
+			 height="75"
+			 enableSelection="true"
+			 title="Series Type"
+			 position="Top"></RadLegendView>
         </RadCartesianChart>
       </CarouselItem>
     </Carousel>
