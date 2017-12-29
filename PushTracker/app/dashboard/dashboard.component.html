@@ -38,13 +38,13 @@
 	  <BarSeries tkCartesianSeries
 		     legendTitle="Pushes With"
 		     stackMode="stack"
-		     items="{{ HistoricalDataSource }}"
+		     [items]="HistoricalData.dataSource"
 		     categoryProperty="Date"
 		     valueProperty="pushesWith"></BarSeries>
 	  <BarSeries tkCartesianSeries
 		     legendTitle="Pushes Without"
 		     stackMode="stack"
-		     items="{{ HistoricalDataSource }}"
+		     [items]="HistoricalData.dataSource"
 		     categoryProperty="Date"
 		     valueProperty="pushesWithout"></BarSeries>
 	  <DateTimeContinuousAxis tkCartesianHorizontalAxis></DateTimeContinuousAxis>
@@ -64,12 +64,12 @@
         <RadCartesianChart class="dashboard-chart">
 	  <BarSeries tkCartesianSeries
 		     legendTitle="Coast With"
-		     items="{{ HistoricalDataSource }}"
+		     [items]="HistoricalData.dataSource"
 		     categoryProperty="Date"
 		     valueProperty="coastWith"></BarSeries>
 	  <BarSeries tkCartesianSeries
 		     legendTitle="Coast Without"
-		     items="{{ HistoricalDataSource }}"
+		     [items]="HistoricalData.dataSource"
 		     categoryProperty="Date"
 		     valueProperty="coastWithout"></BarSeries>
 	  <DateTimeContinuousAxis tkCartesianHorizontalAxis></DateTimeContinuousAxis>
@@ -88,12 +88,12 @@
         <RadCartesianChart class="dashboard-chart">
 	  <BarSeries tkCartesianSeries
 		     legendTitle="Distance"
-		     items="{{ HistoricalDataSource }}"
+		     [items]="HistoricalData.dataSource"
 		     categoryProperty="Date"
 		     valueProperty="distance"></BarSeries>
 	  <BarSeries tkCartesianSeries
 		     legendTitle="Speed"
-		     items="{{ HistoricalDataSource }}"
+		     [items]="HistoricalData.dataSource"
 		     categoryProperty="Date"
 		     valueProperty="speed"></BarSeries>
 	  <DateTimeContinuousAxis tkCartesianHorizontalAxis></DateTimeContinuousAxis>

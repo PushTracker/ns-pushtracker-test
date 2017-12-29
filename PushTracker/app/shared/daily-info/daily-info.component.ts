@@ -27,24 +27,15 @@ export class DailyInfoComponent implements OnInit {
 
     // functions
 
-    constructor(bytes?: Array<any>) {
-	if (bytes !== null && bytes !== undefined) {
-	    this.fromUint8Array(bytes);
-	}
-    }
-
     constructor(obj?: any) {
-	this.year = obj && obj.year || 2017;
-	this.month = obj && obj.month || 1;
-	this.day = obj && obj.day || 1;
-	this.pushesWith = obj && obj.pushesWith || 0;
-	this.pushesWithout = obj && obj.pushesWithout || 0;
-	this.coastWith = obj && obj.coastWith || 0;
-	this.coastWithout = obj && obj.coastWithout || 0;
-	this.distance = obj && obj.distance || 0;
-	this.speed = obj && obj.speed || 0;
-	this.ptBattery = obj && obj.ptBattery || 0;
-	this.sdBattery = obj && obj.sdBattery || 0;
+	if (obj !== null && obj !== undefined) {
+	    if (typeof obj === typeof Array) {
+		this.fromUint8Array(obj);
+	    }
+	    else {
+		this.fromObject(obj);
+	    }
+	}
     }
 
     public add(di): void {
@@ -76,13 +67,27 @@ export class DailyInfoComponent implements OnInit {
 	    this.day === di.day;
     }
 
-    public fromUint8Array(arr): void {
+    public fromObject(obj: any): void {
+	this.year = obj && obj.year || 2017;
+	this.month = obj && obj.month || 1;
+	this.day = obj && obj.day || 1;
+	this.pushesWith = obj && obj.pushesWith || 0;
+	this.pushesWithout = obj && obj.pushesWithout || 0;
+	this.coastWith = obj && obj.coastWith || 0;
+	this.coastWithout = obj && obj.coastWithout || 0;
+	this.distance = obj && obj.distance || 0;
+	this.speed = obj && obj.speed || 0;
+	this.ptBattery = obj && obj.ptBattery || 0;
+	this.sdBattery = obj && obj.sdBattery || 0;
+    }
+
+    public fromUint8Array(arr: Uint8Array): void {
 	const p = new Packet(arr);
 	this.fromPacket(p);
 	p.destroy();
     }
 
-    public fromPacket(p): void {
+    public fromPacket(p: Packet): void {
 	const di = p.data("dailyInfo");
 	this.year = di.year;
 	this.month = di.month;

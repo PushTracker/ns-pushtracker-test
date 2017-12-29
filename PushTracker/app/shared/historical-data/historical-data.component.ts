@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ObservableArray, ChangedData, ChangeType } from "tns-core-modules/data/observable-array";
 
-import { setItem, getItem } from "nativescript-localstorage";
+import * as localStorage from "nativescript-localstorage";
 
 import { DailyInfoComponent } from "../daily-info/daily-info.component";
+
+//import { Date } from "../date";
 
 @Component({
     moduleId: module.id,
@@ -24,25 +26,25 @@ export class HistoricalDataComponent implements OnInit {
 
     // functions
 
-    constructor() {
+    private constructor() {
 	if (HistoricalDataComponent._instance) {
 	    return HistoricalDataComponent._instance;
 	}
 	HistoricalDataComponent._instance = this;
     }
 
-    public getInstance(): HistoricalDataComponent {
-	return HistoricalDataComponent._instance;
+    public static getInstance(): HistoricalDataComponent {
+	return this._instance || (this._instance = new this());
     }
 
     public saveData(): void {
 	const key = HistoricalDataComponent.fsKeyPrefix + HistoricalDataComponent.fsKeyData;
-	setItem(key, this.data);
+	localStorage.setItem(key, this.data);
     }
 
     public loadData(): void {
 	const key = HistoricalDataComponent.fsKeyPrefix + HistoricalDataComponent.fsKeyData;
-	this.data = getItem(key) || [];
+	this.data = localStorage.getItem(key) || [];
     }
 
     public convertData(dailyInfo: DailyInfoComponent): void {

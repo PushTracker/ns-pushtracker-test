@@ -4,6 +4,8 @@ import { SegmentedBar, SegmentedBarItem } from "ui/segmented-bar";
 
 import { RadSideDrawerComponent } from "nativescript-pro-ui/sidedrawer/angular";
 
+import { HistoricalDataComponent } from "../shared/historical-data/historical-data.component";
+
 @Component({
     selector: "Dashboard",
     moduleId: module.id,
@@ -22,10 +24,13 @@ export class DashboardComponent implements OnInit {
     public timeSelections: Array<SegmentedBarItem>;
     public selectedTime: string = this.times[2];
 
+    public HistoricalData: HistoricalDataComponent = HistoricalDataComponent.getInstance();
+
     // private members
     private _sideDrawerTransition: DrawerTransitionBase;
 
     constructor() {
+	console.log(this.HistoricalData);
         this.timeSelections = [];
         this.times.map((t) => {
             const item = new SegmentedBarItem();
