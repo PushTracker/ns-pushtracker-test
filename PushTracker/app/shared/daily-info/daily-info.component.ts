@@ -22,7 +22,7 @@ export class DailyInfoComponent implements OnInit {
     public speed: number = 0;
     public ptBattery: number = 0;
     public sdBattery: number = 0;
-    public date: Date = null;
+    public date: number = null;
 
     // private members
 
@@ -81,7 +81,7 @@ export class DailyInfoComponent implements OnInit {
 	this.ptBattery = obj && obj.ptBattery || 0;
 	this.sdBattery = obj && obj.sdBattery || 0;
 
-	this.date = this.getDate();
+	this.date = this.getDate().getTime();
     }
 
     public fromUint8Array(arr: Uint8Array): void {
@@ -104,7 +104,7 @@ export class DailyInfoComponent implements OnInit {
 	this.ptBattery = di.ptBattery;
 	this.sdBattery = di.sdBattery;
 
-	this.date = this.getDate();
+	this.date = this.getDate().getTime();
     }
 
     ngOnInit() { }

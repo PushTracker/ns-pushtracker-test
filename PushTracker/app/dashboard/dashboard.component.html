@@ -35,10 +35,12 @@
       <CarouselItem>
         <Label text="Pushes" class="daily-info-label"></Label>
         <RadCartesianChart
+	  visible="false"
 	  (pointSelected)="selectPoint($event)"
 	  (pointDeselected)="unselectPoint($event)"
 	  seriesSelectionMode="Single"
 	  class="dashboard-chart">
+	  <Trackball tkCartesianTrackball></Trackball>
 	  <BarSeries seriesName="Pushes With"
 		     selectionMode="DataPoint"
 		     legendTitle="Pushes With"
@@ -58,7 +60,6 @@
 	  <DateTimeContinuousAxis #pushesXAxis
 				  tkCartesianHorizontalAxis
 				  plotMode="BetweenTicks"></DateTimeContinuousAxis>
-	  <Trackball></Trackball>
 	  <LinearAxis tkCartesianVerticalAxis
 		      android:labelFormat="%.0f"></LinearAxis>
 	  <RadLegendView tkCartesianLegend
@@ -75,6 +76,7 @@
 	  (pointDeselected)="unselectPoint($event)"
 	  seriesSelectionMode="Single"
 	  class="dashboard-chart">
+	  <Trackball tkCartesianTrackball></Trackball>
 	  <BarSeries seriesName="Coast With"
 		     selectionMode="DataPoint"
 		     legendTitle="Coast With"
@@ -108,6 +110,7 @@
 	  (pointDeselected)="unselectPoint($event)"
 	  seriesSelectionMode="Single"
 	  class="dashboard-chart">
+	  <Trackball tkCartesianTrackball></Trackball>
 	  <BarSeries seriesName="Distance"
 		     selectionMode="DataPoint"
 		     legendTitle="Distance"

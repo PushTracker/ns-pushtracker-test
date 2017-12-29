@@ -31,10 +31,32 @@ export class HistoricalDataComponent implements OnInit {
 	}
 	HistoricalDataComponent._instance = this;
 	this.update(new DailyInfoComponent({
+	    month: 11,
+	    day: 25,
 	    pushesWith: 10,
 	    pushesWithout: 14,
 	    coastWith: 10.4,
 	    coastWithout: 1.2,
+	    distance: 8.8,
+	    speed: 4.3
+	}));
+	this.update(new DailyInfoComponent({
+	    month: 11,
+	    day: 26,
+	    pushesWith: 4,
+	    pushesWithout: 20,
+	    coastWith: 20,
+	    coastWithout: 1,
+	    distance: 8.8,
+	    speed: 4.3
+	}));
+	this.update(new DailyInfoComponent({
+	    month: 11,
+	    day: 27,
+	    pushesWith: 4,
+	    pushesWithout: 1,
+	    coastWith: 8,
+	    coastWithout: 2,
 	    distance: 8.8,
 	    speed: 4.3
 	}));
