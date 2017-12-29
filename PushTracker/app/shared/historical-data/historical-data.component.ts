@@ -31,6 +31,14 @@ export class HistoricalDataComponent implements OnInit {
 	    return HistoricalDataComponent._instance;
 	}
 	HistoricalDataComponent._instance = this;
+	this.update(new DailyInfoComponent({
+	    pushesWith: 10,
+	    pushesWithout: 14,
+	    coastWith: 10.4,
+	    coastWithout: 1.2,
+	    distance: 8.8,
+	    speed: 4.3
+	}));
     }
 
     public static getInstance(): HistoricalDataComponent {
@@ -38,13 +46,23 @@ export class HistoricalDataComponent implements OnInit {
     }
 
     public saveData(): void {
-	const key = HistoricalDataComponent.fsKeyPrefix + HistoricalDataComponent.fsKeyData;
-	localStorage.setItem(key, this.data);
+	try {
+	    const key = HistoricalDataComponent.fsKeyPrefix + HistoricalDataComponent.fsKeyData;
+	    localStorage.setItem(key, this.data);
+	}
+	catch (ex) {
+	    console.log(`couldn't save HistoricalData: ${ex}`);
+	}
     }
 
     public loadData(): void {
-	const key = HistoricalDataComponent.fsKeyPrefix + HistoricalDataComponent.fsKeyData;
-	this.data = localStorage.getItem(key) || [];
+	try {
+	    const key = HistoricalDataComponent.fsKeyPrefix + HistoricalDataComponent.fsKeyData;
+	    this.data = localStorage.getItem(key) || [];
+	}
+	catch (ex) {
+	    console.log(`couldn't load HistoricalData: ${ex}`);
+	}
     }
 
     public convertData(dailyInfo: DailyInfoComponent): void {

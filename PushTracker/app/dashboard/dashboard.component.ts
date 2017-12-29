@@ -30,7 +30,6 @@ export class DashboardComponent implements OnInit {
     private _sideDrawerTransition: DrawerTransitionBase;
 
     constructor() {
-	console.log(this.HistoricalData);
         this.timeSelections = [];
         this.times.map((t) => {
             const item = new SegmentedBarItem();

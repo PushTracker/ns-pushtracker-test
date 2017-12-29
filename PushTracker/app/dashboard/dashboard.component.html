@@ -36,16 +36,18 @@
         <Label text="Pushes" class="daily-info-label"></Label>
         <RadCartesianChart class="dashboard-chart">
 	  <BarSeries tkCartesianSeries
+		     selectionMode="DataPoint"
 		     legendTitle="Pushes With"
 		     stackMode="stack"
 		     [items]="HistoricalData.dataSource"
-		     categoryProperty="Date"
+		     categoryProperty="date"
 		     valueProperty="pushesWith"></BarSeries>
 	  <BarSeries tkCartesianSeries
+		     selectionMode="DataPoint"
 		     legendTitle="Pushes Without"
 		     stackMode="stack"
 		     [items]="HistoricalData.dataSource"
-		     categoryProperty="Date"
+		     categoryProperty="date"
 		     valueProperty="pushesWithout"></BarSeries>
 	  <DateTimeContinuousAxis tkCartesianHorizontalAxis></DateTimeContinuousAxis>
 	  <!--
@@ -63,14 +65,16 @@
         <Label text="Coast" class="daily-info-label"></Label>
         <RadCartesianChart class="dashboard-chart">
 	  <BarSeries tkCartesianSeries
+		     selectionMode="DataPoint"
 		     legendTitle="Coast With"
 		     [items]="HistoricalData.dataSource"
-		     categoryProperty="Date"
+		     categoryProperty="date"
 		     valueProperty="coastWith"></BarSeries>
 	  <BarSeries tkCartesianSeries
+		     selectionMode="DataPoint"
 		     legendTitle="Coast Without"
 		     [items]="HistoricalData.dataSource"
-		     categoryProperty="Date"
+		     categoryProperty="date"
 		     valueProperty="coastWithout"></BarSeries>
 	  <DateTimeContinuousAxis tkCartesianHorizontalAxis></DateTimeContinuousAxis>
 	  <!--
@@ -87,14 +91,16 @@
         <Label text="Driving" class="daily-info-label"></Label>
         <RadCartesianChart class="dashboard-chart">
 	  <BarSeries tkCartesianSeries
+		     selectionMode="DataPoint"
 		     legendTitle="Distance"
 		     [items]="HistoricalData.dataSource"
-		     categoryProperty="Date"
+		     categoryProperty="date"
 		     valueProperty="distance"></BarSeries>
 	  <BarSeries tkCartesianSeries
+		     selectionMode="DataPoint"
 		     legendTitle="Speed"
 		     [items]="HistoricalData.dataSource"
-		     categoryProperty="Date"
+		     categoryProperty="date"
 		     valueProperty="speed"></BarSeries>
 	  <DateTimeContinuousAxis tkCartesianHorizontalAxis></DateTimeContinuousAxis>
 	  <!--
