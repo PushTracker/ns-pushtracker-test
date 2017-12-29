@@ -53,7 +53,7 @@ export class DashboardComponent implements OnInit {
 	let minimum = (7).days().ago();
 	let maximum = (0).days().ago();
 	let dateFormat = "MMM d";
-	let majorStep = "Week";
+	let majorStep = "Day";
 	let labelFitMode = "None";
 	let majorTickInterval = 1;
 	switch (this.selectedTime) {
@@ -63,14 +63,14 @@ export class DashboardComponent implements OnInit {
 	case "Month":
 	    majorTickInterval = 7;
 	    minimum = (31).days().ago();
-	    majorStep = "Month";
+	    majorStep = "Week";
 	    labelFitMode = "Rotate";
 	    break;
 	case "Year":
 	    minimum = (11).months().ago();
 	    maximum = (0).months().ago();
 	    dateFormat = "MMM";
-	    majorStep = "Year";
+	    majorStep = "Month";
 	    break;
 	}
 	let xAxis = null;
@@ -78,7 +78,7 @@ export class DashboardComponent implements OnInit {
 	    xAxis = <LinearAxis>this.pushesXAxis.nativeElement;
 	    xAxis.minimum = minimum.toString("dd/MM/yyyy");
 	    xAxis.maximum = minimum.toString("dd/MM/yyyy");
-	    //xAxis.majorStep = majorStep;
+	    xAxis.majorStep = majorStep;
 	    xAxis.dateFormat= dateFormat;
 	    xAxis.labelFitMode = labelFitMode;
 	    xAxis.majorTickInterval = majorTickInterval;
@@ -87,7 +87,7 @@ export class DashboardComponent implements OnInit {
 	    xAxis = <LinearAxis>this.coastXAxis.nativeElement;
 	    xAxis.minimum = minimum.toString("dd/MM/yyyy");
 	    xAxis.maximum = minimum.toString("dd/MM/yyyy");
-	    //xAxis.majorStep = majorStep;
+	    xAxis.majorStep = majorStep;
 	    xAxis.dateFormat= dateFormat;
 	    xAxis.labelFitMode = labelFitMode;
 	    xAxis.majorTickInterval = majorTickInterval;
@@ -96,7 +96,7 @@ export class DashboardComponent implements OnInit {
 	    xAxis = <LinearAxis>this.drivingXAxis.nativeElement;
 	    xAxis.minimum = minimum.toString("dd/MM/yyyy");
 	    xAxis.maximum = minimum.toString("dd/MM/yyyy");
-	    //xAxis.majorStep = majorStep;
+	    xAxis.majorStep = majorStep;
 	    xAxis.dateFormat= dateFormat;
 	    xAxis.labelFitMode = labelFitMode;
 	    xAxis.majorTickInterval = majorTickInterval;
