@@ -54,7 +54,8 @@
             dateFormat="{{ getDateFormat.format }}"
             labelFitMode="{{ getDateFormat.labelFitMode }}"></DateTimeContinuousAxis>
 	    -->
-	  <LinearAxis tkCartesianVerticalAxis></LinearAxis>
+	  <LinearAxis tkCartesianVerticalAxis
+		      android:labelFormat="%.0f"></LinearAxis>
 	  <RadLegendView tkCartesianLegend position="Top"></RadLegendView>
         </RadCartesianChart>
       </CarouselItem>
