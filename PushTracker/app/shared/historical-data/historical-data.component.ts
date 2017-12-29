@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ObservableArray, ChangedData, ChangeType } from "tns-core-modules/data/observable-array";
 
 import * as localStorage from "nativescript-localstorage";
 
@@ -16,7 +15,7 @@ import { DailyInfoComponent } from "../daily-info/daily-info.component";
 export class HistoricalDataComponent implements OnInit {
 
     // public members
-    public dataSource: ObservableArray<DailyInfoComponent> = new ObservableArray();
+    public dataSource: Array<DailyInfoComponent> = []
 
     // private members
     private data: Array<DailyInfoComponent> = [];

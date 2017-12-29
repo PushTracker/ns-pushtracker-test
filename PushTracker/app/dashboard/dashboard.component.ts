@@ -1,10 +1,13 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, ElementRef, Injectable, OnInit, ViewChild } from "@angular/core";
 import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-pro-ui/sidedrawer";
 import { SegmentedBar, SegmentedBarItem } from "ui/segmented-bar";
+import { LinearAxis } from "nativescript-pro-ui/chart";
 
 import { RadSideDrawerComponent } from "nativescript-pro-ui/sidedrawer/angular";
 
 import { HistoricalDataComponent } from "../shared/historical-data/historical-data.component";
+
+//require("../shared/date");
 
 @Component({
     selector: "Dashboard",
@@ -18,6 +21,10 @@ export class DashboardComponent implements OnInit {
     * It is used in the "onDrawerButtonTap" function below to manipulate the drawer.
     *************************************************************/
     @ViewChild("drawer") drawerComponent: RadSideDrawerComponent;
+    
+    @ViewChild("pushesXAxis") pushesXAxis: ElementRef;
+    @ViewChild("coastXAxis") coastXAxis: ElementRef;
+    @ViewChild("drivingXAxis") drivingXAxis: ElementRef;
 
     // public members
     public times: Array<string> = ["Year", "Month", "Week"];
@@ -38,10 +45,82 @@ export class DashboardComponent implements OnInit {
         });
     }
 
-    onSelectedIndexChange(args): void {
+    public onSelectedIndexChange(args): void {
         const segmentedBar = <SegmentedBar>args.object;
         this.selectedTime = this.times[segmentedBar.selectedIndex];
-        console.log(this.selectedTime);
+
+	let minimum = (7).days().ago();
+	let maximum = (0).days().ago();
+	let dateFormat = "MMM d";
+	let majorStep = "Day";
+	let labelFitMode = "None";
+	let majorTickInterval = 1;
+	switch (this.selectedTime) {
+	default:
+	case "Week":
+	    break;
+	case "Month":
+	    majorTickInterval = 7;
+	    minimum = (31).days().ago();
+	    majorStep = "Week";
+	    labelFitMode = "Rotate";
+	    break;
+	case "Year":
+	    minimum = (11).months().ago();
+	    maximum = (0).months().ago();
+	    dateFormat = "MMM";
+	    majorStep = "Month";
+	    break;
+	}
+	let xAxis = null;
+	if (this.pushesXAxis !== undefined) {
+	    xAxis = <LinearAxis>this.pushesXAxis.nativeElement;
+	    xAxis.minimum = minimum.toString("dd/MM/yyyy");
+	    xAxis.maximum = minimum.toString("dd/MM/yyyy");
+	    xAxis.majorStep = majorStep;
+	    xAxis.dateFormat= dateFormat;
+	    xAxis.labelFitMode = labelFitMode;
+	    xAxis.majorTickInterval = majorTickInterval;
+	}
+	if (this.coastXAxis !== undefined) {
+	    xAxis = <LinearAxis>this.coastXAxis.nativeElement;
+	    xAxis.minimum = minimum.toString("dd/MM/yyyy");
+	    xAxis.maximum = minimum.toString("dd/MM/yyyy");
+	    xAxis.majorStep = majorStep;
+	    xAxis.dateFormat= dateFormat;
+	    xAxis.labelFitMode = labelFitMode;
+	    xAxis.majorTickInterval = majorTickInterval;
+	}
+	if (this.drivingXAxis !== undefined) {
+	    xAxis = <LinearAxis>this.drivingXAxis.nativeElement;
+	    xAxis.minimum = minimum.toString("dd/MM/yyyy");
+	    xAxis.maximum = minimum.toString("dd/MM/yyyy");
+	    xAxis.majorStep = majorStep;
+	    xAxis.dateFormat= dateFormat;
+	    xAxis.labelFitMode = labelFitMode;
+	    xAxis.majorTickInterval = majorTickInterval;
+	}
+    }
+
+    public selectPoint(args): void {
+	const eventName = args.eventName;
+	const point = args.object;
+	const series = args.series;
+	const pointIndex = args.pointIndex;
+	const pointData = args.pointData;
+
+	console.log(args.object);
+	console.log(pointIndex);
+	console.log(series.items[pointIndex]);
+	console.log(series.seriesName);
+    }
+
+    public unselectPoint(args): void {
+	const eventName = args.eventName;
+	const point = args.object;
+	const series = args.series;
+	const pointIndex = args.pointIndex;
+	const pointData = args.pointData;
     }
 
     /* ***********************************************************

@@ -34,28 +34,29 @@
     <Carousel row="0" indicatorOffset="0,70" indicatorColor="#66ccff" indicatorColorUnselected="#cceeff">
       <CarouselItem>
         <Label text="Pushes" class="daily-info-label"></Label>
-        <RadCartesianChart class="dashboard-chart">
-	  <BarSeries tkCartesianSeries
+        <RadCartesianChart
+	  (pointSelected)="selectPoint($event)"
+	  (pointDeselected)="unselectPoint($event)"
+	  seriesSelectionMode="Single"
+	  class="dashboard-chart">
+	  <BarSeries seriesName="Pushes With"
 		     selectionMode="DataPoint"
 		     legendTitle="Pushes With"
 		     stackMode="stack"
-		     [items]="HistoricalData.dataSource"
+		     tkCartesianSeries [items]="HistoricalData.dataSource"
 		     categoryProperty="date"
 		     valueProperty="pushesWith"></BarSeries>
-	  <BarSeries tkCartesianSeries
+	  <BarSeries seriesName="Pushes Without"
 		     selectionMode="DataPoint"
 		     legendTitle="Pushes Without"
 		     stackMode="stack"
-		     [items]="HistoricalData.dataSource"
+		     tkCartesianSeries [items]="HistoricalData.dataSource"
 		     categoryProperty="date"
 		     valueProperty="pushesWithout"></BarSeries>
-	  <DateTimeContinuousAxis tkCartesianHorizontalAxis></DateTimeContinuousAxis>
-	  <!--
-            plotMode="{{ getDateFormat.plotMode }}"
-            majorStep="{{ getDateFormat.majorStep }}"
-            dateFormat="{{ getDateFormat.format }}"
-            labelFitMode="{{ getDateFormat.labelFitMode }}"></DateTimeContinuousAxis>
-	    -->
+	  <DateTimeContinuousAxis #pushesXAxis
+				  tkCartesianHorizontalAxis
+				  plotMode="BetweenTicks"></DateTimeContinuousAxis>
+	  <Trackball></Trackball>
 	  <LinearAxis tkCartesianVerticalAxis
 		      android:labelFormat="%.0f"></LinearAxis>
 	  <RadLegendView tkCartesianLegend position="Top"></RadLegendView>
@@ -63,54 +64,48 @@
       </CarouselItem>
       <CarouselItem>
         <Label text="Coast" class="daily-info-label"></Label>
-        <RadCartesianChart class="dashboard-chart">
-	  <BarSeries tkCartesianSeries
+        <RadCartesianChart
+	  (pointSelected)="selectPoint($event)"
+	  (pointDeselected)="unselectPoint($event)"
+	  seriesSelectionMode="Single"
+	  class="dashboard-chart">
+	  <BarSeries seriesName="Coast With"
 		     selectionMode="DataPoint"
 		     legendTitle="Coast With"
-		     [items]="HistoricalData.dataSource"
+		     tkCartesianSeries [items]="HistoricalData.dataSource"
 		     categoryProperty="date"
 		     valueProperty="coastWith"></BarSeries>
-	  <BarSeries tkCartesianSeries
+	  <BarSeries showLabels="true"
+		     seriesName="Coast Without"
 		     selectionMode="DataPoint"
 		     legendTitle="Coast Without"
-		     [items]="HistoricalData.dataSource"
+		     tkCartesianSeries [items]="HistoricalData.dataSource"
 		     categoryProperty="date"
 		     valueProperty="coastWithout"></BarSeries>
-	  <DateTimeContinuousAxis tkCartesianHorizontalAxis></DateTimeContinuousAxis>
-	  <!--
-            plotMode="{{ getDateFormat.plotMode }}"
-            majorStep="{{ getDateFormat.majorStep }}"
-            dateFormat="{{ getDateFormat.format }}"
-            labelFitMode="{{ getDateFormat.labelFitMode }}"></DateTimeContinuousAxis>
-	    -->
+	  <DateTimeContinuousAxis #coastXAxis
+				  tkCartesianHorizontalAxis
+				  plotMode="BetweenTicks"></DateTimeContinuousAxis>
 	  <LinearAxis tkCartesianVerticalAxis></LinearAxis>
 	  <RadLegendView tkCartesianLegend position="Top"></RadLegendView>
         </RadCartesianChart>
       </CarouselItem>
       <CarouselItem>
-        <Label text="Driving" class="daily-info-label"></Label>
-        <RadCartesianChart class="dashboard-chart">
-	  <BarSeries tkCartesianSeries
+        <Label text="Distance" class="daily-info-label"></Label>
+        <RadCartesianChart
+	  (pointSelected)="selectPoint($event)"
+	  (pointDeselected)="unselectPoint($event)"
+	  seriesSelectionMode="Single"
+	  class="dashboard-chart">
+	  <BarSeries seriesName="Distance"
 		     selectionMode="DataPoint"
 		     legendTitle="Distance"
-		     [items]="HistoricalData.dataSource"
+		     tkCartesianSeries [items]="HistoricalData.dataSource"
 		     categoryProperty="date"
 		     valueProperty="distance"></BarSeries>
-	  <BarSeries tkCartesianSeries
-		     selectionMode="DataPoint"
-		     legendTitle="Speed"
-		     [items]="HistoricalData.dataSource"
-		     categoryProperty="date"
-		     valueProperty="speed"></BarSeries>
-	  <DateTimeContinuousAxis tkCartesianHorizontalAxis></DateTimeContinuousAxis>
-	  <!--
-            plotMode="{{ getDateFormat.plotMode }}"
-            majorStep="{{ getDateFormat.majorStep }}"
-            dateFormat="{{ getDateFormat.format }}"
-            labelFitMode="{{ getDateFormat.labelFitMode }}"></DateTimeContinuousAxis>
-	    -->
+	  <DateTimeContinuousAxis #drivingXAxis
+				  tkCartesianHorizontalAxis
+				  plotMode="BetweenTicks"></DateTimeContinuousAxis>
 	  <LinearAxis tkCartesianVerticalAxis></LinearAxis>
-	  <RadLegendView tkCartesianLegend position="Top"></RadLegendView>
         </RadCartesianChart>
       </CarouselItem>
     </Carousel>

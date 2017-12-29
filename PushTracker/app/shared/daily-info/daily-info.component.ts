@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Packet } from "../packet/packet";
 
+require("../date");
+
 @Component({
     moduleId: module.id,
     selector: 'app-daily-info',
