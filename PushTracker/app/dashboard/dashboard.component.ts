@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from "@angular/core";
-import { SegmentedBar, SegmentedBarItem } from "ui/segmented-bar";
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from "@angular/core";
 import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-pro-ui/sidedrawer";
+import { SegmentedBar, SegmentedBarItem } from "ui/segmented-bar";
+
 import { RadSideDrawerComponent } from "nativescript-pro-ui/sidedrawer/angular";
 
 @Component({
@@ -16,25 +17,27 @@ export class DashboardComponent implements OnInit {
     *************************************************************/
     @ViewChild("drawer") drawerComponent: RadSideDrawerComponent;
 
-    private _sideDrawerTransition: DrawerTransitionBase;
-
+    // public members
     public times: Array<string> = ["Year", "Month", "Week"];
     public timeSelections: Array<SegmentedBarItem>;
     public selectedTime: string = this.times[2];
 
+    // private members
+    private _sideDrawerTransition: DrawerTransitionBase;
+
     constructor() {
-	this.timeSelections = [];
-	this.times.map((t) => {
-	    const item = new SegmentedBarItem();
-	    item.title = t;
-	    this.timeSelections.push(item);
-	});
+        this.timeSelections = [];
+        this.times.map((t) => {
+            const item = new SegmentedBarItem();
+            item.title = t;
+            this.timeSelections.push(item);
+        });
     }
 
-    public onSelectedIndexChange(args) {
-	let segmentedBar = <SegmentedBar>args.object;
-	this.selectedTime = this.times[segmentedBar.selectedIndex];
-	console.log(this.selectedTime);
+    onSelectedIndexChange(args): void {
+        const segmentedBar = <SegmentedBar>args.object;
+        this.selectedTime = this.times[segmentedBar.selectedIndex];
+        console.log(this.selectedTime);
     }
 
     /* ***********************************************************
