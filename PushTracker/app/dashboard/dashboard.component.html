@@ -84,13 +84,18 @@
         </RadCartesianChart>
       </CarouselItem>
       <CarouselItem>
-        <Label text="Distance" class="daily-info-label"></Label>
+        <Label text="Driving" class="daily-info-label"></Label>
         <RadCartesianChart class="dashboard-chart">
 	  <BarSeries tkCartesianSeries
 		     legendTitle="Distance"
 		     items="{{ HistoricalDataSource }}"
 		     categoryProperty="Date"
 		     valueProperty="distance"></BarSeries>
+	  <BarSeries tkCartesianSeries
+		     legendTitle="Speed"
+		     items="{{ HistoricalDataSource }}"
+		     categoryProperty="Date"
+		     valueProperty="speed"></BarSeries>
 	  <DateTimeContinuousAxis tkCartesianHorizontalAxis></DateTimeContinuousAxis>
 	  <!--
             plotMode="{{ getDateFormat.plotMode }}"

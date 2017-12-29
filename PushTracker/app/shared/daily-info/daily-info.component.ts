@@ -47,7 +47,7 @@ export class DailyInfoComponent implements OnInit {
 	this.sdBattery = obj && obj.sdBattery || 0;
     }
 
-    add(di): void {
+    public add(di): void {
 	this.pushesWith += di && di.pushesWith || 0;
 	this.pushesWithout += di && di.pushesWithout || 0;
 	this.coastWith += di && di.coastWith || 0;
@@ -55,34 +55,34 @@ export class DailyInfoComponent implements OnInit {
 	this.distance += di && di.distance || 0;
     }
 
-    getDate(): Date {
+    public getDate(): Date {
 	return new Date(
-	    year,
-	    month - 1, // their month is zero indexed
-	    day
+	    this.year,
+	    this.month - 1, // their month is zero indexed
+	    this.day
 	);
     }
 
-    sameAsDate(date): bool {
+    public sameAsDate(date): boolean {
 	const d = this.getDate();
 	return d.getFullYear() === date.getFullYear() &&
 	    d.getMonth() === date.getMonth() &&
 	    d.getDate() === date.getDate();
     }
 
-    sameAsDailyInfo(di): bool {
+    public sameAsDailyInfo(di): boolean {
 	return this.year === di.year &&
 	    this.month === di.month &&
 	    this.day === di.day;
     }
 
-    fromUint8Array(arr): void {
+    public fromUint8Array(arr): void {
 	const p = new Packet(arr);
 	this.fromPacket(p);
 	p.destroy();
     }
 
-    fromPacket(p): void {
+    public fromPacket(p): void {
 	const di = p.data("dailyInfo");
 	this.year = di.year;
 	this.month = di.month;
