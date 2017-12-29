@@ -35,7 +35,8 @@ export class MyDrawerItemComponent implements OnInit {
         this.routerExtensions.navigate([navItemRoute], {
             transition: {
                 name: "fade"
-            }
+            },
+	    clearHistory: true
         });
     }
 }
