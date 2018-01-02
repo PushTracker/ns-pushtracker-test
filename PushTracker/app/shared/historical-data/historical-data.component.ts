@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ObservableArray } from "tns-core-modules/data/observable-array";
 
 import * as localStorage from "nativescript-localstorage";
 
@@ -15,7 +16,7 @@ import { DailyInfoComponent } from "../daily-info/daily-info.component";
 export class HistoricalDataComponent implements OnInit {
 
     // public members
-    public dataSource: Array<DailyInfoComponent> = []
+    public dataSource: ObservableArray<DailyInfoComponent> = new ObservableArray();
 
     // private members
     private data: Array<DailyInfoComponent> = [];
@@ -29,9 +30,9 @@ export class HistoricalDataComponent implements OnInit {
 	if (HistoricalDataComponent._instance) {
 	    return HistoricalDataComponent._instance;
 	}
-	HistoricalDataComponent._instance = this;
+	HistoricalDataComponent._instance = this;	
 	this.update(new DailyInfoComponent({
-	    month: 11,
+	    month: 12,
 	    day: 25,
 	    pushesWith: 10,
 	    pushesWithout: 14,
@@ -41,7 +42,7 @@ export class HistoricalDataComponent implements OnInit {
 	    speed: 4.3
 	}));
 	this.update(new DailyInfoComponent({
-	    month: 11,
+	    month: 12,
 	    day: 26,
 	    pushesWith: 4,
 	    pushesWithout: 20,
@@ -51,8 +52,40 @@ export class HistoricalDataComponent implements OnInit {
 	    speed: 4.3
 	}));
 	this.update(new DailyInfoComponent({
-	    month: 11,
+	    month: 12,
 	    day: 27,
+	    pushesWith: 4,
+	    pushesWithout: 1,
+	    coastWith: 8,
+	    coastWithout: 2,
+	    distance: 8.8,
+	    speed: 4.3
+	}));
+	this.update(new DailyInfoComponent({
+	    month: 12,
+	    day: 29,
+	    pushesWith: 4,
+	    pushesWithout: 1,
+	    coastWith: 8,
+	    coastWithout: 2,
+	    distance: 8.8,
+	    speed: 4.3
+	}));
+	this.update(new DailyInfoComponent({
+	    year: 2018,
+	    month: 1,
+	    day: 1,
+	    pushesWith: 4,
+	    pushesWithout: 1,
+	    coastWith: 8,
+	    coastWithout: 2,
+	    distance: 8.8,
+	    speed: 4.3
+	}));
+	this.update(new DailyInfoComponent({
+	    year: 2018,
+	    month: 1,
+	    day: 2,
 	    pushesWith: 4,
 	    pushesWithout: 1,
 	    coastWith: 8,
@@ -63,7 +96,7 @@ export class HistoricalDataComponent implements OnInit {
     }
 
     public static getInstance(): HistoricalDataComponent {
-	return this._instance || (this._instance = new this());
+	return this._instance || (this._instance = new HistoricalDataComponent());
     }
 
     public saveData(): void {
@@ -123,6 +156,6 @@ export class HistoricalDataComponent implements OnInit {
 	this.dataSource.splice(0, this.dataSource.length, ...this.data);
     }
 
-    ngOnInit() { }
-
+    ngOnInit() {
+    }
 }

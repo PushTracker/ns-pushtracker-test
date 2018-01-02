@@ -9,6 +9,15 @@
   <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()"
               ios.position="left">
   </ActionItem>
+
+  <ActionItem ios.position="right" android.position="actionBar">
+    <Button text="Init" (tap)="onDashboardInitTap()" class="action-item"></Button>
+  </ActionItem>
+
+  <ActionItem ios.position="right" android.position="actionBar">
+    <Button text="Clear" (tap)="onDashboardClearTap()" class="action-item"></Button>
+  </ActionItem>
+
   <Label class="action-bar-title" text="Dashboard"></Label>
 </ActionBar>
 
@@ -40,23 +49,28 @@
 	  (pointDeselected)="unselectPoint($event)"
 	  seriesSelectionMode="Single"
 	  class="dashboard-chart">
-	  <Trackball tkCartesianTrackball></Trackball>
-	  <BarSeries seriesName="Pushes With"
+	  <Trackball tkCartesianTrackball
+		     (trackBallContentRequested)="trackBallContentRequested($event)"
+		     showIntersectionPoints="true"
+		     snapMode="ClosestPoint"></Trackball>
+	  <AreaSeries #pushesWithSeries
+		     seriesName="Pushes With"
 		     selectionMode="DataPoint"
 		     legendTitle="Pushes With"
 		     legendLabel="Series Type"
 		     stackMode="stack"
-		     tkCartesianSeries [items]="HistoricalData.dataSource"
+		     tkCartesianSeries [items]="dataSource"
 		     categoryProperty="date"
-		     valueProperty="pushesWith"></BarSeries>
-	  <BarSeries seriesName="Pushes Without"
+		     valueProperty="pushesWith"></AreaSeries>
+	  <AreaSeries #pushesWithoutSeries
+		     seriesName="Pushes Without"
 		     selectionMode="DataPoint"
 		     legendTitle="Pushes Without"
 		     legendLabel="Series Type"
 		     stackMode="stack"
-		     tkCartesianSeries [items]="HistoricalData.dataSource"
+		     tkCartesianSeries [items]="dataSource"
 		     categoryProperty="date"
-		     valueProperty="pushesWithout"></BarSeries>
+		     valueProperty="pushesWithout"></AreaSeries>
 	  <DateTimeContinuousAxis #pushesXAxis
 				  tkCartesianHorizontalAxis
 				  plotMode="BetweenTicks"></DateTimeContinuousAxis>
@@ -76,22 +90,26 @@
 	  (pointDeselected)="unselectPoint($event)"
 	  seriesSelectionMode="Single"
 	  class="dashboard-chart">
-	  <Trackball tkCartesianTrackball></Trackball>
-	  <BarSeries seriesName="Coast With"
+	  <Trackball tkCartesianTrackball
+		     (trackBallContentRequested)="trackBallContentRequested($event)"
+		     showIntersectionPoints="true"
+		     snapMode="ClosestPoint"></Trackball>
+	  <AreaSeries #coastWithSeries
+		     seriesName="Coast With"
 		     selectionMode="DataPoint"
 		     legendTitle="Coast With"
 		     legendLabel="Series Type"
-		     tkCartesianSeries [items]="HistoricalData.dataSource"
+		     tkCartesianSeries [items]="dataSource"
 		     categoryProperty="date"
-		     valueProperty="coastWith"></BarSeries>
-	  <BarSeries showLabels="true"
+		     valueProperty="coastWith"></AreaSeries>
+	  <AreaSeries #coastWithoutSeries
 		     seriesName="Coast Without"
 		     selectionMode="DataPoint"
 		     legendTitle="Coast Without"
 		     legendLabel="Series Type"
-		     tkCartesianSeries [items]="HistoricalData.dataSource"
+		     tkCartesianSeries [items]="dataSource"
 		     categoryProperty="date"
-		     valueProperty="coastWithout"></BarSeries>
+		     valueProperty="coastWithout"></AreaSeries>
 	  <DateTimeContinuousAxis #coastXAxis
 				  tkCartesianHorizontalAxis
 				  plotMode="BetweenTicks"></DateTimeContinuousAxis>
@@ -104,27 +122,34 @@
         </RadCartesianChart>
       </CarouselItem>
       <CarouselItem>
-        <Label text="Distance" class="daily-info-label"></Label>
+        <Label text="Driving" class="daily-info-label"></Label>
         <RadCartesianChart
 	  (pointSelected)="selectPoint($event)"
 	  (pointDeselected)="unselectPoint($event)"
 	  seriesSelectionMode="Single"
 	  class="dashboard-chart">
-	  <Trackball tkCartesianTrackball></Trackball>
-	  <BarSeries seriesName="Distance"
+	  <Trackball tkCartesianTrackball
+		     (trackBallContentRequested)="trackBallContentRequested($event)"
+		     showIntersectionPoints="true"
+		     snapMode="ClosestPoint"></Trackball>
+	  <AreaSeries tkCartesianSeries
+		     #distanceSeries
+		     seriesName="Distance"
 		     selectionMode="DataPoint"
 		     legendTitle="Distance"
 		     legendLabel="Series Type"
-		     tkCartesianSeries [items]="HistoricalData.dataSource"
+		     [items]="dataSource"
 		     categoryProperty="date"
-		     valueProperty="distance"></BarSeries>
-	  <BarSeries seriesName="Speed"
+		     valueProperty="distance"></AreaSeries>
+	  <AreaSeries tkCartesianSeries
+		     #speedSeries
+		     seriesName="Speed"
 		     selectionMode="DataPoint"
 		     legendTitle="Speed"
 		     legendLabel="Series Type"
-		     tkCartesianSeries [items]="HistoricalData.dataSource"
+		     [items]="dataSource"
 		     categoryProperty="date"
-		     valueProperty="speed"></BarSeries>
+		     valueProperty="speed"></AreaSeries>
 	  <DateTimeContinuousAxis #drivingXAxis
 				  tkCartesianHorizontalAxis
 				  plotMode="BetweenTicks"></DateTimeContinuousAxis>

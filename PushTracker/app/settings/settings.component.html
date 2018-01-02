@@ -7,8 +7,13 @@
     Use the ActionItem for IOS with position set to left. Using the NavigationButton as a side-drawer button in iOS is not possible, because its function is to always navigate back in the application.
     -->
     <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()"
-        ios.position="left">
+		ios.position="left">
     </ActionItem>
+
+    <ActionItem ios.position="right">
+      <Button text="Save" (tap)="onSaveSettingsTap()" class="action-item"></Button>
+    </ActionItem>
+
     <Label class="action-bar-title" text="Settings"></Label>
 </ActionBar>
 

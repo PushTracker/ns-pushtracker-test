@@ -1,6 +1,12 @@
 // Custom common variables
 @import '../../app-variables';
 
+.action-item {
+    color: white;
+    font-size: 18;
+    text-transform: none;
+}
+
 .daily-info-label {
     horizontal-align: center;
     font-weight: bold;

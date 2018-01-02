@@ -19,7 +19,7 @@ export class HistoricalDataService {
     // private members
     private userChangedSource;
     private data: Array<DailyInfoComponent> = [];
-    private static _instance: HistoricalDataComponent = new HistoricalDataComponent();
+    //private static _instance: HistoricalDataService = new HistoricalDataService();
     private static fsKeyPrefix: string = "HistoricalDataComponent.";
     private static fsKeyData: string = "Data";
 
@@ -27,68 +27,8 @@ export class HistoricalDataService {
 	this.userChangedSource = new Subject<any>();
 	this.observableEvents = this.userChangedSource.asObservable();
 
-	this.update(new DailyInfoComponent({
-	    month: 12,
-	    day: 25,
-	    pushesWith: 10,
-	    pushesWithout: 14,
-	    coastWith: 10.4,
-	    coastWithout: 1.2,
-	    distance: 8.8,
-	    speed: 4.3
-	}));
-	this.update(new DailyInfoComponent({
-	    month: 12,
-	    day: 26,
-	    pushesWith: 4,
-	    pushesWithout: 20,
-	    coastWith: 20,
-	    coastWithout: 1,
-	    distance: 8.8,
-	    speed: 4.3
-	}));
-	this.update(new DailyInfoComponent({
-	    month: 12,
-	    day: 27,
-	    pushesWith: 4,
-	    pushesWithout: 1,
-	    coastWith: 8,
-	    coastWithout: 2,
-	    distance: 8.8,
-	    speed: 4.3
-	}));
-	this.update(new DailyInfoComponent({
-	    month: 12,
-	    day: 29,
-	    pushesWith: 4,
-	    pushesWithout: 1,
-	    coastWith: 8,
-	    coastWithout: 2,
-	    distance: 8.8,
-	    speed: 4.3
-	}));
-	this.update(new DailyInfoComponent({
-	    year: 2018,
-	    month: 1,
-	    day: 1,
-	    pushesWith: 4,
-	    pushesWithout: 1,
-	    coastWith: 8,
-	    coastWithout: 2,
-	    distance: 8.8,
-	    speed: 4.3
-	}));
-	this.update(new DailyInfoComponent({
-	    year: 2018,
-	    month: 1,
-	    day: 2,
-	    pushesWith: 4,
-	    pushesWithout: 1,
-	    coastWith: 8,
-	    coastWithout: 2,
-	    distance: 8.8,
-	    speed: 4.3
-	}));
+	this.loadData();
+	this.updateDataSource();
     }
 
     public getDataSource(): ObservableArray<DailyInfoComponent> {
@@ -149,7 +89,16 @@ export class HistoricalDataService {
     }
 
     public updateDataSource(): void {
-	this.dataSource.splice(0, this.dataSource.length, ...this.data);
+	this.dataSource.splice(0, this.dataSource.length);
+	this.data.map((d) => {
+	    this.dataSource.push(d);
+	});
+    }
+
+    public clear(): void {
+	this.data = [];
+	this.saveData();
+	this.updateDataSource();
     }
 
 }
