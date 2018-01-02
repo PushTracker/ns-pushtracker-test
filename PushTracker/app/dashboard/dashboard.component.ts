@@ -41,14 +41,10 @@ export class DashboardComponent implements OnInit {
     public timeSelections: Array<SegmentedBarItem>;
     public selectedTime: string = this.times[2];
 
-    // data source for chart
-    public dataSource$: ObservableArray<DailyInfoComponent>;
-
     // private members
     private _sideDrawerTransition: DrawerTransitionBase;
 
     constructor(private historicalDataService: HistoricalDataService, private cd: ChangeDetectorRef) {
-	this.dataSource$ = this.historicalDataService.getData();
 
         this.timeSelections = [];
         this.times.map((t) => {
@@ -56,6 +52,10 @@ export class DashboardComponent implements OnInit {
             item.title = t;
             this.timeSelections.push(item);
         });
+    }
+
+    get dataSource() {
+	return this.historicalDataService.dataSource;
     }
 
     public onSelectedIndexChange(args): void {
@@ -125,120 +125,26 @@ export class DashboardComponent implements OnInit {
 	const pointData = args.pointData;
     }
 
+    private getRandomRange(min: number, max: number): number {
+	return Math.random() * (max-min) + min;
+    }
+
     public onDashboardInitTap(): void {
-	this.historicalDataService.update(new DailyInfoComponent({
-	    month: 12,
-	    day: 1,
-	    pushesWith: 10,
-	    pushesWithout: 14,
-	    coastWith: 10.4,
-	    coastWithout: 1.2,
-	    distance: 8.8,
-	    speed: 4.3
-	}));
-	this.historicalDataService.update(new DailyInfoComponent({
-	    month: 12,
-	    day: 2,
-	    pushesWith: 10,
-	    pushesWithout: 14,
-	    coastWith: 10.4,
-	    coastWithout: 1.2,
-	    distance: 8.8,
-	    speed: 4.3
-	}));
-	this.historicalDataService.update(new DailyInfoComponent({
-	    month: 12,
-	    day: 3,
-	    pushesWith: 4,
-	    pushesWithout: 20,
-	    coastWith: 20,
-	    coastWithout: 1,
-	    distance: 8.8,
-	    speed: 4.3
-	}));
-	this.historicalDataService.update(new DailyInfoComponent({
-	    month: 12,
-	    day: 25,
-	    pushesWith: 10,
-	    pushesWithout: 14,
-	    coastWith: 10.4,
-	    coastWithout: 1.2,
-	    distance: 8.8,
-	    speed: 4.3
-	}));
-	this.historicalDataService.update(new DailyInfoComponent({
-	    month: 12,
-	    day: 26,
-	    pushesWith: 4,
-	    pushesWithout: 20,
-	    coastWith: 20,
-	    coastWithout: 1,
-	    distance: 8.8,
-	    speed: 4.3
-	}));
-	this.historicalDataService.update(new DailyInfoComponent({
-	    month: 12,
-	    day: 25,
-	    pushesWith: 10,
-	    pushesWithout: 14,
-	    coastWith: 10.4,
-	    coastWithout: 1.2,
-	    distance: 8.8,
-	    speed: 4.3
-	}));
-	this.historicalDataService.update(new DailyInfoComponent({
-	    month: 12,
-	    day: 26,
-	    pushesWith: 4,
-	    pushesWithout: 20,
-	    coastWith: 20,
-	    coastWithout: 1,
-	    distance: 8.8,
-	    speed: 4.3
-	}));
-	this.historicalDataService.update(new DailyInfoComponent({
-	    month: 12,
-	    day: 27,
-	    pushesWith: 4,
-	    pushesWithout: 1,
-	    coastWith: 8,
-	    coastWithout: 2,
-	    distance: 8.8,
-	    speed: 4.3
-	}));
-	this.historicalDataService.update(new DailyInfoComponent({
-	    month: 12,
-	    day: 29,
-	    pushesWith: 4,
-	    pushesWithout: 1,
-	    coastWith: 8,
-	    coastWithout: 2,
-	    distance: 8.8,
-	    speed: 4.3
-	}));
-	this.historicalDataService.update(new DailyInfoComponent({
-	    year: 2018,
-	    month: 1,
-	    day: 1,
-	    pushesWith: 4,
-	    pushesWithout: 1,
-	    coastWith: 8,
-	    coastWithout: 2,
-	    distance: 8.8,
-	    speed: 4.3
-	}));
-	this.historicalDataService.update(new DailyInfoComponent({
-	    year: 2018,
-	    month: 1,
-	    day: 2,
-	    pushesWith: 4,
-	    pushesWithout: 1,
-	    coastWith: 8,
-	    coastWithout: 2,
-	    distance: 8.8,
-	    speed: 4.3
-	}));
-	this.dataSource$ = this.historicalDataService.getData();
+	for (let i=59; i >= 0; i--) {
+	    let d = (i).days().ago();
+	    console.log(d);
+	    this.historicalDataService.update(new DailyInfoComponent({
+		year: d.getFullYear(),
+		month: d.getMonth() + 1,
+		day: d.getDate(),
+		pushesWith: this.getRandomRange(10, 100),
+		pushesWithout: this.getRandomRange(50, 200),
+		coastWith: this.getRandomRange(1, 50),
+		coastWithout: this.getRandomRange(0.5, 1.2),
+		distance: this.getRandomRange(0.5, 9.0),
+		speed: this.getRandomRange(0.1, 6.0)
+	    }));
+	}
 	this.cd.detectChanges();
     }
 
@@ -255,7 +161,6 @@ export class DashboardComponent implements OnInit {
         confirm(options).then((result: boolean) => {
 	    if (result) {
 		this.historicalDataService.clear();
-		this.dataSource$ = this.historicalDataService.getData();
 		this.cd.detectChanges();
 	    }
         });
@@ -266,7 +171,6 @@ export class DashboardComponent implements OnInit {
     *************************************************************/
     ngOnInit(): void {
         this._sideDrawerTransition = new SlideInOnTopTransition();
-	this.dataSource$ = this.historicalDataService.getData();
     }
 
     get sideDrawerTransition(): DrawerTransitionBase {
@@ -277,7 +181,7 @@ export class DashboardComponent implements OnInit {
     * According to guidelines, if you have a drawer on your page, you should always
     * have a button that opens it. Use the showDrawer() function to open the app drawer section.
     *************************************************************/
-    onDrawerButtonTap(): void {
+    public onDrawerButtonTap(): void {
         this.drawerComponent.sideDrawer.showDrawer();
     }
 }

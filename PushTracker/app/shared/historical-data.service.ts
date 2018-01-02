@@ -23,10 +23,8 @@ export class HistoricalDataService {
     // public methods
 
     constructor() {
-    }
-
-    public getData(): ObservableArray<DailyInfoComponent> {
-	return this.dataSource;
+	this.loadFromFS();
+	this.updateDataSource();
     }
 
     // loading

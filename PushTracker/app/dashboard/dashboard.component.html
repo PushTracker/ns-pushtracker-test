@@ -57,7 +57,7 @@
 		     legendTitle="Pushes With"
 		     legendLabel="Series Type"
 		     stackMode="stack"
-		     tkCartesianSeries [items]="dataSource$"
+		     tkCartesianSeries [items]="dataSource"
 		     categoryProperty="date"
 		     valueProperty="pushesWith"></AreaSeries>
 	  <AreaSeries #pushesWithoutSeries
@@ -66,7 +66,7 @@
 		     legendTitle="Pushes Without"
 		     legendLabel="Series Type"
 		     stackMode="stack"
-		     tkCartesianSeries [items]="dataSource$"
+		     tkCartesianSeries [items]="dataSource"
 		     categoryProperty="date"
 		     valueProperty="pushesWithout"></AreaSeries>
 	  <DateTimeContinuousAxis #pushesXAxis
@@ -99,7 +99,7 @@
 		     selectionMode="DataPoint"
 		     legendTitle="Coast With"
 		     legendLabel="Series Type"
-		     tkCartesianSeries [items]="dataSource$"
+		     tkCartesianSeries [items]="dataSource"
 		     categoryProperty="date"
 		     valueProperty="coastWith"></AreaSeries>
 	  <AreaSeries #coastWithoutSeries
@@ -107,7 +107,7 @@
 		     selectionMode="DataPoint"
 		     legendTitle="Coast Without"
 		     legendLabel="Series Type"
-		     tkCartesianSeries [items]="dataSource$"
+		     tkCartesianSeries [items]="dataSource"
 		     categoryProperty="date"
 		     valueProperty="coastWithout"></AreaSeries>
 	  <DateTimeContinuousAxis #coastXAxis
@@ -140,7 +140,7 @@
 		     selectionMode="DataPoint"
 		     legendTitle="Distance"
 		     legendLabel="Series Type"
-		     [items]="dataSource$"
+		     [items]="dataSource"
 		     categoryProperty="date"
 		     valueProperty="distance"></AreaSeries>
 	  <AreaSeries tkCartesianSeries
@@ -149,7 +149,7 @@
 		     selectionMode="DataPoint"
 		     legendTitle="Speed"
 		     legendLabel="Series Type"
-		     [items]="dataSource$"
+		     [items]="dataSource"
 		     categoryProperty="date"
 		     valueProperty="speed"></AreaSeries>
 	  <DateTimeContinuousAxis #drivingXAxis
