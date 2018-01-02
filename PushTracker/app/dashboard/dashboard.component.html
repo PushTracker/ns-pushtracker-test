@@ -10,12 +10,10 @@
               ios.position="left">
   </ActionItem>
 
-  <ActionItem ios.position="right" android.position="actionBar">
-    <Button text="Init" (tap)="onDashboardInitTap()" class="action-item"></Button>
+  <ActionItem text="Init"  ios.position="right" (tap)="onDashboardInitTap()" android.position="popup">
   </ActionItem>
 
-  <ActionItem ios.position="right" android.position="actionBar">
-    <Button text="Clear" (tap)="onDashboardClearTap()" class="action-item"></Button>
+  <ActionItem text="Clear" (tap)="onDashboardClearTap()" ios.position="right" android.position="popup">
   </ActionItem>
 
   <Label class="action-bar-title" text="Dashboard"></Label>
