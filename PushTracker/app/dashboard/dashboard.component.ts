@@ -1,18 +1,17 @@
 /// <reference types="@types/datejs" />
-import { ChangeDetectionStrategy, Component, ElementRef, Injectable, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Injectable, OnInit, ViewChild } from "@angular/core";
 import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-pro-ui/sidedrawer";
 import { SegmentedBar, SegmentedBarItem } from "ui/segmented-bar";
 import { LinearAxis, DateTimeContinuousAxis, DateTimeCategoricalAxis, BarSeries } from "nativescript-pro-ui/chart";
 
-import { confirm } from "ui/dialogs";
-
-import { Observable } from "data/observable";
 import { ObservableArray } from "data/observable-array";
+import { Observable } from "rxjs/Observable";
+
+import { confirm } from "ui/dialogs";
 
 import { RadSideDrawerComponent } from "nativescript-pro-ui/sidedrawer/angular";
 
-import { HistoricalDataService } from "../historical-data.service";
-//import { HistoricalDataComponent } from "../shared/historical-data/historical-data.component";
+import { HistoricalDataService } from "../shared/historical-data.service";
 import { DailyInfoComponent } from "../shared/daily-info/daily-info.component";
 
 require("../shared/date");
@@ -21,7 +20,8 @@ require("../shared/date");
     selector: "Dashboard",
     moduleId: module.id,
     templateUrl: "./dashboard.component.html",
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [HistoricalDataService]
 })
 export class DashboardComponent implements OnInit {
     /* ***********************************************************
@@ -29,30 +29,25 @@ export class DashboardComponent implements OnInit {
     * It is used in the "onDrawerButtonTap" function below to manipulate the drawer.
     *************************************************************/
     @ViewChild("drawer") drawerComponent: RadSideDrawerComponent;
-    
+
     @ViewChild("pushesXAxis") pushesXAxis: ElementRef;
     @ViewChild("coastXAxis") coastXAxis: ElementRef;
     @ViewChild("drivingXAxis") drivingXAxis: ElementRef;
 
-    @ViewChild("pushesWithSeries") pushesWithSeries: ElementRef;
-    @ViewChild("pushesWithoutSeries") pushesWithoutSeries: ElementRef;
-    @ViewChild("coastWithSeries") coastWithSeries: ElementRef;
-    @ViewChild("coastWithoutSeries") coastWithoutSeries: ElementRef;
-    @ViewChild("distanceSeries") distanceSeries: ElementRef;
-    @ViewChild("speedSeries") speedSeries: ElementRef;
 
     // public members
     public times: Array<string> = ["Year", "Month", "Week"];
     public timeSelections: Array<SegmentedBarItem>;
     public selectedTime: string = this.times[2];
 
-    public dataSource: ObservableArray<any>;
+    // data source for chart
+    public dataSource$: ObservableArray<DailyInfoComponent>;
 
     // private members
     private _sideDrawerTransition: DrawerTransitionBase;
 
-    constructor(public historicalDataService: HistoricalDataService) {
-	this.dataSource = historicalDataService.getDataSource();
+    constructor(private historicalDataService: HistoricalDataService, private cd: ChangeDetectorRef) {
+	this.dataSource$ = this.historicalDataService.getData();
 
         this.timeSelections = [];
         this.times.map((t) => {
@@ -98,19 +93,6 @@ export class DashboardComponent implements OnInit {
 		xAxis.majorStep = majorStep;
 		xAxis.dateFormat= dateFormat;
 		xAxis.labelFitMode = labelFitMode;
-	    }
-	});
-
-	const seriesArray = [
-	    this.pushesWithSeries, this.pushesWithoutSeries,
-	    this.coastWithSeries, this.coastWithoutSeries,
-	    this.distanceSeries, this.speedSeries
-	];
-	seriesArray.map((s) => {
-	    if (s !== null && s !== undefined) {
-		const series = <BarSeries>s.nativeElement;
-		series.minBarSize = minBarSize;
-		series.maxBarSize = maxBarSize;
 	    }
 	});
     }
@@ -255,7 +237,8 @@ export class DashboardComponent implements OnInit {
 	    distance: 8.8,
 	    speed: 4.3
 	}));
-	this.dataSource = this.historicalDataService.getDataSource();
+	this.dataSource$ = this.historicalDataService.getData();
+	this.cd.detectChanges();
     }
 
     public onDashboardClearTap(): void {
@@ -271,7 +254,8 @@ export class DashboardComponent implements OnInit {
         confirm(options).then((result: boolean) => {
 	    if (result) {
 		this.historicalDataService.clear();
-		this.dataSource = this.historicalDataService.getDataSource();
+		this.dataSource$ = this.historicalDataService.getData();
+		this.cd.detectChanges();
 	    }
         });
     }
@@ -281,6 +265,7 @@ export class DashboardComponent implements OnInit {
     *************************************************************/
     ngOnInit(): void {
         this._sideDrawerTransition = new SlideInOnTopTransition();
+	this.dataSource$ = this.historicalDataService.getData();
     }
 
     get sideDrawerTransition(): DrawerTransitionBase {

@@ -23,6 +23,7 @@
     "@angular/router": "4.4.6",
     "@types/datejs": "0.0.30",
     "buffer": "^5.0.8",
+    "email-validator": "^1.1.1",
     "nativescript-accelerometer": "^2.0.1",
     "nativescript-angular": "4.4.1",
     "nativescript-bluetooth": "git+https://github.com/finger563/nativescript-bluetooth.git",
