@@ -20,6 +20,7 @@ require("../shared/date");
     selector: "Dashboard",
     moduleId: module.id,
     templateUrl: "./dashboard.component.html",
+    styleUrls: ["./dashboard.component.css"],
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [HistoricalDataService]
 })
