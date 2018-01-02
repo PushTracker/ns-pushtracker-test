@@ -41,6 +41,8 @@ export class DashboardComponent implements OnInit {
     public timeSelections: Array<SegmentedBarItem>;
     public selectedTime: string = this.times[2];
 
+    public average: DailyInfoComponent = new DailyInfoComponent();
+
     // private members
     private _sideDrawerTransition: DrawerTransitionBase;
 
@@ -56,6 +58,32 @@ export class DashboardComponent implements OnInit {
 
     get dataSource() {
 	return this.historicalDataService.dataSource;
+    }
+
+    public updateAverages(min, max): void {
+	const keys = [ "pushesWith", "pushesWithout", "coastWith", "coastWithout", "distance", "speed"];
+	const sums = {};
+	keys.map((k) => {
+	    this.average[k] = 0;
+	    sums[k] = 0;
+	});
+	if (this.historicalDataService.dataSource.length > 0) {
+	    let sum = 0;
+	    let num = 0;
+	    this.historicalDataService.dataSource.map((d) => {
+		if (d.date >= min.getTime() && d.date <= max.getTime()) {
+		    keys.map((k) => {
+			sums[k] += d[k];
+		    });
+		    num++;
+		}
+	    });
+	    if (num > 0) {
+		keys.map((k) => {
+		    this.average[k] = sums[k] / num;
+		});
+	    }
+	}
     }
 
     public onSelectedIndexChange(args): void {
@@ -85,6 +113,9 @@ export class DashboardComponent implements OnInit {
 	    majorStep = "Month";
 	    break;
 	}
+
+	this.updateAverages(minimum, maximum);
+	
 	const axesArray = [ this.pushesXAxis, this.coastXAxis, this.drivingXAxis ];
 	axesArray.map((a) => {
 	    if (a !== null && a !== undefined) {

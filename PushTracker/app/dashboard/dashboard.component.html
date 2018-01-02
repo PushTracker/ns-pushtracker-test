@@ -75,7 +75,15 @@
 				  allowPan="false"
 				  plotMode="BetweenTicks"></DateTimeContinuousAxis>
 	  <LinearAxis tkCartesianVerticalAxis
+		      id="vAxis"		      
 		      android:labelFormat="%.0f"></LinearAxis>
+	  <ChartGridLineAnnotation tkCartesianAnnotations
+				   axisId="vAxis"
+				   hidden="false"
+				   [value]="average.pushesWith"
+				   zPosition="AboveSeries"
+				   strokeWidth="1"
+				   strokeColor="#EB916580"></ChartGridLineAnnotation>
 	  <RadLegendView tkCartesianLegend
 			 height="75"
 			 enableSelection="true"
@@ -115,7 +123,15 @@
 				  allowZoom="false"
 				  allowPan="false"
 				  plotMode="BetweenTicks"></DateTimeContinuousAxis>
-	  <LinearAxis tkCartesianVerticalAxis></LinearAxis>
+	  <LinearAxis tkCartesianVerticalAxis
+		      id="vAxis"></LinearAxis>
+	  <ChartGridLineAnnotation tkCartesianAnnotations
+				   axisId="vAxis"
+				   hidden="false"
+				   [value]="average.coastWith"
+				   zPosition="AboveSeries"
+				   strokeWidth="1"
+				   strokeColor="#EB916580"></ChartGridLineAnnotation>
 	  <RadLegendView tkCartesianLegend
 			 height="75"
 			 enableSelection="true"
@@ -157,7 +173,15 @@
 				  allowZoom="false"
 				  allowPan="false"
 				  plotMode="BetweenTicks"></DateTimeContinuousAxis>
-	  <LinearAxis tkCartesianVerticalAxis></LinearAxis>
+	  <LinearAxis tkCartesianVerticalAxis
+		      id="vAxis"></LinearAxis>
+	  <ChartGridLineAnnotation tkCartesianAnnotations
+				   axisId="vAxis"
+				   hidden="false"
+				   [value]="average.distance"
+				   zPosition="AboveSeries"
+				   strokeWidth="1"
+				   strokeColor="#EB916580"></ChartGridLineAnnotation>
 	  <RadLegendView tkCartesianLegend
 			 height="75"
 			 enableSelection="true"
