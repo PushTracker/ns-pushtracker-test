@@ -71,7 +71,6 @@ export class DashboardComponent implements OnInit {
 	let dateFormat = "MMM d";
 	let majorStep = "Day";
 	let labelFitMode = "None";
-	let majorTickInterval = 1;
 	let minBarSize = 1;
 	let maxBarSize = 10;
 	switch (this.selectedTime) {
@@ -79,13 +78,11 @@ export class DashboardComponent implements OnInit {
 	case "Week":
 	    break;
 	case "Month":
-	    majorTickInterval = 7;
-	    minimum = (31).days().ago();
+	    minimum = (30).days().ago();
 	    majorStep = "Week";
 	    labelFitMode = "None";
 	    break;
 	case "Year":
-	    majorTickInterval = 31;
 	    minimum = (11).months().ago();
 	    maximum = (0).months().ago();
 	    dateFormat = "MMM";
@@ -101,7 +98,6 @@ export class DashboardComponent implements OnInit {
 		xAxis.majorStep = majorStep;
 		xAxis.dateFormat= dateFormat;
 		xAxis.labelFitMode = labelFitMode;
-		//xAxis.majorTickInterval = majorTickInterval;
 	    }
 	});
 
@@ -120,17 +116,6 @@ export class DashboardComponent implements OnInit {
     }
 
     public trackBallContentRequested(args): void {
-	console.log("Trackball content requested!");
-	/*
-	console.log(Object.keys(args));
-	console.log(args.pointIndex);
-	console.log(args.pointData);
-	console.log(args.series);
-	console.log(args.seriesIndex);
-	console.log(args.content);
-	console.log(args.object);
-	args.content = undefined;
-	*/
     }
 
     public selectPoint(args): void {

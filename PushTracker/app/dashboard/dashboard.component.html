@@ -10,10 +10,10 @@
               ios.position="left">
   </ActionItem>
 
-  <ActionItem text="Init"  ios.position="right" (tap)="onDashboardInitTap()" android.position="popup">
+  <ActionItem text="Init"  (tap)="onDashboardInitTap()" ios.position="popup" android.position="popup">
   </ActionItem>
 
-  <ActionItem text="Clear" (tap)="onDashboardClearTap()" ios.position="right" android.position="popup">
+  <ActionItem text="Clear" (tap)="onDashboardClearTap()" ios.position="popup" android.position="popup">
   </ActionItem>
 
   <Label class="action-bar-title" text="Dashboard"></Label>
@@ -71,6 +71,8 @@
 		     valueProperty="pushesWithout"></AreaSeries>
 	  <DateTimeContinuousAxis #pushesXAxis
 				  tkCartesianHorizontalAxis
+				  allowZoom="false"
+				  allowPan="false"
 				  plotMode="BetweenTicks"></DateTimeContinuousAxis>
 	  <LinearAxis tkCartesianVerticalAxis
 		      android:labelFormat="%.0f"></LinearAxis>
@@ -110,6 +112,8 @@
 		     valueProperty="coastWithout"></AreaSeries>
 	  <DateTimeContinuousAxis #coastXAxis
 				  tkCartesianHorizontalAxis
+				  allowZoom="false"
+				  allowPan="false"
 				  plotMode="BetweenTicks"></DateTimeContinuousAxis>
 	  <LinearAxis tkCartesianVerticalAxis></LinearAxis>
 	  <RadLegendView tkCartesianLegend
@@ -150,6 +154,8 @@
 		     valueProperty="speed"></AreaSeries>
 	  <DateTimeContinuousAxis #drivingXAxis
 				  tkCartesianHorizontalAxis
+				  allowZoom="false"
+				  allowPan="false"
 				  plotMode="BetweenTicks"></DateTimeContinuousAxis>
 	  <LinearAxis tkCartesianVerticalAxis></LinearAxis>
 	  <RadLegendView tkCartesianLegend
