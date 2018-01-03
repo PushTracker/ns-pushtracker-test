@@ -35,6 +35,8 @@ export class DashboardComponent implements OnInit {
     @ViewChild("coastXAxis") coastXAxis: ElementRef;
     @ViewChild("drivingXAxis") drivingXAxis: ElementRef;
 
+    public dataSource = HistoricalDataService.dataSource;
+
 
     // public members
     public times: Array<string> = ["Year", "Month", "Week"];
@@ -56,10 +58,6 @@ export class DashboardComponent implements OnInit {
         });
     }
 
-    get dataSource() {
-	return this.historicalDataService.dataSource;
-    }
-
     public updateAverages(min, max): void {
 	const keys = [ "pushesWith", "pushesWithout", "coastWith", "coastWithout", "distance", "speed"];
 	const sums = {};
@@ -67,10 +65,10 @@ export class DashboardComponent implements OnInit {
 	    this.average[k] = 0;
 	    sums[k] = 0;
 	});
-	if (this.historicalDataService.dataSource.length > 0) {
+	if (HistoricalDataService.dataSource.length > 0) {
 	    let sum = 0;
 	    let num = 0;
-	    this.historicalDataService.dataSource.map((d) => {
+	    HistoricalDataService.dataSource.map((d) => {
 		if (d.date >= min.getTime() && d.date <= max.getTime()) {
 		    keys.map((k) => {
 			sums[k] += d[k];
@@ -86,10 +84,7 @@ export class DashboardComponent implements OnInit {
 	}
     }
 
-    public onSelectedIndexChange(args): void {
-        const segmentedBar = <SegmentedBar>args.object;
-        this.selectedTime = this.times[segmentedBar.selectedIndex];
-
+    public updateAxes(): void {
 	let minimum = (7).days().ago();
 	let maximum = (0).days().ago();
 	let dateFormat = "MMM d";
@@ -127,9 +122,18 @@ export class DashboardComponent implements OnInit {
 		xAxis.labelFitMode = labelFitMode;
 	    }
 	});
+	this.cd.detectChanges();
+    }
+
+    public onSelectedIndexChange(args): void {
+        const segmentedBar = <SegmentedBar>args.object;
+        this.selectedTime = this.times[segmentedBar.selectedIndex];
+	this.updateAxes();
     }
 
     public trackBallContentRequested(args): void {
+	console.log("trackball content requested!");
+	console.log(Object.keys(args));
     }
 
     public selectPoint(args): void {
@@ -161,10 +165,11 @@ export class DashboardComponent implements OnInit {
     }
 
     public onDashboardInitTap(): void {
+	this.historicalDataService.clear();
+	const diArray = [];
 	for (let i=59; i >= 0; i--) {
 	    let d = (i).days().ago();
-	    console.log(d);
-	    this.historicalDataService.update(new DailyInfoComponent({
+	    let di = new DailyInfoComponent({
 		year: d.getFullYear(),
 		month: d.getMonth() + 1,
 		day: d.getDate(),
@@ -174,8 +179,11 @@ export class DashboardComponent implements OnInit {
 		coastWithout: this.getRandomRange(0.5, 1.2),
 		distance: this.getRandomRange(0.5, 9.0),
 		speed: this.getRandomRange(0.1, 6.0)
-	    }));
+	    });
+	    diArray.push(di);
 	}
+	this.historicalDataService.updateFromArray(diArray);
+	this.updateAxes();
 	this.cd.detectChanges();
     }
 
@@ -192,6 +200,7 @@ export class DashboardComponent implements OnInit {
         confirm(options).then((result: boolean) => {
 	    if (result) {
 		this.historicalDataService.clear();
+		this.updateAxes();
 		this.cd.detectChanges();
 	    }
         });

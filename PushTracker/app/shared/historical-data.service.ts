@@ -11,14 +11,13 @@ import { DailyInfoComponent } from "./daily-info/daily-info.component";
 @Injectable()
 export class HistoricalDataService {
     // public members
+    public static dataSource: ObservableArray<DailyInfoComponent> = new ObservableArray();
 
     // private members
     private static fsKeyPrefix: string = "HistoricalDataComponent.";
     private static fsKeyData: string = "Data";
 
     private data: Array<DailyInfoComponent> = [];
-
-    public dataSource: ObservableArray<DailyInfoComponent> = new ObservableArray();
 
     // public methods
 
@@ -56,7 +55,7 @@ export class HistoricalDataService {
     }
 
     // modifying
-    public update(dailyInfo: DailyInfoComponent): void {
+    private add(dailyInfo: DailyInfoComponent): void {
 	const sameDates = this.data.filter((di) => {
 	    return dailyInfo.sameAsDailyInfo(di);
 	});
@@ -71,19 +70,34 @@ export class HistoricalDataService {
 	else {
 	    this.data.push(dailyInfo);
 	}
+    }
+    
+    public update(dailyInfo: DailyInfoComponent): void {
+	this.add(dailyInfo);
+	this.updateDataSource();
+	this.saveToFS();
+    }
+
+    public updateFromArray(array: Array<DailyInfoComponent>): void {
+	array.map((di) => {
+	    this.add(di);
+	});
 	this.updateDataSource();
 	this.saveToFS();
     }
 
     public clear(): void {
+	const len = HistoricalDataService.dataSource.length
+	for (let i=0; i<len; i++) {
+	    HistoricalDataService.dataSource.shift();
+	}
 	this.data.splice(0, this.data.length);
-	this.updateDataSource();
 	this.saveToFS();
     }
 
     // private methods
     private updateDataSource(): void {
-	this.dataSource.splice(0, this.dataSource.length, ...this.data);
+	HistoricalDataService.dataSource.splice(0, HistoricalDataService.dataSource.length, ...this.data);
     }
     
     private handleErrors(error: Response) {
