@@ -4,7 +4,7 @@
   "readme": "NativeScript Application",
   "repository": "<fill-your-repository-here>",
   "nativescript": {
-    "id": "org.nativescript.PushTracker",
+    "id": "org.nativescript.nspushtrackertest",
     "tns-android": {
       "version": "3.3.1"
     }
