@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:246955533823:android:00fa7b543ea6c835",
         "android_client_info": {
-          "package_name": "org.nativescript.PushTracker"
+          "package_name": "org.nativescript.nspushtrackertest"
         }
       },
       "oauth_client": [

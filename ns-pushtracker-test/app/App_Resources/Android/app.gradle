@@ -9,7 +9,7 @@ android {
   defaultConfig {
     multiDexEnabled true
     generatedDensities = []
-    applicationId = "org.nativescript.PushTracker"
+    applicationId = "org.nativescript.nspushtrackertest"
     
     //override supported platforms
     // ndk {
