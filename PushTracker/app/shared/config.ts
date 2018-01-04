@@ -1,4 +1,7 @@
 export class Config {
-    static apiUrl = "https://api.max-mobility.com/api/v1/";
-    static stoken = "";
+    static apiUrl = "http://api.max-mobility.com/api/v1/";
+    // related to logging in
+    static token = "";
+    static client = "";
+    static uid = "";
 }

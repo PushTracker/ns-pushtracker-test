@@ -27,11 +27,14 @@ export class LoginService {
 	    { headers: headers }
 	)
 	    .map(res => {
-		console.log(res);
+		console.log(`res: ${res}`);
+		const headers = res.headers;
+		console.log(`headers:\n ${JSON.stringify(headers, null, 2)}`);
 		return res.json();
 	    })
 	    .do(data => {
-		console.log(data);
+		console.log(`data: ${data}`);
+		console.log(JSON.stringify(data, null, 2));
 	    })
 		.catch(this.handleErrors);
 	
@@ -51,11 +54,16 @@ export class LoginService {
 	    { headers: headers }
 	)
 	    .map(res => {
-		console.log(res);
+		console.log(`res: ${res}`);
+		const headers = res.headers;
+		Config.token = headers['access-token'];
+		Config.client = headers['client'];
+		Config.uid = headers['uid'];
 		return res.json();
 	    })
 	    .do(data => {
-		console.log(data);
+		console.log(`data: ${data}`);
+		console.log(JSON.stringify(data, null, 2));
 	    })
 		.catch(this.handleErrors);
     }

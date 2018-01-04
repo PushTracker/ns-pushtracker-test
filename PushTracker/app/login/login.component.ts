@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
 	this.loginService.login(this.user)
 	    .subscribe(
 		() => this.enterApp(),
-		(error) => alert("Unfortunately we could not find your account")
+		(error) => this.handleErrors(error, "Login Failed", "Unfortunately we couldn't find your account")
 	    );
     }
 
@@ -81,8 +81,21 @@ export class LoginComponent implements OnInit {
 		() => {
 		    this.toggleDisplay();
 		},
-		(error) => alert("Unfortunately we could not find your account")
+		(error) => this.handleErrors(error, "Register Failed", "Unfortunately we couldn't create your account")
 	    );
+    }
+
+    private handleErrors(error, message, defaultText): void {
+	const errors = error.json && error.json().errors;
+	if (errors && errors.length) {
+	    alert(`${message}:\n${errors.join('\n')}`);
+	}
+	else if (errors && errors.full_messages) {
+	    alert(`${message}:\n${errors.full_messages}`);
+	}
+	else {
+	    alert(defaultText)
+	}
     }
 
     public toggleDisplay(): void {
