@@ -4,3 +4,27 @@
 .page-content {
     vertical-align: center;
 }
+.account-icon {
+    font-size: 100;
+    text-align: center;
+    margin: 10;
+}
+GridLayout {
+  margin-left: 30;
+  margin-right: 30;
+  background-color: white;
+}
+Label {
+  margin-top: 5;
+  margin-bottom: 20;
+}
+Button, TextField {
+  margin-left: 16;
+  margin-right: 16;
+  margin-bottom: 10;
+}
+.submit-button {
+  background-color: #CB1D00;
+  color: white;
+  margin-top: 20;
+}
