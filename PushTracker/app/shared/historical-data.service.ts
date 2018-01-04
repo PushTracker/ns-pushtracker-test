@@ -6,18 +6,18 @@ import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 import * as localStorage from "nativescript-localstorage";
 
-import { DailyInfoComponent } from "./daily-info/daily-info.component";
+import { DailyInfo } from "./daily-info";
 
 @Injectable()
 export class HistoricalDataService {
     // public members
-    public dataSource: BehaviorSubject<Array<DailyInfoComponent>> = new BehaviorSubject([]);
+    public dataSource: BehaviorSubject<Array<DailyInfo>> = new BehaviorSubject([]);
 
     // private members
     private static fsKeyPrefix: string = "HistoricalDataComponent.";
     private static fsKeyData: string = "Data";
 
-    private data: Array<DailyInfoComponent> = [];
+    private data: Array<DailyInfo> = [];
 
     // public methods
 
@@ -55,7 +55,7 @@ export class HistoricalDataService {
     }
 
     // modifying
-    private add(dailyInfo: DailyInfoComponent): void {
+    private add(dailyInfo: DailyInfo): void {
 	const sameDates = this.data.filter((di) => {
 	    return dailyInfo.sameAsDailyInfo(di);
 	});
@@ -72,13 +72,13 @@ export class HistoricalDataService {
 	}
     }
     
-    public update(dailyInfo: DailyInfoComponent): void {
+    public update(dailyInfo: DailyInfo): void {
 	this.add(dailyInfo);
 	this.updateDataSource();
 	this.saveToFS();
     }
 
-    public updateFromArray(array: Array<DailyInfoComponent>): void {
+    public updateFromArray(array: Array<DailyInfo>): void {
 	array.map((di) => {
 	    this.add(di);
 	});
@@ -107,7 +107,7 @@ export class HistoricalDataService {
 	return Observable.throw(error);
     }
 
-    private convertData(dailyInfo: DailyInfoComponent): void {
+    private convertData(dailyInfo: DailyInfo): void {
 	const convert = {
 	    "coastWith": 100.0,
 	    "coastWithout": 100.0,

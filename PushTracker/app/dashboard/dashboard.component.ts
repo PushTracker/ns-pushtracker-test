@@ -11,7 +11,7 @@ import { confirm } from "ui/dialogs";
 import { RadSideDrawerComponent } from "nativescript-pro-ui/sidedrawer/angular";
 
 import { HistoricalDataService } from "../shared/historical-data.service";
-import { DailyInfoComponent } from "../shared/daily-info/daily-info.component";
+import { DailyInfo } from "../shared/daily-info";
 
 require("../shared/date");
 
@@ -37,9 +37,9 @@ export class DashboardComponent implements OnInit {
     public timeSelections: Array<SegmentedBarItem>;
     public selectedTime: string = this.times[2];
 
-    public average: DailyInfoComponent = new DailyInfoComponent();
+    public average: DailyInfo = new DailyInfo();
 
-    public historicalData: ObservableArray<DailyInfoComponent> = new ObservableArray([]);
+    public historicalData: ObservableArray<DailyInfo> = new ObservableArray([]);
 
     // private members
     private _sideDrawerTransition: DrawerTransitionBase;
@@ -183,7 +183,7 @@ export class DashboardComponent implements OnInit {
 	const diArray = [];
 	for (let i=59; i >= 0; i--) {
 	    let d = (i).days().ago();
-	    let di = new DailyInfoComponent({
+	    let di = new DailyInfo({
 		year: d.getFullYear(),
 		month: d.getMonth() + 1,
 		day: d.getDate(),
