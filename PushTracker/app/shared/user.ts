@@ -17,7 +17,6 @@ export class User {
     public ability: string = "";
 
     public isValidEmail(): boolean {
-	console.log(this.email);
         return validator.validate(this.email);
     }
 }

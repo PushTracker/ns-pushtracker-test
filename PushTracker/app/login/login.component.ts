@@ -1,5 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 
+import { NativeScriptFormsModule } from "nativescript-angular/forms";
+
 import { Router } from "@angular/router";
 import { Page } from "ui/page";
 import { Color } from "color";
@@ -15,25 +17,25 @@ import { LoginService } from "../shared/login.service";
 @Component({
     selector: "Login",
     moduleId: module.id,
-    providers: [LoginService],
-    templateUrl: "./login.component.html"
+    templateUrl: "./login.component.html",
+    styleUrls: ["./login.component.css"]
 })
 export class LoginComponent implements OnInit {
-
-    // public members
-    public user: User = new User();
-    public isLoggingIn: boolean = true;
 
     @ViewChild("container") container: ElementRef;
     @ViewChild("icon") icon: ElementRef;
     @ViewChild("email") email: ElementRef;
     @ViewChild("password") password: ElementRef;
 
+    // public members
+    public user: User;
+    public isLoggingIn: boolean = true;
+
     // private members
 
     // functions
-
     constructor(private router: Router, private loginService: LoginService, private page: Page) {
+	this.user = new User();
     }
 
     /* ***********************************************************
@@ -41,8 +43,8 @@ export class LoginComponent implements OnInit {
      *************************************************************/
     ngOnInit(): void {
 	this.page.actionBarHidden = true;
+	this.page.addCss("Page { background-repeat: no-repeat; background-size: 100% 100%; }");
 	//this.page.backgroundImage = "res://bg_login";
-	//this.page.addCss("Page { background-repeat: no-repeat; background-size: 100% 100%; }");
     }
 
     public enterApp(): void {
@@ -54,10 +56,8 @@ export class LoginComponent implements OnInit {
     }
     
     public submit(): void {
-	console.log(JSON.stringify(this.user, null, 2));
-	console.log(this.user.email);
 	if (!this.user.isValidEmail()) {
-	    alert("Enter a valid email address.");
+	    alert(`"${this.user.email}" is not a valid email address!`);
 	    return;
 	}
 	if (this.isLoggingIn) {
@@ -68,11 +68,21 @@ export class LoginComponent implements OnInit {
     }
 
     public login(): void {
-	this.enterApp();
+	this.loginService.login(this.user)
+	    .subscribe(
+		() => this.enterApp(),
+		(error) => alert("Unfortunately we could not find your account")
+	    );
     }
 
     public signUp(): void {
-	this.enterApp();
+	this.loginService.register(this.user)
+	    .subscribe(
+		() => {
+		    this.toggleDisplay();
+		},
+		(error) => alert("Unfortunately we could not find your account")
+	    );
     }
 
     public toggleDisplay(): void {
@@ -99,6 +109,19 @@ export class LoginComponent implements OnInit {
 		console.log(e.message);
 	    });
 	*/
+    }
+
+    public setTextFieldColors(): void {
+	let emailTextField = <TextField>this.email.nativeElement;
+	let passwordTextField = <TextField>this.password.nativeElement;
+
+	let mainTextColor = new Color(this.isLoggingIn ? "black" : "#C4AFB4");
+	emailTextField.color = mainTextColor;
+	passwordTextField.color = mainTextColor;
+
+	let hintColor = new Color(this.isLoggingIn ? "#AcA6A7" : "#C4AFB4");
+	//setHintColor({ view: emailTextField, color: hintColor });
+	//setHintColor({ view: passwordTextField, color: hintColor });
     }
 
 }

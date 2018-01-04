@@ -10,19 +10,21 @@
 	   class="account-icon fa"
 	   text="&#xf2be;"></Label>
     <TextField #email
+	       [text]="user.email"
+	       (textChange)="user.email=$event.value"
 	       row="1"
 	       colSpan="2"
 	       hint="Email Address"
 	       keyboardType="email"
-	       [(ngModel)]="user.email"
 	       autocorrect="false"
 	       autocapitalizationType="none"></TextField>
     <TextField #password
+	       [text]="user.password"
+	       (textChange)="user.password=$event.value"
 	       row="2"
 	       colSpan="2"
 	       hint="Password"
-	       secure="true"
-	       [(ngModel)]="user.password"></TextField>
+	       secure="true"></TextField>
 
     <Button row="3"
 	    colSpan="2"
