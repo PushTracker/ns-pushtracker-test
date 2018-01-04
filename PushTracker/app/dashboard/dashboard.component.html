@@ -59,7 +59,7 @@
 		     legendTitle="Pushes With"
 		     legendLabel="Series Type"
 		     stackMode="stack"
-		     tkCartesianSeries [items]="dataSource"
+		     tkCartesianSeries [items]="historicalData"
 		     categoryProperty="date"
 		     valueProperty="pushesWith"></AreaSeries>
 	  <AreaSeries #pushesWithoutSeries
@@ -68,7 +68,7 @@
 		     legendTitle="Pushes Without"
 		     legendLabel="Series Type"
 		     stackMode="stack"
-		     tkCartesianSeries [items]="dataSource"
+		     tkCartesianSeries [items]="historicalData"
 		     categoryProperty="date"
 		     valueProperty="pushesWithout"></AreaSeries>
 	  <DateTimeContinuousAxis #pushesXAxis
@@ -77,11 +77,11 @@
 				  allowPan="false"
 				  plotMode="BetweenTicks"></DateTimeContinuousAxis>
 	  <LinearAxis tkCartesianVerticalAxis
-		      id="vAxis"		      
+		      id="pushesVAxis"
 		      android:labelFormat="%.0f"></LinearAxis>
 	  <ChartGridLineAnnotation tkCartesianAnnotations
-				   axisId="vAxis"
-				   hidden="false"
+				   axisId="pushesVAxis"
+				   [hidden]="average.pushesWith == 0"
 				   [value]="average.pushesWith"
 				   zPosition="AboveSeries"
 				   strokeWidth="1"
@@ -111,7 +111,7 @@
 		     selectionMode="DataPoint"
 		     legendTitle="Coast With"
 		     legendLabel="Series Type"
-		     tkCartesianSeries [items]="dataSource"
+		     tkCartesianSeries [items]="historicalData"
 		     categoryProperty="date"
 		     valueProperty="coastWith"></AreaSeries>
 	  <AreaSeries #coastWithoutSeries
@@ -119,7 +119,7 @@
 		     selectionMode="DataPoint"
 		     legendTitle="Coast Without"
 		     legendLabel="Series Type"
-		     tkCartesianSeries [items]="dataSource"
+		     tkCartesianSeries [items]="historicalData"
 		     categoryProperty="date"
 		     valueProperty="coastWithout"></AreaSeries>
 	  <DateTimeContinuousAxis #coastXAxis
@@ -128,10 +128,10 @@
 				  allowPan="false"
 				  plotMode="BetweenTicks"></DateTimeContinuousAxis>
 	  <LinearAxis tkCartesianVerticalAxis
-		      id="vAxis"></LinearAxis>
+		      id="coastVAxis"></LinearAxis>
 	  <ChartGridLineAnnotation tkCartesianAnnotations
-				   axisId="vAxis"
-				   hidden="false"
+				   axisId="coastVAxis"
+				   [hidden]="average.coastWith == 0"
 				   [value]="average.coastWith"
 				   zPosition="AboveSeries"
 				   strokeWidth="1"
@@ -162,7 +162,7 @@
 		     selectionMode="DataPoint"
 		     legendTitle="Distance"
 		     legendLabel="Series Type"
-		     [items]="dataSource"
+		     [items]="historicalData"
 		     categoryProperty="date"
 		     valueProperty="distance"></AreaSeries>
 	  <AreaSeries tkCartesianSeries
@@ -171,7 +171,7 @@
 		     selectionMode="DataPoint"
 		     legendTitle="Speed"
 		     legendLabel="Series Type"
-		     [items]="dataSource"
+		     [items]="historicalData"
 		     categoryProperty="date"
 		     valueProperty="speed"></AreaSeries>
 	  <DateTimeContinuousAxis #drivingXAxis
@@ -180,10 +180,10 @@
 				  allowPan="false"
 				  plotMode="BetweenTicks"></DateTimeContinuousAxis>
 	  <LinearAxis tkCartesianVerticalAxis
-		      id="vAxis"></LinearAxis>
+		      id="drivingVAxis"></LinearAxis>
 	  <ChartGridLineAnnotation tkCartesianAnnotations
-				   axisId="vAxis"
-				   hidden="false"
+				   axisId="drivingVAxis"
+				   [hidden]="average.distance == 0"
 				   [value]="average.distance"
 				   zPosition="AboveSeries"
 				   strokeWidth="1"

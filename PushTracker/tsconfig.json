@@ -18,7 +18,9 @@
                 "./node_modules/*"
             ]
         },
-	"types": ["@types/datejs"]
+        "types": [
+            "@types/datejs"
+        ]
     },
     "exclude": [
         "app/shared/date.js",

@@ -5,7 +5,6 @@ import { SegmentedBar, SegmentedBarItem } from "ui/segmented-bar";
 import { LinearAxis, DateTimeContinuousAxis, DateTimeCategoricalAxis, BarSeries } from "nativescript-pro-ui/chart";
 
 import { ObservableArray } from "data/observable-array";
-import { Observable } from "rxjs/Observable";
 
 import { confirm } from "ui/dialogs";
 
@@ -33,9 +32,6 @@ export class DashboardComponent implements OnInit {
     @ViewChild("coastXAxis") coastXAxis: ElementRef;
     @ViewChild("drivingXAxis") drivingXAxis: ElementRef;
 
-    public dataSource = HistoricalDataService.dataSource;
-
-
     // public members
     public times: Array<string> = ["Year", "Month", "Week"];
     public timeSelections: Array<SegmentedBarItem>;
@@ -43,11 +39,24 @@ export class DashboardComponent implements OnInit {
 
     public average: DailyInfoComponent = new DailyInfoComponent();
 
+    public historicalData: ObservableArray<DailyInfoComponent> = new ObservableArray([]);
+
     // private members
     private _sideDrawerTransition: DrawerTransitionBase;
 
     constructor(private historicalDataService: HistoricalDataService, private cd: ChangeDetectorRef) {
-
+	this.historicalDataService.dataSource.subscribe(
+	    (x) => {
+		if (x.length) {
+		    this.historicalData.splice(0, this.historicalData.length, ...x)
+		}
+		else {
+		    this.historicalData.splice(0, this.historicalData.length);
+		}
+	    },
+	    (err) => console.log(err),
+	    () => console.log("subscription completed")
+	);
         this.timeSelections = [];
         this.times.map((t) => {
             const item = new SegmentedBarItem();
@@ -56,17 +65,24 @@ export class DashboardComponent implements OnInit {
         });
     }
 
+    public zeroAverages(): void {
+	const keys = [ "pushesWith", "pushesWithout", "coastWith", "coastWithout", "distance", "speed"];
+	keys.map((k) => {
+	    this.average[k] = 0;
+	});
+    }
+
     public updateAverages(min, max): void {
 	const keys = [ "pushesWith", "pushesWithout", "coastWith", "coastWithout", "distance", "speed"];
 	const sums = {};
+	this.zeroAverages();
 	keys.map((k) => {
-	    this.average[k] = 0;
 	    sums[k] = 0;
 	});
-	if (HistoricalDataService.dataSource.length > 0) {
+	if (this.historicalData.length > 0) {
 	    let sum = 0;
 	    let num = 0;
-	    HistoricalDataService.dataSource.map((d) => {
+	    this.historicalData.map((d) => {
 		if (d.date >= min.getTime() && d.date <= max.getTime()) {
 		    keys.map((k) => {
 			sums[k] += d[k];
@@ -198,7 +214,7 @@ export class DashboardComponent implements OnInit {
         confirm(options).then((result: boolean) => {
 	    if (result) {
 		this.historicalDataService.clear();
-		this.updateAxes();
+		this.zeroAverages();
 		this.cd.detectChanges();
 	    }
         });

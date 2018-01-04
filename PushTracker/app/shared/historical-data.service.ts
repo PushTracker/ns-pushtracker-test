@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from "@angular/http";
-import { ObservableArray } from "data/observable-array";
+
 import { Observable } from "rxjs/Rx";
-import "rxjs/add/operator/map";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 import * as localStorage from "nativescript-localstorage";
 
@@ -11,7 +11,7 @@ import { DailyInfoComponent } from "./daily-info/daily-info.component";
 @Injectable()
 export class HistoricalDataService {
     // public members
-    public static dataSource: ObservableArray<DailyInfoComponent> = new ObservableArray();
+    public dataSource: BehaviorSubject<Array<DailyInfoComponent>> = new BehaviorSubject([]);
 
     // private members
     private static fsKeyPrefix: string = "HistoricalDataComponent.";
@@ -87,17 +87,19 @@ export class HistoricalDataService {
     }
 
     public clear(): void {
-	const len = HistoricalDataService.dataSource.length
-	for (let i=0; i<len; i++) {
-	    HistoricalDataService.dataSource.shift();
-	}
 	this.data.splice(0, this.data.length);
+	this.updateDataSource();
 	this.saveToFS();
     }
 
     // private methods
     private updateDataSource(): void {
-	HistoricalDataService.dataSource.splice(0, HistoricalDataService.dataSource.length, ...this.data);
+	if (this.data.length) {
+	    this.dataSource.next([...this.data]);
+	}
+	else {
+	    this.dataSource.next([]);
+	}
     }
     
     private handleErrors(error: Response) {
