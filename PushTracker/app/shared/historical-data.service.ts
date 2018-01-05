@@ -86,6 +86,12 @@ export class HistoricalDataService {
 	this.saveToFS();
     }
 
+    public initFromArray(array: Array<DailyInfo>): void {
+	this.data.splice(0, this.data.length, ...array);
+	this.updateDataSource();
+	this.saveToFS();
+    }
+
     public clear(): void {
 	this.data.splice(0, this.data.length);
 	this.updateDataSource();

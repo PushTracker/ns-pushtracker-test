@@ -42,6 +42,7 @@
       <CarouselItem>
         <Label text="Pushes" class="daily-info-label"></Label>
         <RadCartesianChart
+	  #pushesChart
 	  visible="false"
 	  (pointSelected)="selectPoint($event)"
 	  (pointDeselected)="unselectPoint($event)"
@@ -96,6 +97,7 @@
       <CarouselItem>
         <Label text="Coast" class="daily-info-label"></Label>
         <RadCartesianChart
+	  #coastChart
 	  (pointSelected)="selectPoint($event)"
 	  (pointDeselected)="unselectPoint($event)"
 	  seriesSelectionMode="Single"
@@ -146,6 +148,7 @@
       <CarouselItem>
         <Label text="Driving" class="daily-info-label"></Label>
         <RadCartesianChart
+	  #drivingChart
 	  (pointSelected)="selectPoint($event)"
 	  (pointDeselected)="unselectPoint($event)"
 	  seriesSelectionMode="Single"

@@ -1,8 +1,8 @@
 /// <reference types="@types/datejs" />
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Injectable, OnInit, ViewChild } from "@angular/core";
+import { Component, ChangeDetectionStrategy, ElementRef, Injectable, OnInit, ViewChild, NgZone } from "@angular/core";
 import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-pro-ui/sidedrawer";
 import { SegmentedBar, SegmentedBarItem } from "ui/segmented-bar";
-import { LinearAxis, DateTimeContinuousAxis, DateTimeCategoricalAxis, BarSeries } from "nativescript-pro-ui/chart";
+import { RadCartesianChart, LinearAxis, DateTimeContinuousAxis, DateTimeCategoricalAxis, BarSeries } from "nativescript-pro-ui/chart";
 
 import { ObservableArray } from "data/observable-array";
 
@@ -19,7 +19,8 @@ require("../shared/date");
     selector: "Dashboard",
     moduleId: module.id,
     templateUrl: "./dashboard.component.html",
-    styleUrls: ["./dashboard.component.css"]
+    styleUrls: ["./dashboard.component.css"],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent implements OnInit {
     /* ***********************************************************
@@ -31,6 +32,10 @@ export class DashboardComponent implements OnInit {
     @ViewChild("pushesXAxis") pushesXAxis: ElementRef;
     @ViewChild("coastXAxis") coastXAxis: ElementRef;
     @ViewChild("drivingXAxis") drivingXAxis: ElementRef;
+
+    @ViewChild("pushesChart") pushesChart: ElementRef;
+    @ViewChild("coastChart") coastChart: ElementRef;
+    @ViewChild("drivingChart") drivingChart: ElementRef;
 
     // public members
     public times: Array<string> = ["Year", "Month", "Week"];
@@ -44,19 +49,7 @@ export class DashboardComponent implements OnInit {
     // private members
     private _sideDrawerTransition: DrawerTransitionBase;
 
-    constructor(private historicalDataService: HistoricalDataService, private cd: ChangeDetectorRef) {
-	this.historicalDataService.dataSource.subscribe(
-	    (x) => {
-		if (x.length) {
-		    this.historicalData.splice(0, this.historicalData.length, ...x)
-		}
-		else {
-		    this.historicalData.splice(0, this.historicalData.length);
-		}
-	    },
-	    (err) => console.log(err),
-	    () => console.log("subscription completed")
-	);
+    constructor(private historicalDataService: HistoricalDataService, private _ngZone: NgZone) {
         this.timeSelections = [];
         this.times.map((t) => {
             const item = new SegmentedBarItem();
@@ -136,7 +129,6 @@ export class DashboardComponent implements OnInit {
 		xAxis.labelFitMode = labelFitMode;
 	    }
 	});
-	this.cd.detectChanges();
     }
 
     public onSelectedIndexChange(args): void {
@@ -181,7 +173,7 @@ export class DashboardComponent implements OnInit {
     public onDashboardInitTap(): void {
 	this.historicalDataService.clear();
 	const diArray = [];
-	for (let i=59; i >= 0; i--) {
+	for (let i=200; i >= 0; i--) {
 	    let d = (i).days().ago();
 	    let di = new DailyInfo({
 		year: d.getFullYear(),
@@ -196,9 +188,8 @@ export class DashboardComponent implements OnInit {
 	    });
 	    diArray.push(di);
 	}
-	this.historicalDataService.updateFromArray(diArray);
+	this.historicalDataService.initFromArray(diArray);
 	this.updateAxes();
-	this.cd.detectChanges();
     }
 
     public onDashboardClearTap(): void {
@@ -213,9 +204,10 @@ export class DashboardComponent implements OnInit {
 
         confirm(options).then((result: boolean) => {
 	    if (result) {
-		this.historicalDataService.clear();
-		this.zeroAverages();
-		this.cd.detectChanges();
+		this._ngZone.run(() => {
+		    this.historicalDataService.initFromArray([]);
+		    this.zeroAverages();
+		});
 	    }
         });
     }
@@ -224,6 +216,21 @@ export class DashboardComponent implements OnInit {
     * Use the sideDrawerTransition property to change the open/close animation of the drawer.
     *************************************************************/
     ngOnInit(): void {
+	this.historicalDataService.dataSource.subscribe(
+	    (x) => {
+		this._ngZone.run(() => {
+		    if (x.length) {
+			this.historicalData.splice(0, this.historicalData.length, ...x)
+		    }
+		    else {
+			console.log('clearing historical data!');
+			this.historicalData.splice(0, this.historicalData.length);
+		    }
+		});
+	    },
+	    (err) => console.log(err),
+	    () => console.log("subscription completed")
+	);
         this._sideDrawerTransition = new SlideInOnTopTransition();
     }
 

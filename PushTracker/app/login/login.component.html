@@ -10,8 +10,7 @@
 	   class="account-icon fa"
 	   text="&#xf2be;"></Label>
     <TextField #email
-	       [text]="user.email"
-	       (textChange)="user.email=$event.value"
+	       [(ngModel)]="user.email"
 	       row="1"
 	       colSpan="2"
 	       hint="Email Address"
@@ -19,8 +18,7 @@
 	       autocorrect="false"
 	       autocapitalizationType="none"></TextField>
     <TextField #password
-	       [text]="user.password"
-	       (textChange)="user.password=$event.value"
+	       [(ngModel)]="user.password"
 	       row="2"
 	       colSpan="2"
 	       hint="Password"
