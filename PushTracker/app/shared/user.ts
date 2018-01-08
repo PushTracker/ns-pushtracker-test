@@ -1,6 +1,8 @@
 const validator = require("email-validator");
 
 export class User {
+    public loggedIn: boolean = false;
+    
     public email: string = "";
     public accessToken: string = "";
     public client: string = "";

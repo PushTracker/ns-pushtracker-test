@@ -13,6 +13,8 @@ export class LoginService {
     constructor(private http: Http) { }
 
     public register(user: User) {
+	Config.user.loggedIn = false;
+
 	let headers = new Headers();
 	headers.append('Accept', 'application/json');
 	headers.append('Content-Type', 'application/json');
@@ -41,6 +43,8 @@ export class LoginService {
     }
 
     public login(user: User) {
+	Config.user.loggedIn = false;
+
 	let headers = new Headers();
 	headers.append('Accept', 'application/json');
 	headers.append('Content-Type', 'application/json');
@@ -60,6 +64,7 @@ export class LoginService {
 		Config.client = headers['client'];
 		Config.uid = headers['uid'];
 		Config.user = user;
+		Config.user.loggedIn = true;
 		return res.json();
 	    })
 	    .do(data => {
@@ -71,6 +76,8 @@ export class LoginService {
     }
 
     public handleErrors(error: Response) {
+	Config.user.loggedIn = false;
+
         console.log(JSON.stringify(error.json()));
         return Observable.throw(error);
     }
