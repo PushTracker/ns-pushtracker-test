@@ -34,4 +34,7 @@ export class SettingsComponent implements OnInit {
     onDrawerButtonTap(): void {
         this.drawerComponent.sideDrawer.showDrawer();
     }
+
+    onSaveSettingsTap(): void {
+    }
 }
