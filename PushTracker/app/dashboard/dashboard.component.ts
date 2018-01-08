@@ -6,7 +6,7 @@ import { RadCartesianChart, LinearAxis, DateTimeContinuousAxis, DateTimeCategori
 
 import { ObservableArray } from "data/observable-array";
 
-import { confirm } from "ui/dialogs";
+import { confirm, prompt, inputType } from "ui/dialogs";
 
 import { RadSideDrawerComponent } from "nativescript-pro-ui/sidedrawer/angular";
 
@@ -171,25 +171,41 @@ export class DashboardComponent implements OnInit {
     }
 
     public onDashboardInitTap(): void {
-	this.historicalDataService.clear();
-	const diArray = [];
-	for (let i=200; i >= 0; i--) {
-	    let d = (i).days().ago();
-	    let di = new DailyInfo({
-		year: d.getFullYear(),
-		month: d.getMonth() + 1,
-		day: d.getDate(),
-		pushesWith: this.getRandomRange(10, 100),
-		pushesWithout: this.getRandomRange(50, 200),
-		coastWith: this.getRandomRange(1, 50),
-		coastWithout: this.getRandomRange(0.5, 1.2),
-		distance: this.getRandomRange(0.5, 9.0),
-		speed: this.getRandomRange(0.1, 6.0)
-	    });
-	    diArray.push(di);
-	}
-	this.historicalDataService.initFromArray(diArray);
-	this.updateAxes();
+	const options = {
+	    title: "How many days?",
+	    defaultText: "200",
+	    cancelButtonText: "Cancel",
+	    okButtonText: "Ok",
+	    inputType: inputType.text
+	};
+	prompt(options).then((result) => {
+	    if (!result.result) {
+		return;
+	    }
+	    const numDays = parseInt(result.text);
+	    if (numDays <= 0 || numDays === NaN) {
+		return;
+	    }
+	    this.historicalDataService.clear();
+	    const diArray = [];
+	    for (let i=numDays; i >= 0; i--) {
+		let d = (i).days().ago();
+		let di = new DailyInfo({
+		    year: d.getFullYear(),
+		    month: d.getMonth() + 1,
+		    day: d.getDate(),
+		    pushesWith: this.getRandomRange(10, 100),
+		    pushesWithout: this.getRandomRange(50, 200),
+		    coastWith: this.getRandomRange(1, 50),
+		    coastWithout: this.getRandomRange(0.5, 1.2),
+		    distance: this.getRandomRange(0.5, 9.0),
+		    speed: this.getRandomRange(0.1, 6.0)
+		});
+		diArray.push(di);
+	    }
+	    this.historicalDataService.initFromArray(diArray);
+	    this.updateAxes();
+	});
     }
 
     public onDashboardClearTap(): void {
@@ -219,15 +235,13 @@ export class DashboardComponent implements OnInit {
 	this.historicalDataService.dataSource.subscribe(
 	    (x) => {
 		console.log(x.length);
-		this._ngZone.run(() => {
-		    if (x.length) {
-			this.historicalData.splice(0, this.historicalData.length, ...x)
-		    }
-		    else {
-			console.log('clearing historical data!');
-			this.historicalData.splice(0, this.historicalData.length);
-		    }
-		});
+		if (x.length) {
+		    this.historicalData.splice(0, this.historicalData.length, ...x)
+		}
+		else {
+		    console.log('clearing historical data!');
+		    this.historicalData.splice(0, this.historicalData.length);
+		}
 	    },
 	    (err) => console.log(err),
 	    () => console.log("subscription completed")
