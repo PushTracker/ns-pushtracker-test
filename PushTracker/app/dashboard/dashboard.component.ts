@@ -218,6 +218,7 @@ export class DashboardComponent implements OnInit {
     ngOnInit(): void {
 	this.historicalDataService.dataSource.subscribe(
 	    (x) => {
+		console.log(x.length);
 		this._ngZone.run(() => {
 		    if (x.length) {
 			this.historicalData.splice(0, this.historicalData.length, ...x)

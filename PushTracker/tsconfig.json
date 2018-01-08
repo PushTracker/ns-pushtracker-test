@@ -1,7 +1,9 @@
 {
     "compilerOptions": {
+	"allowJs": true,
         "module": "commonjs",
         "target": "es5",
+	"outDir": "./RANDOM",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "noEmitHelpers": true,
@@ -14,8 +16,7 @@
         "baseUrl": ".",
         "paths": {
             "*": [
-                "./node_modules/tns-core-modules/*",
-                "./node_modules/*"
+                "./node_modules/tns-core-modules/*"
             ]
         },
         "types": [
@@ -23,8 +24,12 @@
         ]
     },
     "exclude": [
-        "app/shared/date.js",
+        "./webpack.config.js",
+        "./app/shared/date.js",
+        "./app/shared/packet/packet.js",
+        "./app/shared/packet/packet_bindings.js",
         "node_modules",
+	"hooks",
         "platforms",
         "**/*.aot.ts"
     ]

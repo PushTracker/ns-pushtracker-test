@@ -212,9 +212,3 @@ Packet.prototype.parseOTA = function(ota) {
 module.exports.Packet = function(bytes) {
     return new Packet(bytes);
 };
-// export functions
-module.exports.decimalToHex = decimalToHex;
-module.exports.bufferToHex = bufferToHex;
-module.exports.makePacketData = makePacketData;
-module.exports.toString = toString;
-module.exports.toUint8Array = toUint8Array;

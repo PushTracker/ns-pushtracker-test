@@ -1,4 +1,4 @@
-import { Packet } from "./packet/packet";
+const Packet = require( "./packet/packet" );
 
 export class DailyInfo {
     // public members
@@ -76,12 +76,12 @@ export class DailyInfo {
     }
 
     public fromUint8Array(arr: Uint8Array): void {
-	const p = new Packet(arr);
+	const p = new Packet.Packet(arr);
 	this.fromPacket(p);
 	p.destroy();
     }
 
-    public fromPacket(p: Packet): void {
+    public fromPacket(p): void {
 	const di = p.data("dailyInfo");
 	this.year = di.year;
 	this.month = di.month;
