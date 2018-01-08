@@ -54,19 +54,19 @@
 
       <Label text="Acceleration" class="settings-item" ></Label>
       <GridLayout rows="auto" columns="*, auto">
-        <Slider verticalAlignment="center" class="settings-slider" [(ngModel)]="settings.acceleration" row="0" col="0"></Slider>
+        <Slider verticalAlignment="center" class="settings-slider" [value]="settings.acceleration" (valueChange)="onSliderUpdate('acceleration', $event)" row="0" col="0"></Slider>
         <Label verticalAlignment="center" class="settings-slider-label" style="min-width: 50" [text]="settings.acceleration+'%'" row="0" col="1"></Label>
       </GridLayout>
 
       <Label text="Max Speed" class="settings-item" ></Label>
       <GridLayout rows="auto" columns="*, auto">
-        <Slider verticalAlignment="center" class="settings-slider" [(ngModel)]="settings.maxSpeed" row="0" col="0"></Slider>
+        <Slider verticalAlignment="center" class="settings-slider" [value]="settings.maxSpeed" (valueChange)="onSliderUpdate('maxSpeed', $event)" row="0" col="0"></Slider>
         <Label verticalAlignment="center" class="settings-slider-label" style="min-width: 50" [text]="settings.maxSpeed+'%'" row="0" col="1"></Label>
       </GridLayout>
 
       <Label text="Tap Sensitivity" class="settings-item" ></Label>
       <GridLayout rows="auto" columns="*, auto">
-        <Slider verticalAlignment="center" class="settings-slider" [(ngModel)]="settings.tapSensitivity" row="0" col="0"></Slider>
+        <Slider verticalAlignment="center" class="settings-slider" [value]="settings.tapSensitivity" (valueChange)="onSliderUpdate('tapSensitivity', $event)" row="0" col="0"></Slider>
         <Label verticalAlignment="center" class="settings-slider-label" style="min-width: 50" [text]="settings.tapSensitivity+'%'" row="0" col="1"></Label>
       </GridLayout>
     </StackLayout>

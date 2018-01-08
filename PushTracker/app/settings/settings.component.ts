@@ -52,6 +52,10 @@ export class SettingsComponent implements OnInit {
 	this.settings.set("units", Units.Options[segmentedBar.selectedIndex]);
     }
 
+    public onSliderUpdate(key, args) {
+	this.settings.set(key, args.object.value);
+    }
+
     /* ***********************************************************
     * Use the sideDrawerTransition property to change the open/close animation of the drawer.
     *************************************************************/
