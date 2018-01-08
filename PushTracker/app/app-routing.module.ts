@@ -10,7 +10,8 @@ const routes: Routes = [
     { path: "browse", loadChildren: "./browse/browse.module#BrowseModule" },
     { path: "search", loadChildren: "./search/search.module#SearchModule" },
     { path: "featured", loadChildren: "./featured/featured.module#FeaturedModule" },
-    { path: "settings", loadChildren: "./settings/settings.module#SettingsModule" }
+    { path: "settings", loadChildren: "./settings/settings.module#SettingsModule" },
+    { path: "account", loadChildren: "./account/account.module#AccountModule" },
 ];
 
 @NgModule({
