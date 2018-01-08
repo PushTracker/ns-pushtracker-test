@@ -2,10 +2,18 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-pro-ui/sidedrawer";
 import { RadSideDrawerComponent } from "nativescript-pro-ui/sidedrawer/angular";
 
+import { Observable } from "data/observable";
+
+import { SegmentedBar, SegmentedBarItem } from "ui/segmented-bar";
+
+import { ControlMode, Units } from "../shared/settings";
+import { SettingsService } from "../shared/settings.service";
+
 @Component({
     selector: "Settings",
     moduleId: module.id,
-    templateUrl: "./settings.component.html"
+    templateUrl: "./settings.component.html",
+    styleUrls: ["./settings.component.css"]
 })
 export class SettingsComponent implements OnInit {
     /* ***********************************************************
@@ -14,7 +22,34 @@ export class SettingsComponent implements OnInit {
     *************************************************************/
     @ViewChild("drawer") drawerComponent: RadSideDrawerComponent;
 
+    public ControlModes: Array<SegmentedBarItem> = [];
+    public Units: Array<SegmentedBarItem> = [];
+    
+    // private members
     private _sideDrawerTransition: DrawerTransitionBase;
+
+    constructor() {
+	ControlMode.Options.map((o) => {
+	    const item = new SegmentedBarItem();
+	    item.title = o;
+	    this.ControlModes.push(item);
+	});
+	Units.Options.map((o) => {
+	    const item = new SegmentedBarItem();
+	    item.title = o;
+	    this.Units.push(item);
+	});
+    }
+
+    public onControlModeChange(args): void {
+	let segmentedBar = <SegmentedBar>args.object;
+	this.settings.set("controlMode", ControlMode.Options[segmentedBar.selectedIndex]);
+    }
+
+    public onUnitsChange(args): void {
+	let segmentedBar = <SegmentedBar>args.object;
+	this.settings.set("units", Units.Options[segmentedBar.selectedIndex]);
+    }
 
     /* ***********************************************************
     * Use the sideDrawerTransition property to change the open/close animation of the drawer.
@@ -25,6 +60,10 @@ export class SettingsComponent implements OnInit {
 
     get sideDrawerTransition(): DrawerTransitionBase {
         return this._sideDrawerTransition;
+    }
+
+    get settings(): Observable {
+	return SettingsService.settings;
     }
 
     /* ***********************************************************

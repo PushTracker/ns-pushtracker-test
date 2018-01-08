@@ -212,3 +212,4 @@ Packet.prototype.parseOTA = function(ota) {
 module.exports.Packet = function(bytes) {
     return new Packet(bytes);
 };
+module.exports.bindingTypeToString = bindingTypeToString;
