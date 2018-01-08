@@ -198,6 +198,17 @@
 			 position="Top"></RadLegendView>
         </RadCartesianChart>
       </CarouselItem>
+      <CarouselItem>
+        <Label text="Data List" class="daily-info-label"></Label>
+	<ListView [items]="historicalData" >
+	  <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
+            <StackLayout [class.odd]="odd" [class.even]="even">
+              <Label [text]='"index: " + i'></Label>
+              <Label [text]='"[" + item.date +"] " + item.pushesWith'></Label>
+            </StackLayout>
+	  </ng-template>
+	</ListView>
+      </CarouselItem>
     </Carousel>
     <SegmentedBar
       row="1"
