@@ -1,7 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 
-import { NativeScriptFormsModule } from "nativescript-angular/forms";
-
 import { Router } from "@angular/router";
 import { Page } from "ui/page";
 import { Color } from "color";

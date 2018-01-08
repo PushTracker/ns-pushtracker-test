@@ -11,7 +11,7 @@ export class User {
     public smartdrive_serial_number: string = "";
     public login_state: string = "";
     public error_message: string = "";
-    public first_name: string = "";
+    public name: string = "";
     public year_of_birth: number = 1988;
     public gender: string = "";
     public ability: string = "";

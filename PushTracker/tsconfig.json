@@ -1,9 +1,7 @@
 {
     "compilerOptions": {
-	"allowJs": true,
         "module": "commonjs",
         "target": "es5",
-	"outDir": "./RANDOM",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "noEmitHelpers": true,

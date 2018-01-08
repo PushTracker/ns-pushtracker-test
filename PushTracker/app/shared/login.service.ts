@@ -59,10 +59,12 @@ export class LoginService {
 		Config.token = headers['access-token'];
 		Config.client = headers['client'];
 		Config.uid = headers['uid'];
+		Config.user = user;
 		return res.json();
 	    })
 	    .do(data => {
 		console.log(`data: ${data}`);
+		Config.user.name = data.data.first_name;
 		console.log(JSON.stringify(data, null, 2));
 	    })
 		.catch(this.handleErrors);
