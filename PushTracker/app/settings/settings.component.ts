@@ -3,6 +3,7 @@ import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-pro-u
 import { RadSideDrawerComponent } from "nativescript-pro-ui/sidedrawer/angular";
 
 import { Observable } from "data/observable";
+import { confirm } from "ui/dialogs";
 
 import { SegmentedBar, SegmentedBarItem } from "ui/segmented-bar";
 
@@ -75,5 +76,11 @@ export class SettingsComponent implements OnInit {
     }
 
     onSaveSettingsTap(): void {
+	confirm({
+            title: "Save Settings?",
+            message: "Send these settings to the PushTracker?",
+            okButtonText: "Yes",
+            cancelButtonText: "No"
+	});
     }
 }

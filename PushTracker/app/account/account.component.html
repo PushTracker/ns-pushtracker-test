@@ -10,7 +10,7 @@
 	      ios.position="left">
   </ActionItem>
 
-  <ActionItem ios.position="right">
+  <ActionItem ios.position="right" (tap)="onSaveAccountTap()">
     <Button text="Save" (tap)="onSaveAccountTap()" class="action-item"></Button>
   </ActionItem>
 
@@ -36,22 +36,19 @@
       Use the tkMainContent directive to display the content of the page when you have an app drawer.
     -->
   <ScrollView tkMainContent>
-    <GridLayout rows="auto, auto, auto, auto, auto, auto" columns="*, *" class="page-content" horizontalAlign="center">
-      <Label row="0" colSpan="2" class="account-icon fa" text="&#xf2be;"></Label>
-      <GridLayout row="1" colSpan="2" columns="100, *">
+    <StackLayout class="page-content">
+      <Label class="account-icon fa" text="&#xf2be;"></Label>
+      <GridLayout columns="100, *">
 	<Label text="Name" dock="left" class="account-item"></Label>
 	<TextField col="1" [(ngModel)]="user.name" class="account-text-entry" hint="John Smith" dock="right"></TextField>
       </GridLayout>
-      <GridLayout row="2" colSpan="2" columns="100, *">
+      <GridLayout columns="100, *">
 	<Label text="Email" dock="left" class="account-item"></Label>
 	<TextField col="1" [(ngModel)]="user.email" class="account-text-entry" hint="example@the.net.com" dock="right"></TextField>
       </GridLayout>
-      <GridLayout row="3" colSpan="2" columns="100, *">
-	<Label text="Account" dock="left" class="account-item"></Label>
-	<TextField col="1" text="{{ account }}" class="account-text-entry" hint="yourAccountName" dock="right"></TextField>
-      </GridLayout>
-      <Button row="4" colSpan="2" text="Change Password" (tap)="onChangePasswordTap()"></Button>
-      <Button row="5" colSpan="2" text="Reset Account" (tap)="onResetAccountTap()"></Button>
-    </GridLayout>
+
+      <Button text="Change Password" (tap)="onChangePasswordTap()"></Button>
+      <Button text="Reset Account" (tap)="onResetAccountTap()"></Button>
+    </StackLayout>
   </ScrollView>
 </RadSideDrawer>
