@@ -6,7 +6,7 @@ import { RadCartesianChart, LinearAxis, DateTimeContinuousAxis, DateTimeCategori
 
 import { ObservableArray } from "data/observable-array";
 
-import { confirm, prompt, inputType } from "ui/dialogs";
+import { alert, confirm, prompt, inputType } from "ui/dialogs";
 
 import { RadSideDrawerComponent } from "nativescript-pro-ui/sidedrawer/angular";
 
@@ -226,6 +226,14 @@ export class DashboardComponent implements OnInit {
 		});
 	    }
         });
+    }
+
+    public onDataTap(data): void {
+	alert({
+	    title: "Daily Info",
+	    message: JSON.stringify(data, null, 2),
+	    okButtonText: "Ok"
+	});
     }
 
     /* ***********************************************************

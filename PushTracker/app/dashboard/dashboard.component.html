@@ -202,10 +202,10 @@
         <Label text="Data List" class="daily-info-label"></Label>
 	<ListView [items]="historicalData" >
 	  <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
-            <StackLayout [class.odd]="odd" [class.even]="even">
-              <Label [text]='"index: " + i'></Label>
-              <Label [text]='"[" + item.date +"] " + item.pushesWith'></Label>
-            </StackLayout>
+            <DockLayout stretchLastChild="false" [class.odd]="odd" [class.even]="even">
+              <Label dock="left" [text]="item.date"></Label>
+	      <Button dock="right" text="View" (tap)="onDataTap(item)"></Button>
+            </DockLayout>
 	  </ng-template>
 	</ListView>
       </CarouselItem>
