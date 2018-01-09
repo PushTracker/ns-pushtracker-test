@@ -18,18 +18,20 @@
     <style name="LaunchScreenTheme" parent="LaunchScreenThemeBase">
     </style>
 
+    <style name="MyDarkTheme" parent="@style/Widget.AppCompat.ActionButton.Overflow" >
+      <item name="android:tint">@color/white</item>
+    </style>    
+
     <!-- theme to use AFTER launch screen is loaded-->
     <style name="AppThemeBase" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="toolbarStyle">@style/NativeScriptToolbarStyle</item>
+
+	<item name="actionOverflowButtonStyle">@style/MyDarkTheme</item>
 
         <item name="colorPrimary">@color/ns_primary</item>
         <item name="colorPrimaryDark">@color/ns_primaryDark</item>
         <item name="colorAccent">@color/ns_accent</item>
     </style>
-
-    <style name="MyDarkTheme" parent="@style/Widget.AppCompat.ActionButton.Overflow" >
-      <item name="android:tint">@color/white</item>
-    </style>    
 
     <style name="AppTheme" parent="AppThemeBase">
       <item name="actionOverflowButtonStyle">@style/MyDarkTheme</item>
@@ -40,10 +42,12 @@
         <item name="android:background">@color/ns_primary</item>
         <item name="theme">@style/ThemeOverlay.AppCompat.ActionBar</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+	<item name="actionOverflowButtonStyle">@style/MyDarkTheme</item>
     </style>
 
     <!-- This style is where you define the tint color of your overflow menu button -->
     <style name="actionOverflowButtonStyle" parent="@style/Widget.AppCompat.ActionButton.Overflow">
+      <item name="actionOverflowButtonStyle">@style/MyDarkTheme</item>
       <item name="android:tint">@color/white</item>
     </style>
 
