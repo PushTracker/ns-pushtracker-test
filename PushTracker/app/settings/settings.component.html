@@ -72,7 +72,7 @@
 
       <DockLayout stretchLastChild="false">
 	<Label text="LED Color" class="settings-item" dock="left"></Label>
-	<Button [backgroundColor]="color" dock="right" (tap)="onPickColor()"></Button>
+	<Button [backgroundColor]="settings.ledColor" dock="right" (tap)="onPickColor()"></Button>
       </DockLayout>
 
     </StackLayout>

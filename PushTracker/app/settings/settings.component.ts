@@ -28,7 +28,6 @@ export class SettingsComponent implements OnInit {
 
     public ControlModes: Array<SegmentedBarItem> = [];
     public Units: Array<SegmentedBarItem> = [];
-    public color: Color = new Color("#FFFF00");
     
     // private members
     private _sideDrawerTransition: DrawerTransitionBase;
@@ -62,8 +61,8 @@ export class SettingsComponent implements OnInit {
     }
 
     public onPickColor() {
-	this.picker.show(this.color.hex, "RGB").then((result: string) => {
-	    this.color = new Color(result);
+	this.picker.show(this.settings.get("ledColor").hex, "RGB").then((result: string) => {
+	    this.settings.set("ledColor", new Color(result));
 	});
     }
 

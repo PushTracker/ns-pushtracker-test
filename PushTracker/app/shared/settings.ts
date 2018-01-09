@@ -1,3 +1,5 @@
+import { Color } from "color";
+
 const Packet = require("./packet/packet");
 
 export class ControlMode {
@@ -40,6 +42,8 @@ export class Settings {
     public maxSpeed: number = 70;
     public tapSensitivity: number = 100;
 
+    public ledColor: Color = new Color("#3c8aba");
+
     // private members
 
     // functions
@@ -62,6 +66,8 @@ export class Settings {
 	this.acceleration = obj && obj.acceleration || 30;
 	this.maxSpeed = obj && obj.maxSpeed || 70;
 	this.tapSensitivity = obj && obj.tapSensitivity || 100;
+
+	this.ledColor = obj && obj.ledColor && new Color(obj.ledColor) || new Color("#3c8aba");
     }
 
     public fromUint8Array(arr: Uint8Array): void {
