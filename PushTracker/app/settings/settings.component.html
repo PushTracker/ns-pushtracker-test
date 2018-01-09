@@ -69,6 +69,12 @@
         <Slider verticalAlignment="center" class="settings-slider" [value]="settings.tapSensitivity" (valueChange)="onSliderUpdate('tapSensitivity', $event)" row="0" col="0"></Slider>
         <Label verticalAlignment="center" class="settings-slider-label" style="min-width: 50" [text]="settings.tapSensitivity+'%'" row="0" col="1"></Label>
       </GridLayout>
+
+      <DockLayout stretchLastChild="false">
+	<Label text="LED Color" class="settings-item" dock="left"></Label>
+	<Button [backgroundColor]="color" dock="right" (tap)="onPickColor()"></Button>
+      </DockLayout>
+
     </StackLayout>
   </ScrollView>
 </RadSideDrawer>

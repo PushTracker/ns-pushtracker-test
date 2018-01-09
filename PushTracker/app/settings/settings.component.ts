@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { DrawerTransitionBase, SlideInOnTopTransition } from "nativescript-pro-ui/sidedrawer";
 import { RadSideDrawerComponent } from "nativescript-pro-ui/sidedrawer/angular";
 
@@ -9,6 +9,9 @@ import { SegmentedBar, SegmentedBarItem } from "ui/segmented-bar";
 
 import { ControlMode, Units } from "../shared/settings";
 import { SettingsService } from "../shared/settings.service";
+
+import { ColorPicker } from "nativescript-color-picker";
+import { Color } from "color";
 
 @Component({
     selector: "Settings",
@@ -25,9 +28,11 @@ export class SettingsComponent implements OnInit {
 
     public ControlModes: Array<SegmentedBarItem> = [];
     public Units: Array<SegmentedBarItem> = [];
+    public color: Color = new Color("#FFFF00");
     
     // private members
     private _sideDrawerTransition: DrawerTransitionBase;
+    private picker: ColorPicker = new ColorPicker();
 
     constructor() {
 	ControlMode.Options.map((o) => {
@@ -54,6 +59,12 @@ export class SettingsComponent implements OnInit {
 
     public onSliderUpdate(key, args) {
 	this.settings.set(key, args.object.value);
+    }
+
+    public onPickColor() {
+	this.picker.show(this.color.hex, "RGB").then((result: string) => {
+	    this.color = new Color(result);
+	});
     }
 
     /* ***********************************************************
