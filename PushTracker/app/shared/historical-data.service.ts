@@ -33,7 +33,9 @@ export class HistoricalDataService {
     public loadFromFS() {
 	try {
 	    const key = HistoricalDataService.fsKeyPrefix + HistoricalDataService.fsKeyData;
-	    this.data = localStorage.getItem(key) || [];
+	    this.data = (localStorage.getItem(key) || []).map((d) => {
+		return new DailyInfo(d);
+	    });
 	}
 	catch (ex) {
 	    console.log(`couldn't load HistoricalData: ${ex}`);

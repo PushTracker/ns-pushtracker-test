@@ -203,8 +203,8 @@
 	<ListView [items]="historicalData" >
 	  <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
             <DockLayout stretchLastChild="false" [class.odd]="odd" [class.even]="even">
-              <Label dock="left" [text]="item.date"></Label>
-	      <Button dock="right" text="View" (tap)="onDataTap(item)"></Button>
+              <Label verticalAlign="center" dock="left" [text]="item.date"></Label>
+	      <Button class="daily-info-button" dock="right" text="View" (tap)="onDataTap(item)"></Button>
             </DockLayout>
 	  </ng-template>
 	</ListView>
