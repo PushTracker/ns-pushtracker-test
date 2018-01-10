@@ -56,6 +56,23 @@ export class DashboardComponent implements OnInit {
             item.title = t;
             this.timeSelections.push(item);
         });
+	this.historicalDataService.dataSource.subscribe(
+	    (x) => this.updateData(x),
+	    (err) => console.log(err),
+	    () => console.log("subscription completed")
+	);
+    }
+
+    public updateData(newData): void {
+	this._ngZone.run(() => {
+	    if (newData.length) {
+		this.historicalData.splice(0, this.historicalData.length, ...newData)
+	    }
+	    else {
+		this.historicalData.splice(0, this.historicalData.length);
+	    }
+	    this.updateAxes();
+	});
     }
 
     public zeroAverages(): void {
@@ -204,7 +221,6 @@ export class DashboardComponent implements OnInit {
 		diArray.push(di);
 	    }
 	    this.historicalDataService.initFromArray(diArray);
-	    this.updateAxes();
 	});
     }
 
@@ -220,10 +236,7 @@ export class DashboardComponent implements OnInit {
 
         confirm(options).then((result: boolean) => {
 	    if (result) {
-		this._ngZone.run(() => {
-		    this.historicalDataService.initFromArray([]);
-		    this.zeroAverages();
-		});
+		this.historicalDataService.clear();
 	    }
         });
     }
@@ -240,20 +253,6 @@ export class DashboardComponent implements OnInit {
     * Use the sideDrawerTransition property to change the open/close animation of the drawer.
     *************************************************************/
     ngOnInit(): void {
-	this.historicalDataService.dataSource.subscribe(
-	    (x) => {
-		console.log(x.length);
-		if (x.length) {
-		    this.historicalData.splice(0, this.historicalData.length, ...x)
-		}
-		else {
-		    console.log('clearing historical data!');
-		    this.historicalData.splice(0, this.historicalData.length);
-		}
-	    },
-	    (err) => console.log(err),
-	    () => console.log("subscription completed")
-	);
         this._sideDrawerTransition = new SlideInOnTopTransition();
     }
 
