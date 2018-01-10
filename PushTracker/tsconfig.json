@@ -27,7 +27,7 @@
         "./app/shared/packet/packet.js",
         "./app/shared/packet/packet_bindings.js",
         "node_modules",
-	"hooks",
+        "hooks",
         "platforms",
         "**/*.aot.ts"
     ]
