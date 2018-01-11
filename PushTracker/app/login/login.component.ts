@@ -16,7 +16,7 @@ import { LoginService } from "../shared/login.service";
     selector: "Login",
     moduleId: module.id,
     templateUrl: "./login.component.html",
-    styleUrls: ["./login.component.css"]
+    styleUrls: ["./login.css"]
 })
 export class LoginComponent implements OnInit {
 

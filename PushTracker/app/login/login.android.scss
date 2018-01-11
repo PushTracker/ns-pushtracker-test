@@ -8,7 +8,7 @@
     color: #0067a6;
     font-size: 100;
     text-align: center;
-    margin: 10;
+    margin: 10, 10, 50, 10;
 }
 GridLayout {
   margin-left: 30;
@@ -22,10 +22,11 @@ Label {
 Button, TextField {
   margin-left: 16;
   margin-right: 16;
-  margin-bottom: 10;
+  margin-bottom: 10;  
 }
 .submit-button {
   background-color: #3c8aba;
   color: white;
+  padding: 10;
   margin-top: 20;
 }
