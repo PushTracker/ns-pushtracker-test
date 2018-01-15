@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from "@angular/http";
 
 import { Observable } from "rxjs/Observable";
-import "rxjs/add/operator/catch";
+import { catchError } from "rxjs/operators";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 import * as localStorage from "nativescript-localstorage";

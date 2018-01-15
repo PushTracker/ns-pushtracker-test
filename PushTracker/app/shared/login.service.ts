@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
-import "rxjs/add/operator/catch";
+import { catchError } from "rxjs/operators";
 import "rxjs/add/operator/do";
 import "rxjs/add/operator/map";
 
@@ -34,13 +34,13 @@ export class LoginService {
 		const headers = res.headers;
 		console.log(`headers:\n ${JSON.stringify(headers, null, 2)}`);
 		return res.json();
-	    })
+	    },
+		 catchError((err) => this.handleErrors(err))
+		)
 	    .do(data => {
 		console.log(`data: ${data}`);
 		console.log(JSON.stringify(data, null, 2));
-	    })
-		.catch(this.handleErrors);
-	
+	    });
     }
 
     public login(user: User) {
@@ -67,13 +67,14 @@ export class LoginService {
 		Config.user = user;
 		Config.user.loggedIn = true;
 		return res.json();
-	    })
+	    },
+		 catchError((err) => this.handleErrors(err))
+		)
 	    .do(data => {
 		console.log(`data: ${data}`);
 		Config.user.name = data.data.first_name;
 		console.log(JSON.stringify(data, null, 2));
-	    })
-		.catch(this.handleErrors);
+	    });
     }
 
     public handleErrors(error: Response) {
