@@ -66,3 +66,4 @@ PatientInfo/*.js
 PushTracker/**/*.js
 PatientInfo/**/*.js
 PushTracker/**/*.css
+.DS_Store
