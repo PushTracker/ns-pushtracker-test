@@ -125,6 +125,16 @@
 	      </chart:RadCartesianChart.legend>
 	    </chart:RadCartesianChart>
 	  </ns:CarouselItem>
+	  <ns:CarouselItem>
+	    <StackLayout>
+              <Label text="Data List" class="daily-info-label"></Label>
+	      <ListView id="dataList" items="{{ HistoricalDataSource }}" itemTap="listViewItemTap">
+		<ListView.itemTemplate>
+		  <Label verticalAlign="center" dock="left" text="{{ Date }}"></Label>
+		</ListView.itemTemplate>
+	      </ListView>
+	    </StackLayout>
+	  </ns:CarouselItem>
 	</ns:Carousel>
 	<SegmentedBar row="1" selectedIndex="2" selectedIndexChanged="{{ onDataRangeChanged }}">
 	  <SegmentedBar.items>
